@@ -1,0 +1,56 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# Java
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.ear
+*.nar
+bin/main/
+bin/test/
+hs_err_pid*
+replay_pid*
+
+# Node
+node_modules/
+.env
+dist/
+
+# Logs
+*.log
+*.tmp
+*.temp
+
+# IDEs and editors
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# omo
+.omo/*
+!.omo/rules/
+!.omo/rules/*.md
+
+# OpenSpec: publish current contracts and keep change history local
+openspec/*
+!openspec/config.yaml
+!openspec/specs/
+!openspec/specs/**
+
+# pack tgz
+*.tgz
+
+## agents
+.agents/skills

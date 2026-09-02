@@ -1,0 +1,19 @@
+version: 1
+jmeter_version: 5.6.3
+source: packaged-j4a-runtime-discovery
+categories:
+  - {id: post-processor, discovered_count: 13, fixture_component: org.apache.jmeter.extractor.gui.RegexExtractorGui, label: Regular Expression Extractor}
+  - {id: assertion, discovered_count: 15, fixture_component: org.apache.jmeter.assertions.gui.AssertionGui, label: Response Assertion}
+  - {id: listener, discovered_count: 26, fixture_component: org.apache.jmeter.visualizers.SummaryReport, label: Summary Report}
+  - {id: pre-processor, discovered_count: 9, fixture_component: org.apache.jmeter.modifiers.gui.UserParametersGui, label: User Parameters}
+  - {id: logic-controller, discovered_count: 18, fixture_component: org.apache.jmeter.control.gui.LogicControllerGui, label: Simple Controller}
+  - {id: test-fragment, discovered_count: 1, fixture_component: org.apache.jmeter.control.gui.TestFragmentControllerGui, label: Test Fragment}
+  - {id: non-test-element, discovered_count: 3, fixture_component: org.apache.jmeter.visualizers.PropertyControlGui, label: Property Display}
+  - {id: sampler, discovered_count: 27, fixture_component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui, label: HTTP Request}
+  - {id: thread-group, discovered_count: 9, fixture_component: org.apache.jmeter.threads.gui.ThreadGroupGui, label: Thread Group}
+  - {id: timer, discovered_count: 10, fixture_component: org.apache.jmeter.timers.gui.ConstantTimerGui, label: Constant Timer}
+  - {id: config-element, discovered_count: 23, fixture_component: org.apache.jmeter.protocol.http.gui.HeaderPanel, label: HTTP Header Manager}
+unavailable_or_unsupported_categories: []
+notes:
+  - Counts and identities came from the selected JMeter 5.6.3 runtime; no component identity was invented.
+  - Plugin components discovered by the runtime remain outside the minimum core-category representative fixture unless required by the approved Stepping Thread Group scenario template.

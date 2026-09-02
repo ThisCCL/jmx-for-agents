@@ -1,0 +1,51 @@
+changes:
+  - set:
+      ref: jmx_d62893619b1f
+      component: org.apache.jmeter.control.gui.TestPlanGui
+      properties:
+        - property: [TestElement.name]
+          value: J4A GUI Gate - Capacity 70-30
+          type: string
+        - property: [TestPlan.comments]
+          value: Capacity style; reversible 70/30 scheduling target. T=100 implies 70/30 TPS. No load was run.
+          type: string
+  - add:
+      parent: jmx_bde39eac1600
+      position: first
+      component: org.apache.jmeter.control.gui.ThroughputControllerGui
+      as: mix_a
+      properties:
+        - property: [TestElement.name]
+          value: Mix A - 70 percent
+          type: string
+        - property: [ThroughputController.style]
+          value: 1
+          type: int
+        - property: [ThroughputController.perThread]
+          value: false
+          type: boolean
+  - add:
+      parent: jmx_bde39eac1600
+      position: last
+      component: org.apache.jmeter.control.gui.ThroughputControllerGui
+      as: mix_b
+      properties:
+        - property: [TestElement.name]
+          value: Mix B - 30 percent
+          type: string
+        - property: [ThroughputController.style]
+          value: 1
+          type: int
+        - property: [ThroughputController.perThread]
+          value: false
+          type: boolean
+  - move:
+      ref: jmx_0c1f47c42e2b
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      parent: $mix_a
+      position: last
+  - move:
+      ref: jmx_833ceabf31ea
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      parent: $mix_b
+      position: last

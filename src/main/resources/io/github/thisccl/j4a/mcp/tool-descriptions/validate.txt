@@ -1,0 +1,1 @@
+Load and traverse one JMX with the selected trusted local JMeter runtime; no sampler or load execution occurs. Supply exactly one of file/path and optionally jmeter_home. Use after read/write when independent validation is requested. Text content is readable status and structuredContent.data is typed output; a failure is never an authorization to replay a prior mutation.

@@ -1,0 +1,103 @@
+changes:
+  - set:
+      ref: jmx_d62893619b1f
+      component: org.apache.jmeter.control.gui.TestPlanGui
+      properties:
+        - property: [TestElement.name]
+          value: J4A GUI Gate - Debug 1x1
+          type: string
+        - property: [TestPlan.comments]
+          value: Sanitized authoring fixture only; do not execute samplers during release GUI inspection.
+          type: string
+  - set:
+      ref: jmx_f2796911d1b5
+      component: org.apache.jmeter.assertions.jmespath.gui.JMESPathAssertionGui
+      properties:
+        - property: [TestElement.name]
+          value: Common assertion - status is ok
+          type: string
+        - property: [JMES_PATH]
+          value: status
+          type: string
+        - property: [EXPECTED_VALUE]
+          value: ok
+          type: string
+        - property: [JSONVALIDATION]
+          value: false
+          type: boolean
+        - property: [ISREGEX]
+          value: false
+          type: boolean
+  - set:
+      ref: jmx_19871e6efa95
+      component: org.apache.jmeter.threads.gui.ThreadGroupGui
+      properties:
+        - property: [TestElement.name]
+          value: Debug Thread Group - native 1x1
+          type: string
+        - property: [ThreadGroup.num_threads]
+          value: "1"
+          type: string
+  - delete:
+      ref: jmx_330976848c8e
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+  - add:
+      parent: jmx_19871e6efa95
+      position: last
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      as: business_a
+      properties:
+        - property: [TestElement.name]
+          value: Business A - GET orders
+          type: string
+        - property: [HTTPSampler.method]
+          value: GET
+          type: string
+        - property: [HTTPsampler.Arguments]
+          type: rows
+          value:
+            row_type: org.apache.jmeter.protocol.http.util.HTTPArgument
+            rows:
+              - Argument.name: tenant
+                Argument.value: gui-gate
+                HTTPArgument.always_encode: true
+                HTTPArgument.content_type: ""
+                Argument.metadata: "="
+                HTTPArgument.use_equals: true
+  - add:
+      parent: jmx_19871e6efa95
+      position: last
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      as: business_b
+      properties:
+        - property: [TestElement.name]
+          value: Business B - POST search
+          type: string
+        - property: [HTTPSampler.method]
+          value: POST
+          type: string
+        - property: [HTTPsampler.Arguments]
+          type: rows
+          value:
+            row_type: org.apache.jmeter.protocol.http.util.HTTPArgument
+            rows:
+              - Argument.name: query
+                Argument.value: sanitized
+                HTTPArgument.always_encode: true
+                HTTPArgument.content_type: text/plain
+                Argument.metadata: "="
+                HTTPArgument.use_equals: true
+  - set:
+      ref: jmx_c754cb875592
+      component: org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui
+      properties:
+        - property: [TestElement.name]
+          value: HTTP Defaults - sanitized
+          type: string
+  - set:
+      ref: jmx_d910bf1aac24
+      component: org.apache.jmeter.visualizers.ViewResultsFullVisualizer
+      properties:
+        - property: [TestElement.name]
+          value: View Results Tree - debug only
+          type: string

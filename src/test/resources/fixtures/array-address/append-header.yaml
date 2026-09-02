@@ -1,0 +1,7 @@
+changes:
+  - append:
+      ref: jmx_3a211baa6d71
+      property: [HeaderManager.headers]
+      row:
+        Header.name: appended
+        Header.value: one

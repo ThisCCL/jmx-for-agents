@@ -1,0 +1,30 @@
+changes:
+  - set:
+      ref: jmx_d62893619b1f
+      component: org.apache.jmeter.control.gui.TestPlanGui
+      properties:
+        - property: [TestElement.name]
+          value: J4A GUI Gate - Stability 80 threads 18000 seconds
+          type: string
+        - property: [TestPlan.comments]
+          value: N_stable=80; V_day=900000; V_target=1800000; observed sustainable TPS=100; ceil(1800000/100)=18000s. No load was run for this fixture generation.
+          type: string
+  - set:
+      ref: jmx_bde39eac1600
+      component: kg.apc.jmeter.threads.SteppingThreadGroupGui
+      properties:
+        - property: [TestElement.name]
+          value: Stability - 80 threads for 18000 seconds
+          type: string
+        - property: [ThreadGroup.num_threads]
+          value: "80"
+          type: string
+        - property: [Start users count]
+          value: "80"
+          type: string
+        - property: [Start users period]
+          value: "1"
+          type: string
+        - property: [flighttime]
+          value: "18000"
+          type: string

@@ -1,0 +1,344 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.gradleup.shadow' version '8.3.8'
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+import groovy.json.JsonSlurper
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.security.MessageDigest
+import java.util.zip.ZipFile
+
+def packageJsonFile = layout.projectDirectory.file('package.json')
+def packageMetadata = new JsonSlurper().parse(packageJsonFile.asFile) as Map
+def packageVersion = packageMetadata.version
+if (!(packageVersion instanceof String)
+        || !(packageVersion ==~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/)) {
+    throw new GradleException('package.json version must be SemVer-compatible')
+}
+
+group = 'io.github.thisccl.j4a'
+version = packageVersion
+
+def generatedVersionResources = layout.buildDirectory.dir('generated/version-resources')
+def generatedVersionResource = generatedVersionResources.map {
+    it.file('META-INF/j4a/version.properties')
+}
+
+tasks.register('generateVersionResource') {
+    inputs.file(packageJsonFile)
+    inputs.property('packageVersion', packageVersion)
+    outputs.file(generatedVersionResource)
+
+    doLast {
+        File output = generatedVersionResource.get().asFile
+        output.parentFile.mkdirs()
+        Files.write(output.toPath(), "version=${packageVersion}\n".getBytes(StandardCharsets.UTF_8))
+    }
+}
+
+sourceSets.main.resources.srcDir(generatedVersionResources)
+tasks.named('processResources') {
+    dependsOn tasks.named('generateVersionResource')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+application {
+    mainClass = 'io.github.thisccl.j4a.cli.Main'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    String configuredJMeterHome = System.getProperty('j4a.test.jmeterHome')
+    if (configuredJMeterHome != null && !configuredJMeterHome.trim().isEmpty()) {
+        systemProperty 'j4a.test.jmeterHome', configuredJMeterHome
+    }
+    filter {
+        excludeTestsMatching '*SecurityTest'
+        excludeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCursorSigningKeyTest'
+        excludeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCategoryCursorTest'
+        excludeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCategoryCursorCrossProcessTest'
+    }
+    dependsOn tasks.named('shadowJar')
+    maxHeapSize = '1g'
+    systemProperty 'j4a.worker.reuse', 'true'
+    doFirst {
+        if (filter.commandLineIncludePatterns.contains('*PropertyPath*')
+                && filter.commandLineIncludePatterns.contains('*JMeterPropertyGraph*')) {
+            filter.commandLineIncludePatterns.clear()
+            filter.setIncludePatterns(
+                    'io.github.thisccl.j4a.path.PropertyPathTest',
+                    'io.github.thisccl.j4a.path.PropertyPathResolverTest',
+                    'io.github.thisccl.j4a.jmx.property.JMeterPropertyGraphContractTest',
+                    'io.github.thisccl.j4a.jmx.property.JMeterPropertyGraphDiscoveryTest')
+        } else if (filter.commandLineIncludePatterns.contains('*PropertyGraphCodec*')) {
+            filter.commandLineIncludePatterns.clear()
+            filter.setIncludePatterns('*PropertyGraph*CodecTest')
+        } else if (filter.commandLineIncludePatterns.contains('*StructuredCollection*')) {
+            filter.commandLineIncludePatterns.clear()
+            filter.setIncludePatterns(
+                    'io.github.thisccl.j4a.validation.StructuredCollectionRegistryTest',
+                    'io.github.thisccl.j4a.validation.StructuredCollectionValidationTest')
+        }
+    }
+    doFirst {
+        if (javaLauncher.get().metadata.languageVersion.asInt() >= 9) {
+            jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED',
+                    '--add-opens=java.base/java.util=ALL-UNNAMED',
+                    '--add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED',
+                    '-Djava.security.manager=allow'
+        }
+    }
+}
+
+def releaseLicenseManifest = layout.projectDirectory.file('config/release-license-obligations.json')
+def releaseLicenseSources = layout.projectDirectory.dir('config/release-licenses')
+def generatedReleaseLicenses = layout.buildDirectory.dir('generated/releaseLicenses')
+
+def sha256 = { byte[] bytes ->
+    MessageDigest.getInstance('SHA-256').digest(bytes).encodeHex().toString()
+}
+
+tasks.register('prepareReleaseLicenses') {
+    inputs.file(releaseLicenseManifest)
+    inputs.file(layout.projectDirectory.file('LICENSE'))
+    inputs.dir(releaseLicenseSources)
+    inputs.files(configurations.runtimeClasspath)
+    outputs.dir(generatedReleaseLicenses)
+
+    doLast {
+        File output = generatedReleaseLicenses.get().asFile
+        delete(output)
+        File manifestFile = releaseLicenseManifest.asFile
+        Map manifest = new JsonSlurper().parse(manifestFile) as Map
+        List records = manifest.records as List
+        if (records.size() != manifest.artifactFiles
+                || records.collect { it.coordinate }.toSet().size() != manifest.coordinates) {
+            throw new GradleException('release-license-manifest-counts')
+        }
+
+        Map expectedById = records.collectEntries { record -> [(record.recordId): record] }
+        Map actualById = configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.collectEntries { artifact ->
+            String coordinate = "${artifact.moduleVersion.id.group}:${artifact.name}:${artifact.moduleVersion.id.version}"
+            String recordId = "${coordinate}:${artifact.file.name}"
+            [(recordId): artifact.file]
+        }
+        if (actualById.keySet() != expectedById.keySet()) {
+            Set missing = expectedById.keySet() - actualById.keySet()
+            Set unaccounted = actualById.keySet() - expectedById.keySet()
+            throw new GradleException("release-license-artifact-set missing=${missing.sort()} unaccounted=${unaccounted.sort()}")
+        }
+        expectedById.each { recordId, record ->
+            String actualHash = sha256(actualById[recordId].bytes)
+            if (actualHash != record.artifact.sha256) {
+                throw new GradleException("release-license-artifact-hash:${recordId}")
+            }
+        }
+
+        (manifest.texts as List).each { text ->
+            Map source = text.source as Map
+            byte[] bytes
+            if (source.type == 'runtimeArtifactEntry') {
+                ZipFile archive = new ZipFile(actualById[source.recordId] as File)
+                try {
+                    def entry = archive.getEntry(source.entry as String)
+                    if (entry == null) {
+                        throw new GradleException("release-license-source-entry:${source.recordId}:${source.entry}")
+                    }
+                    bytes = archive.getInputStream(entry).bytes
+                } finally {
+                    archive.close()
+                }
+            } else if (source.type == 'base64File') {
+                String encoded = layout.projectDirectory.file(source.path as String).asFile.text.trim()
+                bytes = Base64.decoder.decode(encoded)
+            } else if (source.type == 'projectFile') {
+                bytes = layout.projectDirectory.file(source.path as String).asFile.bytes
+            } else if (source.type == 'empty') {
+                bytes = new byte[0]
+            } else {
+                throw new GradleException("release-license-source-type:${source.type}")
+            }
+            if (sha256(bytes) != text.sha256) {
+                throw new GradleException("release-license-source-hash:${text.sha256}")
+            }
+            File target = new File(output, text.path as String)
+            target.parentFile.mkdirs()
+            Files.write(target.toPath(), bytes)
+        }
+
+        byte[] projectLicense = layout.projectDirectory.file('LICENSE').asFile.bytes
+        if (sha256(projectLicense) != manifest.upstreamLicense.sha256) {
+            throw new GradleException('release-license-upstream-hash')
+        }
+        File projectLicenseTarget = new File(output, manifest.upstreamLicense.path as String)
+        projectLicenseTarget.parentFile.mkdirs()
+        Files.write(projectLicenseTarget.toPath(), projectLicense)
+
+        File embeddedManifest = new File(output, 'META-INF/j4a/release-license-obligations.json')
+        embeddedManifest.parentFile.mkdirs()
+        Files.write(embeddedManifest.toPath(), manifestFile.bytes)
+    }
+}
+
+tasks.named('shadowJar') {
+    dependsOn tasks.named('prepareReleaseLicenses')
+    archiveClassifier = 'all'
+    exclude 'LICENSE', 'NOTICE',
+            'META-INF/DARCULA_LICENSE.txt',
+            'META-INF/FastDoubleParser-LICENSE',
+            'META-INF/FastDoubleParser-NOTICE',
+            'META-INF/INTELLIJ_LICENSE.txt',
+            'META-INF/INTELLIJ_NOTICE.txt',
+            'META-INF/LICENSE',
+            'META-INF/LICENSE.txt',
+            'META-INF/NOTICE',
+            'META-INF/NOTICE-tools.txt',
+            'META-INF/NOTICE.txt',
+            'META-INF/PBJAR_LICENSE.txt',
+            'META-INF/README.md',
+            'META-INF/NATIVEUTIL_LICENSE.txt',
+            'META-INF/thirdparty-LICENSE',
+            'META-INF/licenses/**',
+            'com/github/jaiimageio/README.txt',
+            'license/LICENSE',
+            'license/LICENSE.dom-documentation.txt',
+            'license/LICENSE.dom-software.txt',
+            'license/LICENSE.sac.html',
+            'license/LICENSE.sax.txt',
+            'license/NOTICE',
+            'license/README.dom.txt',
+            'license/README.sax.txt',
+            'org/xmlresolver/notices/**'
+    from(generatedReleaseLicenses)
+    manifest {
+        attributes 'Multi-Release': 'true'
+    }
+    transform(Log4j2PluginsCacheFileTransformer)
+}
+
+dependencies {
+    implementation 'org.apache.jmeter:ApacheJMeter_core:5.6.3'
+    implementation 'org.apache.jmeter:ApacheJMeter_http:5.6.3'
+    implementation 'org.yaml:snakeyaml:2.2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'com.github.javaparser:javaparser-core:3.26.3'
+}
+
+def retainedTestPackages = [
+        retainedApplyTest: 'apply',
+        retainedCliTest: 'cli',
+        retainedJmxTest: 'jmx',
+        retainedLocatorTest: 'locator',
+        retainedMcpTest: 'mcp',
+        retainedPathTest: 'path',
+        retainedReadTest: 'read',
+        retainedReferenceTest: 'reference'
+]
+def isolatedValidationTests = [
+        'LocalJMeterGuiSemanticCharacterizationTest',
+        'LocalJMeterGuiSemanticTraversalTest',
+        'LocalJMeterMutationPreflightTest',
+        'LocalJMeterWorkerSemanticHotPathTest'
+]
+def optInValidationTests = ['LocalJMeterWorkerSemanticPerformanceTest']
+def retainedTestTasks = []
+
+retainedTestPackages.each { taskName, packageName ->
+    retainedTestTasks << tasks.register(taskName, Test) {
+        testClassesDirs = sourceSets.test.output.classesDirs
+        classpath = sourceSets.test.runtimeClasspath
+        filter {
+            includeTestsMatching "io.github.thisccl.j4a.${packageName}.*"
+        }
+        reports.junitXml.outputLocation = layout.buildDirectory.dir("test-results/${taskName}")
+        reports.html.outputLocation = layout.buildDirectory.dir("reports/tests/${taskName}")
+    }
+}
+
+def retainedValidationTest = tasks.register('retainedValidationTest', Test) {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    filter {
+        includeTestsMatching 'io.github.thisccl.j4a.validation.*'
+        (isolatedValidationTests + optInValidationTests).each { className ->
+            excludeTestsMatching "io.github.thisccl.j4a.validation.${className}"
+        }
+    }
+    reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/retainedValidationTest')
+    reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/retainedValidationTest')
+}
+retainedTestTasks << retainedValidationTest
+
+isolatedValidationTests.each { className ->
+    String taskName = "retained${className}"
+    retainedTestTasks << tasks.register(taskName, Test) {
+        testClassesDirs = sourceSets.test.output.classesDirs
+        classpath = sourceSets.test.runtimeClasspath
+        filter {
+            includeTestsMatching "io.github.thisccl.j4a.validation.${className}"
+        }
+        reports.junitXml.outputLocation = layout.buildDirectory.dir("test-results/${taskName}")
+        reports.html.outputLocation = layout.buildDirectory.dir("reports/tests/${taskName}")
+    }
+}
+
+tasks.register('semanticPerformanceTest', Test) {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    filter {
+        includeTestsMatching 'io.github.thisccl.j4a.validation.LocalJMeterWorkerSemanticPerformanceTest'
+    }
+    reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/semanticPerformanceTest')
+    reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/semanticPerformanceTest')
+}
+
+retainedTestTasks.eachWithIndex { taskProvider, index ->
+    if (index > 0) {
+        taskProvider.configure {
+            mustRunAfter retainedTestTasks[index - 1]
+        }
+    }
+}
+
+tasks.named('test') {
+    testClassesDirs = files()
+    dependsOn retainedTestTasks
+}
+
+tasks.register('componentTokenSecurityTest', Test) {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    filter {
+        setExcludePatterns(new String[0])
+        includeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCategoryCursorTest'
+        includeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCategoryCursorCrossProcessTest'
+        includeTestsMatching 'io.github.thisccl.j4a.validation.ComponentCursorSigningKeyTest'
+        includeTestsMatching 'io.github.thisccl.j4a.validation.ComponentDetailTokenTest'
+        includeTestsMatching 'io.github.thisccl.j4a.validation.BoundedYamlMessageTest'
+    }
+    reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/componentTokenSecurityTest')
+    reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/componentTokenSecurityTest')
+}

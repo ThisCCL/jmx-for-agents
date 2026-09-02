@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Synthetic Unseen Property Plan" enabled="true"/>
+    <hashTree>
+      <io.github.thisccl.j4a.synthetic.property.UnseenPropertySampler guiclass="io.github.thisccl.j4a.synthetic.property.UnseenPropertySamplerGui" testclass="io.github.thisccl.j4a.synthetic.property.UnseenPropertySampler" testname="Synthetic Unseen Property Sampler" enabled="true">
+        <stringProp name="qa.fixture.marker">populated-jmx-fixture</stringProp>
+      </io.github.thisccl.j4a.synthetic.property.UnseenPropertySampler>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

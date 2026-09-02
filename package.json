@@ -1,0 +1,42 @@
+{
+  "name": "@jmx-for-agents/j4a",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "packageManager": "pnpm@11.5.1",
+  "bin": {
+    "j4a": "./bin/j4a.js"
+  },
+  "description": "Agent-facing JMX and Apache JMeter CLI with MCP support",
+  "license": "Apache-2.0",
+  "repository": "git+https://github.com/ThisCCL/jmx-for-agents.git",
+  "homepage": "https://github.com/ThisCCL/jmx-for-agents#readme",
+  "bugs": {
+    "url": "https://github.com/ThisCCL/jmx-for-agents/issues"
+  },
+  "scripts": {
+    "build": "node scripts/build-dist.mjs",
+    "local:install": "node scripts/local-install.mjs",
+    "release:prepare": "node scripts/release.mjs",
+    "release:verify-prebuilt": "node scripts/release.mjs verify-prebuilt",
+    "verify:licenses": "node scripts/verify-release-licenses.mjs",
+    "verify:public": "node scripts/verify-public-sanitization.mjs",
+    "prepack": "node scripts/release.mjs reject-pack",
+    "test": "node scripts/run-node-test-suite.mjs",
+    "test:property-graph-gates": "node --test test/verify-property-graph-gates.test.mjs"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "files": [
+    "bin/j4a.js",
+    "dist/**/*",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

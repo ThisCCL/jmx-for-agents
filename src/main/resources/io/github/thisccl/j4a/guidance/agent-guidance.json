@@ -1,0 +1,19 @@
+{
+  "cli_read_properties": ["key", "all", "writable"],
+  "mcp_read_properties": ["none", "key", "all", "writable"],
+  "compatibility": {
+    "cursor": "Cursor v3 is rejected; restart category paging from the first page. Use a returned componentToken as the sole selector for exact ordinary detail recovery.",
+    "apply_exits": "Usage/schema exits 2; accepted apply semantics exit 3; filesystem/infrastructure/fatal exits 4.",
+    "fatal": "Unknown outcome: inspect or read the exact target before any retry; never replay automatically.",
+    "component_identity": "Generic TestBeans expose selected-runtime exact FQCN, never TestBeanGUI.",
+    "cli_created_ref": "Valid only against the exact unchanged target; every other or stale target requires fresh read."
+  },
+  "generic_collection_example": "{\"type\":\"collection\",\"value\":{\"presence\":\"present\",\"property_class\":\"org.apache.jmeter.testelement.property.CollectionProperty\",\"items\":[{\"type\":\"string\",\"presence\":\"present\",\"property_class\":\"org.apache.jmeter.testelement.property.StringProperty\",\"value\":\"canonical-guidance\"}]}}",
+  "semantic_row_example": "{\"type\":\"rows\",\"value\":{\"row_type\":\"<copy-from-focused-read>\",\"row_properties\":[{\"name\":\"<reported-row-property>\",\"type\":\"string\",\"required\":false,\"default\":\"\"}],\"rows\":[{\"<reported-row-property>\":\"<native-scalar-value>\"}]}}",
+  "recovery_templates": {
+    "invalid_collection_shape": "{\"tool\":\"read\",\"arguments\":{\"file\":\"<file>\",\"ref\":\"<ref>\",\"properties\":\"writable\"}}",
+    "same_path_write": "j4a set <file> --locator <ref> --property '<json-array-from-read>' --value '<copy-exact-value>' --override",
+    "existing_target": "j4a set <file> --locator <ref> --property '<json-array-from-read>' --value '<copy-exact-value>' --out <distinct-existing.jmx> --force-out",
+    "stale_mcp_ref": "{\"tool\":\"read\",\"arguments\":{\"file\":\"<same-caller-file>\",\"jmeter_home\":\"<same-explicit-home-if-supplied>\"}}"
+  }
+}

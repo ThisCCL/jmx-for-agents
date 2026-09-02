@@ -1,0 +1,14 @@
+changes:
+  - set:
+      ref: jmx_330976848c8e
+      component: http.request
+      properties:
+        - property: HTTPsampler\\.Files
+          type: http_files
+          value:
+            - path: first.txt
+              paramname: first
+              mimetype: text/plain
+            - path: second.bin
+              paramname: second
+              mimetype: application/octet-stream

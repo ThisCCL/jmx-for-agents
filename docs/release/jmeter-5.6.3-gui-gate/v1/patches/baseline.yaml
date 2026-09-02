@@ -1,0 +1,14 @@
+changes:
+  - set:
+      ref: jmx_d62893619b1f
+      component: org.apache.jmeter.control.gui.TestPlanGui
+      properties:
+        - property: [TestElement.name]
+          value: J4A GUI Gate - Baseline Business A
+          type: string
+        - property: [TestPlan.comments]
+          value: Baseline style; only Business A remains enabled/present. No load was run.
+          type: string
+  - delete:
+      ref: jmx_833ceabf31ea
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui

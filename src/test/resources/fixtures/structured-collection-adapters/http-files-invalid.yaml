@@ -1,0 +1,12 @@
+changes:
+  - set:
+      ref: jmx_330976848c8e
+      component: http.request
+      properties:
+        - property: HTTPsampler\\.Files
+          type: http_files
+          value:
+            - path: a
+              paramname: p
+              mimetype: x
+              extra: no

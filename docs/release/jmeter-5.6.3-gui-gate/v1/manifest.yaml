@@ -1,0 +1,98 @@
+version: 1
+status: prepared-for-task-8.5-not-gui-executed
+jmeter_home: ${JMETER_HOME}
+jmeter_version: 5.6.3
+packaged_jar:
+  path: build/libs/j4a-1.0.0-all.jar
+  sha256: 27cb5646fa96a325690d24bc459987e04a33689648d6a8b34ed74b2f3eb7839c
+source_templates:
+  - path: ${J4A_GUI_SOURCE_ASSETS}/debug-minimal.jmx
+    sha256: e4aaf586fbb4f2b64d32621af98e1bfd0c6cfb099608f269717bc8435ea14546
+  - path: ${J4A_GUI_SOURCE_ASSETS}/master-stepping-minimal.jmx
+    sha256: 1618044443c8e2ad58b75d57429bb1be7d23effebb09991146caa619ea7446ca
+  - path: src/test/resources/fixtures/simple-http.jmx
+    sha256: 3859c2141548acf8592260eec30d61a44f1fc2823af9abdc183078be4b528a5f
+    purpose: existing-property seed for ordinary HTTP scalar write proof
+
+assumptions_and_calculations:
+  transaction_unit: one enabled HTTP Request sample equals one transaction for fixture calculations
+  no_load_executed: true
+  service_instances_assumed_for_template_default: 1
+  master_max_threads_formula: 1 * 200 = 200, retained as ${__P(max_threads,200)}
+  capacity_total_tps: 100
+  capacity_mix:
+    business_a: 70 percent -> 100 * 0.70 = 70 TPS
+    business_b: 30 percent -> 100 * 0.30 = 30 TPS
+    reversible_check: 70 + 30 = 100 percent; 70 + 30 = 100 TPS
+  stability:
+    N_stable: 80
+    source: supplied capacity-result trace; not re-measured during fixture generation
+    V_day: 900000
+    V_target: 1800000
+    target_formula: 2 * 900000 = 1800000
+    observed_sustainable_tps: 100
+    duration_formula: ceil(1800000 / 100) = 18000 seconds
+
+operations:
+  - Copy approved debug/master assets byte-for-byte, then use packaged J4A MCP components/read/apply/validate to populate supported names, methods, JMESPath assertion fields, and exact HTTPArgument rows.
+  - Use packaged J4A apply/delete to derive baseline from master with only Business A.
+  - Use packaged J4A apply/add/move and CLI set to derive capacity with two Throughput Controllers and set float percentages to 70.0/30.0.
+  - Copy capacity, then use packaged J4A apply/set to produce the 80-thread, 18000-second stability fixture.
+  - Copy the existing-property HTTP seed, then use packaged J4A apply/set/append to write protocol/domain/port/path/method and an exact HTTPArgument row.
+  - Use packaged J4A init/apply/read/validate to create the core-category catalog and empty/populated Header Manager pair.
+
+patch_files:
+  - {path: patches/debug-populate.yaml, sha256: 2861ad9d979a6a239a4ef4b23aa432713879c42374766424c9c2b1fde4b5c08f}
+  - {path: patches/master-populate.yaml, sha256: 96e1af90d3b5f5aea60b38bd4dd06da9f63aedc0b0ee7ad8767d7b37beb9aea3}
+  - {path: patches/baseline.yaml, sha256: 6d018e7c4060507155e5ec0fcf02861a8710a5d2d1aad42952442f5f1214ef44}
+  - {path: patches/capacity.yaml, sha256: de4571d27bca9c408d0222de692e9f0eef38156c5e2e19881993638f148cec56}
+  - {path: patches/stability.yaml, sha256: e20c58223a3aef06ed447b75798475f499bd92ffede405432b8a65b7e906b313}
+  - {path: patches/http-fields.yaml, sha256: d4793ee9325484b3b2f5c7a1b292254bc83aa0eb485cdb02c4ec3f28917c3036}
+  - {path: patches/catalog-core-categories.yaml, sha256: b711d3d6405355bb027d781508f671ee496ba614482c05d5502fe43117a30242}
+
+authoring_boundary:
+  - The approved minimal assets omit ordinary HTTP protocol/domain/port/path scalar properties. Packaged CLI and real MCP both expose metadata but reject authoring those absent target paths with MISSING_PROPERTY.
+  - The approved debug and master structures were preserved; all supported ordinary fields and structured rows were populated through J4A. `http-fields.jmx` separately proves J4A population when the exact target already contains those scalar properties.
+  - The master structural conversion was not invented: the approved master Stepping Thread Group asset was used directly because J4A has no published contract for replacing the native Thread Group while preserving all children.
+
+fixtures:
+  - path: fixtures/debug.jmx
+    sha256: cfee4961cc80ae566e9e60401f35dbf58cf5afe5affcc03da25ded6fa9616ed9
+    style: debug
+    expected_gui: [J4A GUI Gate - Debug 1x1, Debug Thread Group - native 1x1, Business A - GET orders, Business B - POST search, Common assertion - status is ok, View Results Tree - debug only]
+  - path: fixtures/master.jmx
+    sha256: 44dcc8b4bccfbd6c97600ca4e709a8eaabd067d209ee4bd156c3343dce89490f
+    style: master
+    expected_gui: [J4A GUI Gate - Master Stepping, Master - Stepping Thread Group, Business A - GET orders, Business B - POST search, HTTP Defaults - sanitized]
+  - path: fixtures/baseline.jmx
+    sha256: cbacc0143a493dbebea7ddf798800d8dc1fb1c93e917d0aa1e073031abbac495
+    style: baseline
+    expected_gui: [J4A GUI Gate - Baseline Business A, Master - Stepping Thread Group, Business A - GET orders]
+  - path: fixtures/capacity.jmx
+    sha256: 597d6e000ae0cc654db96cf3a68bb1cac3a5c9e652b8b5a3bed3f57129a152cd
+    style: capacity
+    expected_gui: [Mix A - 70 percent, Business A - GET orders, Mix B - 30 percent, Business B - POST search]
+  - path: fixtures/stability.jmx
+    sha256: a638c8a5b330cc1e2e8ca21fa5ed0cdf102ffac6b07bf3556fc2bc949ad46f41
+    style: stability
+    expected_gui: [J4A GUI Gate - Stability 80 threads 18000 seconds, Stability - 80 threads for 18000 seconds, Mix A - 70 percent, Mix B - 30 percent]
+  - path: fixtures/http-fields.jmx
+    sha256: 7ee21e12f32ac62d15e67ce009cca4cb0ee2207563b05df934ef6c596a0efd19
+    style: populated-http-fields
+    expected_gui: [Populated HTTP Request, protocol=https, domain=api.example.invalid, port=8443, path=/api/orders, method=POST, tenant=gui-gate]
+  - path: fixtures/catalog-core-categories.jmx
+    sha256: acb2cd0fd5a0ffde88f063447f68c36e14ca028dcece5ceed39b3fdb3fb95900
+    style: core-category-catalog
+    expected_gui: [Catalog Thread Group, Category - Simple Controller, Category - HTTP Request, Category - Regular Expression Extractor, Category - User Parameters, Category - Response Assertion, Category - Constant Timer, Category - Summary Report, Category - Test Fragment, Category - Property Display, Structured - Empty Header Manager, Structured - Populated Header Manager]
+
+subtype_acceptance:
+  property: HTTPsampler.Arguments
+  exact_row_type: org.apache.jmeter.protocol.http.util.HTTPArgument
+  required_fields: [Argument.name, Argument.value, HTTPArgument.always_encode, HTTPArgument.content_type, Argument.metadata, HTTPArgument.use_equals]
+  expected: packaged J4A read retains the exact row_type after save/reload; GUI opens the HTTP Parameters panel without class-cast or row loss
+
+task_8_5_acceptance:
+  - Open every fixture in the real JMeter 5.6.3 desktop GUI without executing the plan.
+  - Exercise the named panels, make one reversible field edit on owned copies, Save As, close, reopen, and confirm tree/values/subtypes remain usable.
+  - Run packaged J4A read and validate on GUI-saved copies and confirm versioned fixture hashes remain unchanged.
+  - Block release on any reproducible J4A-generated structural load, panel binding, concrete value-class, save, or reopen failure.

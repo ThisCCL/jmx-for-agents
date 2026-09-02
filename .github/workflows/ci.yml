@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.11.1
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: 8
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version: '1.26'
+          cache: false
+      - name: Enable the pinned pnpm toolchain
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.5.1 --activate
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Provision Apache JMeter 5.6.3
+        run: |
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/apache-jmeter-5.6.3.tgz" https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          printf '%s  %s\n' '5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083' "$RUNNER_TEMP/apache-jmeter-5.6.3.tgz" | sha512sum --check --strict
+          tar -xzf "$RUNNER_TEMP/apache-jmeter-5.6.3.tgz" -C "$RUNNER_TEMP"
+          echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3" >> "$GITHUB_ENV"
+      - name: Lint the workflow
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml
+      - name: Run retained Java and Node suites
+        run: |
+          ./gradlew clean test
+          pnpm test
+      - name: Verify public source inventory
+        run: pnpm run verify:public
+      - name: Prepare and inspect the exact release inputs
+        run: |
+          pnpm run release:prepare -- --tag v1.0.0
+          node scripts/ci-inspect-release.mjs
+      - name: Rehearse a consumer from the exact package
+        run: |
+          ./gradlew clean
+          node test/qa/release-rehearsal.mjs
+          ./gradlew clean
+          git diff --exit-code

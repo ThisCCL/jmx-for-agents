@@ -1,0 +1,4504 @@
+{
+  "schemaVersion": 1,
+  "artifactFiles": 135,
+  "coordinates": 134,
+  "noticeRequiredRecords": 65,
+  "distinctNoticeTexts": 44,
+  "upstreamLicense": {
+    "path": "META-INF/j4a/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "records": [
+    {
+      "recordId": "bsf:bsf:2.4.0:bsf-2.4.0.jar",
+      "coordinate": "bsf:bsf:2.4.0",
+      "artifact": {
+        "basename": "bsf-2.4.0.jar",
+        "sha256": "f873773deb91c1a1c12150f6cdb13b8a2e1b496a75ac903c4bbfa103b363a7c7"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/3/apache-3.pom",
+          "status": 200,
+          "sha256": "393c50afb4b7aa6eb57e5377a55a1a0610b19f75b52ece01308db04a1187a20e"
+        },
+        "files": [
+          "8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "af7665038395c689289c7b4c86e1fc61bb082e7eaf4fa5d233f8a5375123c7a4"
+        ]
+      }
+    },
+    {
+      "recordId": "com.fasterxml.jackson.core:jackson-annotations:2.16.1:jackson-annotations-2.16.1.jar",
+      "coordinate": "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
+      "artifact": {
+        "basename": "jackson-annotations-2.16.1.jar",
+        "sha256": "a4730771e6a495dd3793a42cdb8ce6bddb96c77e15f40c98fd8d9a7ae09e7286"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
+          "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.16.1/jackson-annotations-2.16.1.pom",
+          "sha256": "c6dff6a78b01498929a69af364e6cb78aef72d2a45254b92d6495b2a198ec129"
+        },
+        "files": [
+          "6e0e5b6e6389568c1669163fdf40cee2143be58960be0a4e2f1428805505170d",
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "612b14bc77c944ce229cbba0d14919162cfea8ed802cbf06a8e865e032d03201"
+        ]
+      }
+    },
+    {
+      "recordId": "com.fasterxml.jackson.core:jackson-core:2.16.1:jackson-core-2.16.1.jar",
+      "coordinate": "com.fasterxml.jackson.core:jackson-core:2.16.1",
+      "artifact": {
+        "basename": "jackson-core-2.16.1.jar",
+        "sha256": "f5f8ef90609e64fec82eb908e497dc7d81b2eb983fe509b870292a193cde4dfb"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.fasterxml.jackson.core:jackson-core:2.16.1",
+          "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.16.1/jackson-core-2.16.1.pom",
+          "sha256": "1eed16104d80aecc137c41fe16e4a3ff5ab9a2bfa8b2c49c5772fe4a5fd2e6ce"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "0a0042db627fe915c6a1d9ef74927af5081446063e8888494be6718d692dd2b8"
+        ]
+      },
+      "supplemental": {
+        "files": [
+          "0fe84bf6f8990a28699a23353e1d30b3ed87e76ebe3db337cbe21c4dcbd68663"
+        ]
+      }
+    },
+    {
+      "recordId": "com.fasterxml.jackson.core:jackson-databind:2.16.1:jackson-databind-2.16.1.jar",
+      "coordinate": "com.fasterxml.jackson.core:jackson-databind:2.16.1",
+      "artifact": {
+        "basename": "jackson-databind-2.16.1.jar",
+        "sha256": "baf8a8ebee8f45ef68cdd5e2dd3923b3e296c0937b96ec0b4806aa3a31bccd1d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.fasterxml.jackson.core:jackson-databind:2.16.1",
+          "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.16.1/jackson-databind-2.16.1.pom",
+          "sha256": "7c8a6b428ea4688d01206956cccafb23ac928fc69d717a76bdd7743348d28db8"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "612b14bc77c944ce229cbba0d14919162cfea8ed802cbf06a8e865e032d03201"
+        ]
+      }
+    },
+    {
+      "recordId": "com.fifesoft:rsyntaxtextarea:3.3.4:rsyntaxtextarea-3.3.4.jar",
+      "coordinate": "com.fifesoft:rsyntaxtextarea:3.3.4",
+      "artifact": {
+        "basename": "rsyntaxtextarea-3.3.4.jar",
+        "sha256": "cbcd2167afd58ffce616d9bd2d95c94dd3f951e62486b56462ce0abe3ca6f8ec"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.fifesoft:rsyntaxtextarea:3.3.4",
+          "url": "https://repo.maven.apache.org/maven2/com/fifesoft/rsyntaxtextarea/3.3.4/rsyntaxtextarea-3.3.4.pom",
+          "sha256": "b06b7c992ab7200788756fa4f884280beea10961d78af54e190231f14d87380d"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.formdev:svgSalamander:1.1.4:svgSalamander-1.1.4.jar",
+      "coordinate": "com.formdev:svgSalamander:1.1.4",
+      "artifact": {
+        "basename": "svgSalamander-1.1.4.jar",
+        "sha256": "e0f1a4d91cc4f6ce08e8b441b1b326b898e250366a9f4c489371284c784d3211"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.formdev:svgSalamander:1.1.4",
+          "url": "https://repo.maven.apache.org/maven2/com/formdev/svgSalamander/1.1.4/svgSalamander-1.1.4.pom",
+          "sha256": "9dd4560623ba4b51139a0dc49daac88cbe5d248cd482b3f3a0b25f619bad52f9"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.ben-manes.caffeine:caffeine:2.9.3:caffeine-2.9.3.jar",
+      "coordinate": "com.github.ben-manes.caffeine:caffeine:2.9.3",
+      "artifact": {
+        "basename": "caffeine-2.9.3.jar",
+        "sha256": "1e0a7bbef1dd791653143f3f05d0e489934bf5481e58a87c9e619cd46b68729b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.ben-manes.caffeine:caffeine:2.9.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/2.9.3/caffeine-2.9.3.pom",
+          "sha256": "6fa4f1c10192806f8ef05b5d4be7bd9f5ce58b876f64364d4e90c3fc092323dc"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-core:2.7.3",
+      "artifact": {
+        "basename": "darklaf-core-2.7.3.jar",
+        "sha256": "82180588db345953b399a12a6ed0c7ef6cee08ea5a0dac926a69c0d4029f2b8b"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-core:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-core/2.7.3/darklaf-core-2.7.3.pom",
+          "sha256": "e38c6fc1079c7022fcb20b5a3e9967680d714ed22328e681081f4b73fd7cc92c"
+        },
+        "files": [
+          "00af0c745e49dd49db724a9f81df512ed6468e7ac6a9488c4ebe728887d28139",
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6",
+          "a271aa9d288b06d150a9071764cf38c3fccc27b22f70f09dafb773aaee3bf557",
+          "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "36e05b0ed24aba581a7cc0ba736eab9f34fb24b12210f70c8f46d25cd6768e1d"
+        ]
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4:darklaf-extensions-rsyntaxarea-0.3.4.jar",
+      "coordinate": "com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4",
+      "artifact": {
+        "basename": "darklaf-extensions-rsyntaxarea-0.3.4.jar",
+        "sha256": "dc9b09fea1a786d8dcd004733fe6b47246719c3fda6e5e5f5baa2ca0d6e776ab"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-extensions-rsyntaxarea/0.3.4/darklaf-extensions-rsyntaxarea-0.3.4.pom",
+          "sha256": "db64c36843b0099310adba530c50f98116dfc0f1dd17fbfb98309e1514b32485"
+        },
+        "files": [
+          "d8b47586de51c2540fa76de98ae6bfef4de4b7024c35b23cb7e60bfbac58504b"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-macos:2.7.3:darklaf-macos-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-macos:2.7.3",
+      "artifact": {
+        "basename": "darklaf-macos-2.7.3.jar",
+        "sha256": "3401f62733c3e7a92d628ab6bb2c1b280db6288036eec02a69c33c953d4b93d3"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-macos:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-macos/2.7.3/darklaf-macos-2.7.3.pom",
+          "sha256": "d536dea0598f9a4cb5ab234d45bb6c17fb93f3c77d84b1bb5ede42ad88091bca"
+        },
+        "files": [
+          "13f5c6a183ee37457487fb1cb4c1b01f9d246a12465d7a139430f57fd9fdac7f",
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-native-utils:2.7.3:darklaf-native-utils-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-native-utils:2.7.3",
+      "artifact": {
+        "basename": "darklaf-native-utils-2.7.3.jar",
+        "sha256": "40d1be883d8d6c66601c4fb1ce0f3cd876932bc13eed8313142cadda8b813e85"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-native-utils:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-native-utils/2.7.3/darklaf-native-utils-2.7.3.pom",
+          "sha256": "aa91686b0c7b5858e10e3e6b7350ac1b477cc301cbc0d7a7e800ceb4fdee6c8b"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-platform-base:2.7.3:darklaf-platform-base-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-platform-base:2.7.3",
+      "artifact": {
+        "basename": "darklaf-platform-base-2.7.3.jar",
+        "sha256": "76a2b1620876b642d5b9457b2583e510f07eb33f857b60f5ba80a5b99a6aceab"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-platform-base:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-platform-base/2.7.3/darklaf-platform-base-2.7.3.pom",
+          "sha256": "05de6104f9dcb6f1768f11fd8342710ea2282783c43106df44f88acf829df99c"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-property-loader:2.7.3:darklaf-property-loader-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-property-loader:2.7.3",
+      "artifact": {
+        "basename": "darklaf-property-loader-2.7.3.jar",
+        "sha256": "0593abb3b390c140b0d666c2926207cbcc1b291d6e4be12e28d91a5d1eb2a32e"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-property-loader:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-property-loader/2.7.3/darklaf-property-loader-2.7.3.pom",
+          "sha256": "80e736bbee411529c41293f62354761014d9a4bdb000295b3e1e9b27c000f401"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-theme:2.7.3:darklaf-theme-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-theme:2.7.3",
+      "artifact": {
+        "basename": "darklaf-theme-2.7.3.jar",
+        "sha256": "5ce297afd186f26bfc2c9aa51584b2a8bdb1dc50c5c7ccd37e171b227cacf084"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-theme:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-theme/2.7.3/darklaf-theme-2.7.3.pom",
+          "sha256": "5988e477df4a3a5178ccd432b99c5742482e7f27cf28c04f848f1c466c84299c"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-utils:2.7.3:darklaf-utils-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-utils:2.7.3",
+      "artifact": {
+        "basename": "darklaf-utils-2.7.3.jar",
+        "sha256": "b5cdc7d4f719382280c0b5cf010aee2a260cbe5182079bef2042e14d106353b5"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-utils:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-utils/2.7.3/darklaf-utils-2.7.3.pom",
+          "sha256": "52d02e88b6ded96a265e574d2c75480288a4bb24d46c60151977ebb67aac1471"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:darklaf-windows:2.7.3:darklaf-windows-2.7.3.jar",
+      "coordinate": "com.github.weisj:darklaf-windows:2.7.3",
+      "artifact": {
+        "basename": "darklaf-windows-2.7.3.jar",
+        "sha256": "9fc9044f4cb060dd6e64522df594f16f00326e751692fa40ce5047e733cb3aaa"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:darklaf-windows:2.7.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/darklaf-windows/2.7.3/darklaf-windows-2.7.3.pom",
+          "sha256": "82e326305fa7cf1ec0cea41ceb5539fb404142dbf8ec821792427e47dd557709"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:swing-extensions-laf-support:0.1.3:swing-extensions-laf-support-0.1.3.jar",
+      "coordinate": "com.github.weisj:swing-extensions-laf-support:0.1.3",
+      "artifact": {
+        "basename": "swing-extensions-laf-support-0.1.3.jar",
+        "sha256": "0c8603056c78095e2b015e796d28684cbd0759cd68c8fa010cd891fc269cf7f8"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:swing-extensions-laf-support:0.1.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/swing-extensions-laf-support/0.1.3/swing-extensions-laf-support-0.1.3.pom",
+          "sha256": "c449540ac04bf4e87082012167ff0cba787346b9f08731ba9878525ffb9cf989"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.github.weisj:swing-extensions-visual-padding:0.1.3:swing-extensions-visual-padding-0.1.3.jar",
+      "coordinate": "com.github.weisj:swing-extensions-visual-padding:0.1.3",
+      "artifact": {
+        "basename": "swing-extensions-visual-padding-0.1.3.jar",
+        "sha256": "5f45461409505b35ede425e31f288e7a67d1196ab04cf5297571fd3515d0fd14"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.github.weisj:swing-extensions-visual-padding:0.1.3",
+          "url": "https://repo.maven.apache.org/maven2/com/github/weisj/swing-extensions-visual-padding/0.1.3/swing-extensions-visual-padding-0.1.3.pom",
+          "sha256": "b942f7384515d0aea6b4dc84e2f27283fe880f47df0a6d521a5f37a7704b83c5"
+        },
+        "files": [
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.google.errorprone:error_prone_annotations:2.24.0:error_prone_annotations-2.24.0.jar",
+      "coordinate": "com.google.errorprone:error_prone_annotations:2.24.0",
+      "artifact": {
+        "basename": "error_prone_annotations-2.24.0.jar",
+        "sha256": "a88bd88124c8d4c9851ab823adc3a8f04b0a13af15c9d80b5ecf49f5a7a321d2"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.google.errorprone:error_prone_annotations:2.24.0",
+          "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.24.0/error_prone_annotations-2.24.0.pom",
+          "sha256": "303279f827236c55c1921bbd8632fde35354c5c35c0266bc085f9aa68bcb715d"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.helger:ph-css:6.5.0:ph-css-6.5.0.jar",
+      "coordinate": "com.helger:ph-css:6.5.0",
+      "artifact": {
+        "basename": "ph-css-6.5.0.jar",
+        "sha256": "821dd07ab64263d0700f7de9854acefa015cd6c30011da693acced3da0e54296"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.helger:ph-css:6.5.0",
+          "url": "https://repo.maven.apache.org/maven2/com/helger/ph-css/6.5.0/ph-css-6.5.0.pom",
+          "sha256": "2a3014f1ca30bf6055f16c4f2f21e02b1787009fd162e7a7a207d03999be1c29"
+        },
+        "files": [
+          "6d1d968fb225eca367cb7f0b8831ab012a35d92b547e945e17ef8e7b05c3e5cc"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "66269c3471a65854f170cc0038b1403a68617c54585cbe593a7bfcd4328ff700"
+        ]
+      }
+    },
+    {
+      "recordId": "com.helger.commons:ph-commons:10.2.5:ph-commons-10.2.5.jar",
+      "coordinate": "com.helger.commons:ph-commons:10.2.5",
+      "artifact": {
+        "basename": "ph-commons-10.2.5.jar",
+        "sha256": "977587d023e96cd157194c0e94af22c63d3964f22fb8d8704cd160709bde1001"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.helger.commons:ph-commons:10.2.5",
+          "url": "https://repo.maven.apache.org/maven2/com/helger/commons/ph-commons/10.2.5/ph-commons-10.2.5.pom",
+          "sha256": "4d701efaa884e0bf0c00de0a1729c0fc611f34bbd37033b76384d25b24b22479"
+        },
+        "files": [
+          "6d1d968fb225eca367cb7f0b8831ab012a35d92b547e945e17ef8e7b05c3e5cc"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "376e8bd54f6d2f4eccfae7ba67871d0e9de4b10c75c2ecb6fe098f68def2480c"
+        ]
+      }
+    },
+    {
+      "recordId": "com.jayway.jsonpath:json-path:2.8.0:json-path-2.8.0.jar",
+      "coordinate": "com.jayway.jsonpath:json-path:2.8.0",
+      "artifact": {
+        "basename": "json-path-2.8.0.jar",
+        "sha256": "9601707e95cd79fb98570a01ea8cfb857b5cde948744d6e0edf733c11002c95b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "com.jayway.jsonpath:json-path:2.8.0",
+          "url": "https://repo.maven.apache.org/maven2/com/jayway/jsonpath/json-path/2.8.0/json-path-2.8.0.pom",
+          "sha256": "a9514437a43d18744115d43eb95aa20f68c3c87e165aa66f564f3e18804ee660"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.miglayout:miglayout-core:5.3:miglayout-core-5.3.jar",
+      "coordinate": "com.miglayout:miglayout-core:5.3",
+      "artifact": {
+        "basename": "miglayout-core-5.3.jar",
+        "sha256": "cf3cb12d94b76c2f80c113977d0372d037784002943e566fcdac6b92d076935e"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "com.miglayout:miglayout-parent:5.3",
+          "url": "https://repo.maven.apache.org/maven2/com/miglayout/miglayout-parent/5.3/miglayout-parent-5.3.pom",
+          "status": 200,
+          "sha256": "1f979a80a2ab104b3071237148f6ef9e9ea5a942bb7d3d9af095cd2c1b35b189"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.miglayout:miglayout-swing:5.3:miglayout-swing-5.3.jar",
+      "coordinate": "com.miglayout:miglayout-swing:5.3",
+      "artifact": {
+        "basename": "miglayout-swing-5.3.jar",
+        "sha256": "ae384b680242234170de6b939bebf56effa40dd483477e13cd898104ba1e1de1"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "com.miglayout:miglayout-parent:5.3",
+          "url": "https://repo.maven.apache.org/maven2/com/miglayout/miglayout-parent/5.3/miglayout-parent-5.3.pom",
+          "status": 200,
+          "sha256": "1f979a80a2ab104b3071237148f6ef9e9ea5a942bb7d3d9af095cd2c1b35b189"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.sun.activation:javax.activation:1.2.0:javax.activation-1.2.0.jar",
+      "coordinate": "com.sun.activation:javax.activation:1.2.0",
+      "artifact": {
+        "basename": "javax.activation-1.2.0.jar",
+        "sha256": "993302b16cd7056f21e779cc577d175a810bb4900ef73cd8fbf2b50f928ba9ce"
+      },
+      "license": {
+        "expression": "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "com.sun.activation:all:1.2.0",
+          "url": "https://repo.maven.apache.org/maven2/com/sun/activation/all/1.2.0/all-1.2.0.pom",
+          "status": 200,
+          "sha256": "1d8518e3ac7532a104e4f7be77def37c982e530723c6bdb3d67708cce2b0c2c4"
+        },
+        "files": [
+          "a14851d626df4d0298a117ac41788bca73a9c24c2ecc2a12fa2a1101ee9fddc8"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "com.thoughtworks.xstream:xstream:1.4.20:xstream-1.4.20.jar",
+      "coordinate": "com.thoughtworks.xstream:xstream:1.4.20",
+      "artifact": {
+        "basename": "xstream-1.4.20.jar",
+        "sha256": "87df0f0be57c92037d0110fbb225a30b651702dc275653d285afcfef31bc2e81"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "com.thoughtworks.xstream:xstream-parent:1.4.20",
+          "url": "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-parent/1.4.20/xstream-parent-1.4.20.pom",
+          "status": 200,
+          "sha256": "111889e302165a0f44a54de4db705250d1de0dc91ba78a198a1d2278344beee7"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "commons-codec:commons-codec:1.16.0:commons-codec-1.16.0.jar",
+      "coordinate": "commons-codec:commons-codec:1.16.0",
+      "artifact": {
+        "basename": "commons-codec-1.16.0.jar",
+        "sha256": "56595fb20b0b85bc91d0d503dad50bb7f1b9afc0eed5dffa6cbb25929000484d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:29",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/29/apache-29.pom",
+          "status": 200,
+          "sha256": "3e49037174820bbd0df63420a977255886398954c2a06291fa61f727ac35b377"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "93a47176ace8e5ded45c32d89ab9045e4fc1d4b4b181414a1c0d3827e0c22f4d"
+        ]
+      }
+    },
+    {
+      "recordId": "commons-collections:commons-collections:3.2.2:commons-collections-3.2.2.jar",
+      "coordinate": "commons-collections:commons-collections:3.2.2",
+      "artifact": {
+        "basename": "commons-collections-3.2.2.jar",
+        "sha256": "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/16/apache-16.pom",
+          "status": 200,
+          "sha256": "9f85ff2fd7d6cb3097aa47fb419ee7f0ebe869109f98aba9f4eca3f49e74a40e"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "908eccd700fb68db2628eba3318ebe0cdce1fe8bbf79089b21530f2aef9f6adf"
+        ]
+      }
+    },
+    {
+      "recordId": "commons-io:commons-io:2.15.1:commons-io-2.15.1.jar",
+      "coordinate": "commons-io:commons-io:2.15.1",
+      "artifact": {
+        "basename": "commons-io-2.15.1.jar",
+        "sha256": "a58af12ee1b68cfd2ebb0c27caef164f084381a00ec81a48cc275fd7ea54e154"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:31",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/31/apache-31.pom",
+          "status": 200,
+          "sha256": "555d0c9eaa69c042aff924927b9381e8f8174136d355eead445224452e6291cc"
+        },
+        "files": [
+          "8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "d881568c91b929923350fa3b9db693a0b1e6ae9de972087822e4e87802561c6a"
+        ]
+      }
+    },
+    {
+      "recordId": "commons-logging:commons-logging:1.3.0:commons-logging-1.3.0.jar",
+      "coordinate": "commons-logging:commons-logging:1.3.0",
+      "artifact": {
+        "basename": "commons-logging-1.3.0.jar",
+        "sha256": "66d3c980470b99b0c511dad3dfc0ae7b265ec1fb144e96bc0253a8a175fd34d9"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:31",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/31/apache-31.pom",
+          "status": 200,
+          "sha256": "555d0c9eaa69c042aff924927b9381e8f8174136d355eead445224452e6291cc"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "443ffaefcfa714c401a0847d0e1b3aefb21ef10ffbc665884d5855803a86df99"
+        ]
+      }
+    },
+    {
+      "recordId": "commons-net:commons-net:3.10.0:commons-net-3.10.0.jar",
+      "coordinate": "commons-net:commons-net:3.10.0",
+      "artifact": {
+        "basename": "commons-net-3.10.0.jar",
+        "sha256": "2230eec44ef4b8112ea09cbeb6de826977abe792e627cee2770e35ca8c39dce1"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:30",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/30/apache-30.pom",
+          "status": 200,
+          "sha256": "63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "75917685c268f9c473af270fc0ba576194be3411ae18251705b311ca2c2fb264"
+        ]
+      }
+    },
+    {
+      "recordId": "dnsjava:dnsjava:2.1.9:dnsjava-2.1.9.jar",
+      "coordinate": "dnsjava:dnsjava:2.1.9",
+      "artifact": {
+        "basename": "dnsjava-2.1.9.jar",
+        "sha256": "072bba34267ffad8907c30a99a6b68f900782f3191454d278e395e289d478446"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "dnsjava:dnsjava:2.1.9",
+          "url": "https://repo.maven.apache.org/maven2/dnsjava/dnsjava/2.1.9/dnsjava-2.1.9.pom",
+          "sha256": "36ed9775f06dbe1bb06986625856b08a50649a78a6dbdaf167a547f015abbf8f"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "io.burt:jmespath-core:0.6.0:jmespath-core-0.6.0.jar",
+      "coordinate": "io.burt:jmespath-core:0.6.0",
+      "artifact": {
+        "basename": "jmespath-core-0.6.0.jar",
+        "sha256": "14d000d71381d23041466c2b560506cbee1fb0a9d2bcb6d1c609ebe7adc66381"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "io.burt:jmespath:0.6.0",
+          "url": "https://repo.maven.apache.org/maven2/io/burt/jmespath/0.6.0/jmespath-0.6.0.pom",
+          "status": 200,
+          "sha256": "0102c41031a399898f37b449da93d6c19b164200df0f2a4ffe59423777e147ed"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "io.burt:jmespath-jackson:0.6.0:jmespath-jackson-0.6.0.jar",
+      "coordinate": "io.burt:jmespath-jackson:0.6.0",
+      "artifact": {
+        "basename": "jmespath-jackson-0.6.0.jar",
+        "sha256": "e0fec658325693c5db7405268fcc1a73033b92c7ed516237fea420197a24c1f9"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "io.burt:jmespath:0.6.0",
+          "url": "https://repo.maven.apache.org/maven2/io/burt/jmespath/0.6.0/jmespath-0.6.0.pom",
+          "status": 200,
+          "sha256": "0102c41031a399898f37b449da93d6c19b164200df0f2a4ffe59423777e147ed"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "io.github.microutils:kotlin-logging-jvm:2.0.5:kotlin-logging-jvm-2.0.5.jar",
+      "coordinate": "io.github.microutils:kotlin-logging-jvm:2.0.5",
+      "artifact": {
+        "basename": "kotlin-logging-jvm-2.0.5.jar",
+        "sha256": "c1d9a50adba57d4a948dea6bfa63136c18cb73bab6ae97aa820bff7a44a5903e"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "io.github.microutils:kotlin-logging-jvm:2.0.5",
+          "url": "https://repo.maven.apache.org/maven2/io/github/microutils/kotlin-logging-jvm/2.0.5/kotlin-logging-jvm-2.0.5.pom",
+          "sha256": "115ad16254631e3774de43afc7ebff9c2eba1b8dcfa73df83ae93162ac90ed5c"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "io.github.x-stream:mxparser:1.2.2:mxparser-1.2.2.jar",
+      "coordinate": "io.github.x-stream:mxparser:1.2.2",
+      "artifact": {
+        "basename": "mxparser-1.2.2.jar",
+        "sha256": "aeeee23a3303d811bca8790ea7f25b534314861c03cff36dafdcc2180969eb97"
+      },
+      "license": {
+        "expression": "LicenseRef-Indiana-University-Extreme-Lab",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "io.github.x-stream:mxparser:1.2.2",
+          "url": "https://repo.maven.apache.org/maven2/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.pom",
+          "sha256": "235022424e12f33181f62ada19cc4428019b697657c3c392ce357160a422faa8"
+        },
+        "files": [
+          "79f77e2e1ab271375ee45e3d9673fc78c024fe781ba6e3212d76f98bf3e60734"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "javax.mail:mail:1.5.0-b01:mail-1.5.0-b01.jar",
+      "coordinate": "javax.mail:mail:1.5.0-b01",
+      "artifact": {
+        "basename": "mail-1.5.0-b01.jar",
+        "sha256": "04f10be09bc598b4b65b93e5eb55bb380abe1ca76c440cf0c8233d86e868f1c7"
+      },
+      "license": {
+        "expression": "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "com.sun.mail:all:1.5.0-b01",
+          "url": "https://repo.maven.apache.org/maven2/com/sun/mail/all/1.5.0-b01/all-1.5.0-b01.pom",
+          "status": 200,
+          "sha256": "0fb0b898c3c4943b2ab63e655bcedca8ea1063ab6f2143469966268a55fb9c72"
+        },
+        "files": [
+          "10f3b2b1bbdbba01667bfb3bee47ec989e7c577c244ba74846d55f31d8e2093c"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "jcharts:jcharts:0.7.5:jcharts-0.7.5.jar",
+      "coordinate": "jcharts:jcharts:0.7.5",
+      "artifact": {
+        "basename": "jcharts-0.7.5.jar",
+        "sha256": "c0fdb330280ff7223923e399be06b7575c1920451faaeb29333f9c2b0f5d2ddc"
+      },
+      "license": {
+        "expression": "Apache-1.1",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "jcharts:jcharts:0.7.5",
+          "url": "https://repo.maven.apache.org/maven2/jcharts/jcharts/0.7.5/jcharts-0.7.5.pom",
+          "sha256": "7d35702ca8ae43fdd40c21d7f3dd63a192a3d430103b1e641a634c7162528e10"
+        },
+        "files": [
+          "632072c545bc4a542196d2baac36842a108f39c991c4b6b2d0fb01fd645b9365"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "net.minidev:accessors-smart:2.5.0:accessors-smart-2.5.0.jar",
+      "coordinate": "net.minidev:accessors-smart:2.5.0",
+      "artifact": {
+        "basename": "accessors-smart-2.5.0.jar",
+        "sha256": "12314fc6881d66a413fd66370787adba16e504fbf7e138690b0f3952e3fbd321"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "net.minidev:accessors-smart:2.5.0",
+          "url": "https://repo.maven.apache.org/maven2/net/minidev/accessors-smart/2.5.0/accessors-smart-2.5.0.pom",
+          "sha256": "5497a5c4861e582c66e71c87cc5a6982d6ae8b3e214947abb1b97b97bd3e1c07"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "net.minidev:json-smart:2.5.0:json-smart-2.5.0.jar",
+      "coordinate": "net.minidev:json-smart:2.5.0",
+      "artifact": {
+        "basename": "json-smart-2.5.0.jar",
+        "sha256": "432b9e545848c4141b80717b26e367f83bf33f19250a228ce75da6e967da2bc7"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "net.minidev:json-smart:2.5.0",
+          "url": "https://repo.maven.apache.org/maven2/net/minidev/json-smart/2.5.0/json-smart-2.5.0.pom",
+          "sha256": "c32a366109b2a5a36ea00e121aaa257dae56ee3a9b97d24423e633b5e2145466"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "net.sf.jtidy:jtidy:r938:jtidy-r938.jar",
+      "coordinate": "net.sf.jtidy:jtidy:r938",
+      "artifact": {
+        "basename": "jtidy-r938.jar",
+        "sha256": "6fc03e51e73fa884f06e7eae0761e045e56fdeb4e146a4d952e3023cc9e3fb43"
+      },
+      "license": {
+        "expression": "LicenseRef-Java-HTML-Tidy",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "net.sf.jtidy:jtidy:r938",
+          "url": "https://repo.maven.apache.org/maven2/net/sf/jtidy/jtidy/r938/jtidy-r938.pom",
+          "sha256": "842738466999d276fa47c2f519514f577b1e5db067ca856057dfd524b9ac6770"
+        },
+        "files": [
+          "7a20dd0c72b88b8d33e5d41b403e945e5aef94e1e59d76e925c38556a248c94c"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "net.sf.saxon:Saxon-HE:11.6:Saxon-HE-11.6.jar",
+      "coordinate": "net.sf.saxon:Saxon-HE:11.6",
+      "artifact": {
+        "basename": "Saxon-HE-11.6.jar",
+        "sha256": "6e482b8130b362fc38ef5c9dee4bac9b085b3aaa7d5bc91bc1888d765c8696f8"
+      },
+      "license": {
+        "expression": "MPL-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "net.sf.saxon:Saxon-HE:11.6",
+          "url": "https://repo.maven.apache.org/maven2/net/sf/saxon/Saxon-HE/11.6/Saxon-HE-11.6.pom",
+          "sha256": "10d8bf00f415fb599ca2f8a2d651ff7b2b19618988b16143638e0824fedff430"
+        },
+        "files": [
+          "ada0787f27b581e024972a18b51db92c8e8508d0f05017d104a1c70a61b59951"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.apache-extras.beanshell:bsh:2.0b6:bsh-2.0b6.jar",
+      "coordinate": "org.apache-extras.beanshell:bsh:2.0b6",
+      "artifact": {
+        "basename": "bsh-2.0b6.jar",
+        "sha256": "a17955976070c0573235ee662f2794a78082758b61accffce8d3f8aedcd91047"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache-extras.beanshell:bsh:2.0b6",
+          "url": "https://repo.maven.apache.org/maven2/org/apache-extras/beanshell/bsh/2.0b6/bsh-2.0b6.pom",
+          "sha256": "679be8f12aa2864f7c286f7f5bcbac8365851c01821de5b99a12d6f772f521e6"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.apache.commons:commons-collections4:4.4:commons-collections4-4.4.jar",
+      "coordinate": "org.apache.commons:commons-collections4:4.4",
+      "artifact": {
+        "basename": "commons-collections4-4.4.jar",
+        "sha256": "1df8b9430b5c8ed143d7815e403e33ef5371b2400aadbe9bda0883762e0846d1"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:21",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/21/apache-21.pom",
+          "status": 200,
+          "sha256": "af10c108da014f17cafac7b52b2b4b5a3a1c18265fa2af97a325d9143537b380"
+        },
+        "files": [
+          "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "10203d78a651da05754be398e7df4c5a0b421522a34211a6fa6a1c42f557a2f2"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.commons:commons-lang3:3.14.0:commons-lang3-3.14.0.jar",
+      "coordinate": "org.apache.commons:commons-lang3:3.14.0",
+      "artifact": {
+        "basename": "commons-lang3-3.14.0.jar",
+        "sha256": "7b96bf3ee68949abb5bc465559ac270e0551596fa34523fddf890ec418dde13c"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:30",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/30/apache-30.pom",
+          "status": 200,
+          "sha256": "63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "2254574ad82687764e97a182763118379a948d6d6408cce25f0ba716a7b9ac08"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.commons:commons-math3:3.6.1:commons-math3-3.6.1.jar",
+      "coordinate": "org.apache.commons:commons-math3:3.6.1",
+      "artifact": {
+        "basename": "commons-math3-3.6.1.jar",
+        "sha256": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/16/apache-16.pom",
+          "status": 200,
+          "sha256": "9f85ff2fd7d6cb3097aa47fb419ee7f0ebe869109f98aba9f4eca3f49e74a40e"
+        },
+        "files": [
+          "64f23963615950bad9ddd31569a7f09afbbe11b81d94873ffd9b1cac6081a11d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5495442a32bfc2b93b4a8f2c34c5c218d16cca434aa5684fb953d9419120e3fa"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.commons:commons-pool2:2.12.0:commons-pool2-2.12.0.jar",
+      "coordinate": "org.apache.commons:commons-pool2:2.12.0",
+      "artifact": {
+        "basename": "commons-pool2-2.12.0.jar",
+        "sha256": "6d3bd18df8410f3e31b031aca582cc109342358a62a2759ebd0c4cdf30d06f8b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:30",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/30/apache-30.pom",
+          "status": 200,
+          "sha256": "63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8"
+        },
+        "files": [
+          "8f8441a968c10a65a27d75935cb16937775e2fcfc2d73066ca4b2ae9a6597b4f"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "8842303d7eb3ab21179def02cbcf139dbf8f24ff5cf8b73d7cb54f78a79590f1"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.commons:commons-text:1.11.0:commons-text-1.11.0.jar",
+      "coordinate": "org.apache.commons:commons-text:1.11.0",
+      "artifact": {
+        "basename": "commons-text-1.11.0.jar",
+        "sha256": "2acf30a070b19163d5a480eae411a281341e870020e3534c6d5d4c8472739e30"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:30",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/30/apache-30.pom",
+          "status": 200,
+          "sha256": "63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "ebedffcca675b7865b622a9f8d9e25005be10a8afb52a007225aaaf4ee936e66"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents:httpasyncclient:4.1.5:httpasyncclient-4.1.5.jar",
+      "coordinate": "org.apache.httpcomponents:httpasyncclient:4.1.5",
+      "artifact": {
+        "basename": "httpasyncclient-4.1.5.jar",
+        "sha256": "0c1877489a9d1ba4fa50f6cfcab11d1123618858cb31d56afaab5afdd5064d99"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.httpcomponents:httpcomponents-asyncclient:4.1.5",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-asyncclient/4.1.5/httpcomponents-asyncclient-4.1.5.pom",
+          "status": 200,
+          "sha256": "e90181e280c0271ff313741343e6f05405fae882702f45a4ce26dec016cd9c9f"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "6e3b048ff02c055b938a07320191d9faf5d0ddb8b4d591bdcf5f4e3f3fda575f"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents:httpclient:4.5.14:httpclient-4.5.14.jar",
+      "coordinate": "org.apache.httpcomponents:httpclient:4.5.14",
+      "artifact": {
+        "basename": "httpclient-4.5.14.jar",
+        "sha256": "c8bc7e1c51a6d4ce72f40d2ebbabf1c4b68bfe76e732104b04381b493478e9d6"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.httpcomponents:httpcomponents-client:4.5.14",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.5.14/httpcomponents-client-4.5.14.pom",
+          "status": 200,
+          "sha256": "5bad1de4f101447659f89d089868ccbad64a68cc503d2d65410b51f6904aa061"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "f5783fbb52e5fcfb26b6916ce3bb9c717d22759b030cee6deaa03145f1f8d819"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents:httpcore-nio:4.4.16:httpcore-nio-4.4.16.jar",
+      "coordinate": "org.apache.httpcomponents:httpcore-nio:4.4.16",
+      "artifact": {
+        "basename": "httpcore-nio-4.4.16.jar",
+        "sha256": "4018736ede2d321034e8517ea90baefb31831a8608afccc446d8a699fb1d00d4"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.httpcomponents:httpcomponents-core:4.4.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-core/4.4.16/httpcomponents-core-4.4.16.pom",
+          "status": 200,
+          "sha256": "f2d75a2c2d423ad18539bf21656d56f88a4091944a662fcaf159d5ae283db7f7"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "715b44cce5a2ef3cbd825f774fcbcf5ff091472669ffe2f868f4fb33fb45038b"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents:httpcore:4.4.16:httpcore-4.4.16.jar",
+      "coordinate": "org.apache.httpcomponents:httpcore:4.4.16",
+      "artifact": {
+        "basename": "httpcore-4.4.16.jar",
+        "sha256": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.httpcomponents:httpcomponents-core:4.4.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-core/4.4.16/httpcomponents-core-4.4.16.pom",
+          "status": 200,
+          "sha256": "f2d75a2c2d423ad18539bf21656d56f88a4091944a662fcaf159d5ae283db7f7"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "a8ff0d486f1bdd29331e0e244f96245354779ef818ec25ecd60545ad335b68da"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents:httpmime:4.5.14:httpmime-4.5.14.jar",
+      "coordinate": "org.apache.httpcomponents:httpmime:4.5.14",
+      "artifact": {
+        "basename": "httpmime-4.5.14.jar",
+        "sha256": "d401243d5c6eae928a37121b6e819158c8c32ea0584793e7285bb489ab2a3d17"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.httpcomponents:httpcomponents-client:4.5.14",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.5.14/httpcomponents-client-4.5.14.pom",
+          "status": 200,
+          "sha256": "5bad1de4f101447659f89d089868ccbad64a68cc503d2d65410b51f6904aa061"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "896bc4810113dd9a1e5b86d4ba49ee7f335075d903913365d4a7460969d5afd7"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents.client5:httpclient5:5.3:httpclient5-5.3.jar",
+      "coordinate": "org.apache.httpcomponents.client5:httpclient5:5.3",
+      "artifact": {
+        "basename": "httpclient5-5.3.jar",
+        "sha256": "b5649c109a30f57692172a4c4fd373e7d8bfe686d38e52f29ba7a183f6154044"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:27",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/27/apache-27.pom",
+          "status": 200,
+          "sha256": "b2b0fc69e22a650c3892f1c366d77076f29575c6738df4c7a70a44844484cdf9"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "4ad1973880c25e0c41fdf45fb47fbb3cb935b322982cca535d4dbf8062cc5a47"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents.core5:httpcore5-h2:5.2.4:httpcore5-h2-5.2.4.jar",
+      "coordinate": "org.apache.httpcomponents.core5:httpcore5-h2:5.2.4",
+      "artifact": {
+        "basename": "httpcore5-h2-5.2.4.jar",
+        "sha256": "dc1a95e73eb04db93451533d390ce02c53b301a10dc343d08c862f2934b3d30e"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:27",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/27/apache-27.pom",
+          "status": 200,
+          "sha256": "b2b0fc69e22a650c3892f1c366d77076f29575c6738df4c7a70a44844484cdf9"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "9c9b2e926919e38adf222b3191267806a742ce1adcd1e13dc91d11014b85bd57"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.httpcomponents.core5:httpcore5:5.2.4:httpcore5-5.2.4.jar",
+      "coordinate": "org.apache.httpcomponents.core5:httpcore5:5.2.4",
+      "artifact": {
+        "basename": "httpcore5-5.2.4.jar",
+        "sha256": "a7f62496113f66f9e27c26b84c44f5ce4555c6270083cdf2d45f255336cd52af"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:27",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/27/apache-27.pom",
+          "status": 200,
+          "sha256": "b2b0fc69e22a650c3892f1c366d77076f29575c6738df4c7a70a44844484cdf9"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "94a71d64ef74b0ca85db2d5e538118a4265ff8eed2f978eda58d2cfa5d88a310"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.jmeter:ApacheJMeter_components:5.6.3:ApacheJMeter_components-5.6.3.jar",
+      "coordinate": "org.apache.jmeter:ApacheJMeter_components:5.6.3",
+      "artifact": {
+        "basename": "ApacheJMeter_components-5.6.3.jar",
+        "sha256": "8995a26ad6949f52632736efc4e10edc56561ed643af5841b45d1b6496ee6eed"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.jmeter:ApacheJMeter_components:5.6.3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/jmeter/ApacheJMeter_components/5.6.3/ApacheJMeter_components-5.6.3.pom",
+          "sha256": "9001fff5bde8d65e3a35a45633d310421db57854a781fe02c1000f97c43f60ee"
+        },
+        "files": [
+          "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.jmeter:ApacheJMeter_core:5.6.3:ApacheJMeter_core-5.6.3.jar",
+      "coordinate": "org.apache.jmeter:ApacheJMeter_core:5.6.3",
+      "artifact": {
+        "basename": "ApacheJMeter_core-5.6.3.jar",
+        "sha256": "7d3bbe4844f299e53c58aa336578e39721c87cc4eb7e475d8173f408edc8dd4d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.jmeter:ApacheJMeter_core:5.6.3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/jmeter/ApacheJMeter_core/5.6.3/ApacheJMeter_core-5.6.3.pom",
+          "sha256": "75449dd4ccba1c176dad230eab701129c7ccf07e86cc772f40ec0fdb597a865d"
+        },
+        "files": [
+          "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.jmeter:ApacheJMeter_http:5.6.3:ApacheJMeter_http-5.6.3.jar",
+      "coordinate": "org.apache.jmeter:ApacheJMeter_http:5.6.3",
+      "artifact": {
+        "basename": "ApacheJMeter_http-5.6.3.jar",
+        "sha256": "d683037ecc7b7c12d657727eef104f6f760f540a1c0056b23419b684b6112005"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.jmeter:ApacheJMeter_http:5.6.3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/jmeter/ApacheJMeter_http/5.6.3/ApacheJMeter_http-5.6.3.pom",
+          "sha256": "caac66b7bc8a3a14a81e013154c9be7b0e5325305be5d8eb61d59c12b955803e"
+        },
+        "files": [
+          "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.jmeter:ApacheJMeter:5.6.3:ApacheJMeter-5.6.3.jar",
+      "coordinate": "org.apache.jmeter:ApacheJMeter:5.6.3",
+      "artifact": {
+        "basename": "ApacheJMeter-5.6.3.jar",
+        "sha256": "9c18010142b88cba2659a8471be414b34dd993e181bb10d6218fbab3e7b8712b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.jmeter:ApacheJMeter:5.6.3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/jmeter/ApacheJMeter/5.6.3/ApacheJMeter-5.6.3.pom",
+          "sha256": "b8e1f40a07e3a87675f269b81e400502623b66f4a492435ef08a00286b0977a6"
+        },
+        "files": [
+          "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.jmeter:jorphan:5.6.3:jorphan-5.6.3.jar",
+      "coordinate": "org.apache.jmeter:jorphan:5.6.3",
+      "artifact": {
+        "basename": "jorphan-5.6.3.jar",
+        "sha256": "304d51667db74eb6732676273ae548cce94505db7542989e0b7281b48bd1fc4c"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.jmeter:jorphan:5.6.3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/jmeter/jorphan/5.6.3/jorphan-5.6.3.pom",
+          "sha256": "3793e02ca50fe8e357cf6c139607902b38523a428330dd73671f91b2e065ce5a"
+        },
+        "files": [
+          "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.logging.log4j:log4j-1.2-api:2.22.1:log4j-1.2-api-2.22.1.jar",
+      "coordinate": "org.apache.logging.log4j:log4j-1.2-api:2.22.1",
+      "artifact": {
+        "basename": "log4j-1.2-api-2.22.1.jar",
+        "sha256": "9a025b24d7df425e7b22590274546df8eb0b040ccb3aff3856f9a266fa787fd8"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.logging.log4j:log4j-1.2-api:2.22.1",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-1.2-api/2.22.1/log4j-1.2-api-2.22.1.pom",
+          "sha256": "5b5b1f60a3aca5073cc4c053c044257b104437311a5c61e0182ca70e26760d41"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "c3b688392014011a0e25533edece0879768871288de6b182f6febd1899d5e5ab"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.logging.log4j:log4j-api:2.22.1:log4j-api-2.22.1.jar",
+      "coordinate": "org.apache.logging.log4j:log4j-api:2.22.1",
+      "artifact": {
+        "basename": "log4j-api-2.22.1.jar",
+        "sha256": "5d7beae7ff15d8516d6517121d7f12a79a6ac180df64b5fcec55d5be21056e53"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.logging.log4j:log4j-api:2.22.1",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.pom",
+          "sha256": "6d57547771394b3ee18f9ed3effa2159719e2f3634627863d05023ba9fd8e18b"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "2a8908b6a276d18ec83f94a918a04babaa48e3b5a9b8018aea7d5562648a8179"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.logging.log4j:log4j-core:2.22.1:log4j-core-2.22.1.jar",
+      "coordinate": "org.apache.logging.log4j:log4j-core:2.22.1",
+      "artifact": {
+        "basename": "log4j-core-2.22.1.jar",
+        "sha256": "46dccecac556623d8e2ce8648496824a82951d139062a4e61148aff1a25ed18d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.logging.log4j:log4j-core:2.22.1",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.pom",
+          "sha256": "1cf7f648fed43f0bfac3328d93fc823c7499078fd7904e18b6549bb1078a9c52"
+        },
+        "files": [
+          "e118ad8e5f2d3c71f0e7d6202d5829e7580ccd9e3609a546c692788e657afbe2"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "47481ebb980fb2d78204a80da2ccdb897c41aa34f43e0e5bcc06c1a32ea9ff48"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.logging.log4j:log4j-slf4j-impl:2.22.1:log4j-slf4j-impl-2.22.1.jar",
+      "coordinate": "org.apache.logging.log4j:log4j-slf4j-impl:2.22.1",
+      "artifact": {
+        "basename": "log4j-slf4j-impl-2.22.1.jar",
+        "sha256": "05e6b1a44022d9a30c4dd592c5ebd62309a857bdc6ccfd2f41a3e7495f5ec8b3"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.logging.log4j:log4j-slf4j-impl:2.22.1",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.22.1/log4j-slf4j-impl-2.22.1.pom",
+          "sha256": "98986034a8c5ba73bc5c9ef9c73e65868caaeb1f182522e9887791c70d9fc33d"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "6198f21d20d5611ca32d12a8b0900d9e093f678725f99eae40ece9962cd10404"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.tika:tika-core:1.28.5:tika-core-1.28.5.jar",
+      "coordinate": "org.apache.tika:tika-core:1.28.5",
+      "artifact": {
+        "basename": "tika-core-1.28.5.jar",
+        "sha256": "e64b3dc06c60b98ecbdfb9dbc3857f4ab54f9548eedd449ee0de39c0df5e3170"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:27",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/27/apache-27.pom",
+          "status": 200,
+          "sha256": "b2b0fc69e22a650c3892f1c366d77076f29575c6738df4c7a70a44844484cdf9"
+        },
+        "files": [
+          "9798f8a331a824364d0507bc2e8ccf58ded9204f6839f48ec4f10556116e40ac"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "c5642fe8d9afaa1e18a07435073ce2f079634b5747e41a6bb7140fbbaa970325"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.tika:tika-parsers:1.28.5:tika-parsers-1.28.5.jar",
+      "coordinate": "org.apache.tika:tika-parsers:1.28.5",
+      "artifact": {
+        "basename": "tika-parsers-1.28.5.jar",
+        "sha256": "ef3a343e1c107a7f2679f1e36b8c5c8f313a2846c46bee5be74562cf6b37ea7f"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:27",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/27/apache-27.pom",
+          "status": 200,
+          "sha256": "b2b0fc69e22a650c3892f1c366d77076f29575c6738df4c7a70a44844484cdf9"
+        },
+        "files": [
+          "e7c368dc3fc83d9493a30284322d7cc22caf6f8860b19e55d83644beaff494f1"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "25267e0ef4b0a316b17b040172e2d1eb6f643d361e70b752ff201e7e49683ff3"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-anim:1.16:batik-anim-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-anim:1.16",
+      "artifact": {
+        "basename": "batik-anim-1.16.jar",
+        "sha256": "93d2948dfc9837c392cb9c97d5ddaa4db95845e3061974b4ab94148f1587ddbf"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-awt-util:1.16:batik-awt-util-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-awt-util:1.16",
+      "artifact": {
+        "basename": "batik-awt-util-1.16.jar",
+        "sha256": "dc0409227230b21a69ac3e79359385e2300df76728ec26081c6ed6c4373d3f13"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-bridge:1.16:batik-bridge-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-bridge:1.16",
+      "artifact": {
+        "basename": "batik-bridge-1.16.jar",
+        "sha256": "a96031c2664599b43eee89ada011b6f20fb1d940bf70d1e830fbf780e7e2c86d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-codec:1.16:batik-codec-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-codec:1.16",
+      "artifact": {
+        "basename": "batik-codec-1.16.jar",
+        "sha256": "372f8127e7898256c19af3823a3837c80a58c23f5a5e36f34667b648d1a5e58a"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-constants:1.16:batik-constants-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-constants:1.16",
+      "artifact": {
+        "basename": "batik-constants-1.16.jar",
+        "sha256": "0bdc9ac3e0b93f26cafd3fd8e3065d13fe678865115fc162f4d627fa0af35ad5"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-css:1.16:batik-css-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-css:1.16",
+      "artifact": {
+        "basename": "batik-css-1.16.jar",
+        "sha256": "1f7e51c703813f21de58e9be4e6d907cef3a5540d23047507af9c4c5dc396419"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-dom:1.16:batik-dom-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-dom:1.16",
+      "artifact": {
+        "basename": "batik-dom-1.16.jar",
+        "sha256": "968dbc4bd291bb3c0074dc4b60223c4a95e0455c7b8c2a51ce5fe92aa68e15a1"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-ext:1.16:batik-ext-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-ext:1.16",
+      "artifact": {
+        "basename": "batik-ext-1.16.jar",
+        "sha256": "a12be0ba0f20a9f57ca16f76685366485b8c3119eaf5a2da4a34008d4947db73"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-gvt:1.16:batik-gvt-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-gvt:1.16",
+      "artifact": {
+        "basename": "batik-gvt-1.16.jar",
+        "sha256": "2232cfd309c30c5ee2d37d9efbacc8c708da091af747a77c4fc04287e234bd41"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-i18n:1.16:batik-i18n-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-i18n:1.16",
+      "artifact": {
+        "basename": "batik-i18n-1.16.jar",
+        "sha256": "94fc90806f7cb823dabc0d292012ed97d637207329dc8d2f351f52e0a9107d9a"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-parser:1.16:batik-parser-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-parser:1.16",
+      "artifact": {
+        "basename": "batik-parser-1.16.jar",
+        "sha256": "98257ac1b9daf378d917d7ac005ec9d85a17cfbb88fa744d0fed0d176e403220"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-script:1.16:batik-script-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-script:1.16",
+      "artifact": {
+        "basename": "batik-script-1.16.jar",
+        "sha256": "a66febdb41d9bade0e11e6320ed4914ea2799aa6b814c5ec7f35589b370733dc"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-shared-resources:1.16:batik-shared-resources-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-shared-resources:1.16",
+      "artifact": {
+        "basename": "batik-shared-resources-1.16.jar",
+        "sha256": "318543fe05ee0d118938d9302b2fce137d040f31d71e042d2ca02406e386974a"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-svg-dom:1.16:batik-svg-dom-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-svg-dom:1.16",
+      "artifact": {
+        "basename": "batik-svg-dom-1.16.jar",
+        "sha256": "701ee2e9c14ff7d39759db8fa8a8dd04398cbf9d38c75ad5ca178f05d99f4406"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-svggen:1.16:batik-svggen-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-svggen:1.16",
+      "artifact": {
+        "basename": "batik-svggen-1.16.jar",
+        "sha256": "4bb25e0267d80765a4f87063ff3cac77688b045dafe8e903452c6b3fae9b249c"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-transcoder:1.16:batik-transcoder-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-transcoder:1.16",
+      "artifact": {
+        "basename": "batik-transcoder-1.16.jar",
+        "sha256": "eaf365c90f758ab95deedf4d21331d5cdf0fa4e00df715df0240ab8f6653ff1e"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-util:1.16:batik-util-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-util:1.16",
+      "artifact": {
+        "basename": "batik-util-1.16.jar",
+        "sha256": "a8306eda7a840685da7a730cdd99a63f8145ceb543017779d438c9d67550bfa2"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:batik-xml:1.16:batik-xml-1.16.jar",
+      "coordinate": "org.apache.xmlgraphics:batik-xml:1.16",
+      "artifact": {
+        "basename": "batik-xml-1.16.jar",
+        "sha256": "56f1ed597857bc81f5db7e669d15caa7d9497887e2710f0f98eea4b3e3f8ddaa"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache.xmlgraphics:batik:1.16",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/batik/1.16/batik-1.16.pom",
+          "status": 200,
+          "sha256": "1ee6d8aa086f96dd8893b11c5060111a4e11634749abe30cfe9963957ca2e928"
+        },
+        "files": [
+          "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apache.xmlgraphics:xmlgraphics-commons:2.9:xmlgraphics-commons-2.9.jar",
+      "coordinate": "org.apache.xmlgraphics:xmlgraphics-commons:2.9",
+      "artifact": {
+        "basename": "xmlgraphics-commons-2.9.jar",
+        "sha256": "2ebd333ab2a624514793c336e3af086608673286fe37ba1e639e0ac3e1b58be2"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apache.xmlgraphics:xmlgraphics-commons:2.9",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/xmlgraphics/xmlgraphics-commons/2.9/xmlgraphics-commons-2.9.pom",
+          "sha256": "092d520a61ca4b8a4590437424c421cdb0cf40e798aececf2b0526f2af8f1f88"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "6716ab14ccc5f6cdd842c17c12cef90731ed58e14dd086e938e7d602619b5688"
+        ]
+      }
+    },
+    {
+      "recordId": "org.apiguardian:apiguardian-api:1.1.2:apiguardian-api-1.1.2.jar",
+      "coordinate": "org.apiguardian:apiguardian-api:1.1.2",
+      "artifact": {
+        "basename": "apiguardian-api-1.1.2.jar",
+        "sha256": "b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.apiguardian:apiguardian-api:1.1.2",
+          "url": "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.pom",
+          "sha256": "32355081d109095c3d5d374d5a43b4f4c1b75d549e983ef50723e2772e5302a0"
+        },
+        "files": [
+          "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.brotli:dec:0.1.2:dec-0.1.2.jar",
+      "coordinate": "org.brotli:dec:0.1.2",
+      "artifact": {
+        "basename": "dec-0.1.2.jar",
+        "sha256": "615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.brotli:parent:0.1.2",
+          "url": "https://repo.maven.apache.org/maven2/org/brotli/parent/0.1.2/parent-0.1.2.pom",
+          "status": 200,
+          "sha256": "116f9d6632c13cd49c3f33337765075fcefa1ab911e9e2b7762736cad4a8f569"
+        },
+        "files": [
+          "00af0c745e49dd49db724a9f81df512ed6468e7ac6a9488c4ebe728887d28139",
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6",
+          "a271aa9d288b06d150a9071764cf38c3fccc27b22f70f09dafb773aaee3bf557",
+          "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.checkerframework:checker-qual:3.42.0:checker-qual-3.42.0.jar",
+      "coordinate": "org.checkerframework:checker-qual:3.42.0",
+      "artifact": {
+        "basename": "checker-qual-3.42.0.jar",
+        "sha256": "ccaedd33af0b7894d9f2f3b644f4d19e43928e32902e61ac4d10777830f5aac7"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.checkerframework:checker-qual:3.42.0",
+          "url": "https://repo.maven.apache.org/maven2/org/checkerframework/checker-qual/3.42.0/checker-qual-3.42.0.pom",
+          "sha256": "bf5fcaab272f54cbcf1bbe77c3bd963c821c9abad2058708bf0bed3c875494ca"
+        },
+        "files": [
+          "e90eaa08dea089df10f2bf7f9dba63a5f6237c01562c4741e2e86773e78582d5"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-datetime:3.0.20:groovy-datetime-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-datetime:3.0.20",
+      "artifact": {
+        "basename": "groovy-datetime-3.0.20.jar",
+        "sha256": "2de4a2bc1dc5b063d30fc7dd7ddb4650da8ed94176ea2f85e99bb02af44a4d9e"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-datetime:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-datetime/3.0.20/groovy-datetime-3.0.20.pom",
+          "sha256": "d04700aab6d25027ec0f4e012561ef84d361a5a78363bbec91c32f43d503e22e"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-dateutil:3.0.20:groovy-dateutil-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-dateutil:3.0.20",
+      "artifact": {
+        "basename": "groovy-dateutil-3.0.20.jar",
+        "sha256": "75cae7acdcf46b13cb32768216ef375eca75f1a1dc2dfe06d00a3291961aec91"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-dateutil:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-dateutil/3.0.20/groovy-dateutil-3.0.20.pom",
+          "sha256": "201a265e8000d444cf30634d0c33c28ee64c375cb2f882092e15f753863b4630"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-jmx:3.0.20:groovy-jmx-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-jmx:3.0.20",
+      "artifact": {
+        "basename": "groovy-jmx-3.0.20.jar",
+        "sha256": "bb4100d324923a873eae366266682e55adb182c96de99f815cd0a15bacb3df6d"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-jmx:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-jmx/3.0.20/groovy-jmx-3.0.20.pom",
+          "sha256": "02369a7a689f0d380193cfb8d8a6da54801429ae84cf6389cd083490bdd3b2e0"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-json:3.0.20:groovy-json-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-json:3.0.20",
+      "artifact": {
+        "basename": "groovy-json-3.0.20.jar",
+        "sha256": "ea34a860bae73f916c8f4fc3ec6006462ae72e3b67d76ae8fa30db68ec754f7b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-json:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-json/3.0.20/groovy-json-3.0.20.pom",
+          "sha256": "80904c27a8d4fd393c288f4b2ba72b05edfede620aaf56443db75ddf0cf6880d"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-jsr223:3.0.20:groovy-jsr223-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-jsr223:3.0.20",
+      "artifact": {
+        "basename": "groovy-jsr223-3.0.20.jar",
+        "sha256": "f5fd449d8ac64009c569dd6e81b431408b27eda75d6b54db2f9983442d579974"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-jsr223:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-jsr223/3.0.20/groovy-jsr223-3.0.20.pom",
+          "sha256": "169a81add4f45c8229deb41e12f187c11a198e741ed00ba694c186921a43c62a"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-sql:3.0.20:groovy-sql-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-sql:3.0.20",
+      "artifact": {
+        "basename": "groovy-sql-3.0.20.jar",
+        "sha256": "3cc75b90719ab516929bbc6b4dbc27a8a8df415ba1f95ce5cf57fb5a7233c842"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-sql:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-sql/3.0.20/groovy-sql-3.0.20.pom",
+          "sha256": "53b20cdea75831606f9d8a43ba8bee26e5e7492cfc6cbd167c79963bd8abe3f5"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-templates:3.0.20:groovy-templates-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-templates:3.0.20",
+      "artifact": {
+        "basename": "groovy-templates-3.0.20.jar",
+        "sha256": "3485ae9cba0bf625ea3f5325833c194a6d59994cf01a28db5a976851b6564f7b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-templates:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-templates/3.0.20/groovy-templates-3.0.20.pom",
+          "sha256": "8fe207ab27b08d0565f71d86c85087896cfaeb1b87b163d4cebc33992ea1f2f8"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy-xml:3.0.20:groovy-xml-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy-xml:3.0.20",
+      "artifact": {
+        "basename": "groovy-xml-3.0.20.jar",
+        "sha256": "45f8fc9e1e392ab902369e03c985e4230b3429e4c2b06c0e3bf09180c3ed5e8e"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy-xml:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-xml/3.0.20/groovy-xml-3.0.20.pom",
+          "sha256": "3a3b40dfee80889d1130fd370d385d8c038e7958101c53f03185adb1cc44129e"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.codehaus.groovy:groovy:3.0.20:groovy-3.0.20.jar",
+      "coordinate": "org.codehaus.groovy:groovy:3.0.20",
+      "artifact": {
+        "basename": "groovy-3.0.20.jar",
+        "sha256": "1bcdd2fa1f8f062234cb6ed5b8c9c56a5876a9493afef3221f22dd4f92589736"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.codehaus.groovy:groovy:3.0.20",
+          "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy/3.0.20/groovy-3.0.20.pom",
+          "sha256": "03ea068ca42334fb71dd53c84cdaf1bb556e6ae9a358ee8cc83f3cda5ab8ddbe"
+        },
+        "files": [
+          "f594431f26247b3c75f10d8114ef114f69246958636a7011ed5c755de5ad2e27"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "7b618f2fcf2949dcc749cf71b9ef24692393cf8cd0e5bd6f7bc0467fc68c5001"
+        ]
+      }
+    },
+    {
+      "recordId": "org.freemarker:freemarker:2.3.32:freemarker-2.3.32.jar",
+      "coordinate": "org.freemarker:freemarker:2.3.32",
+      "artifact": {
+        "basename": "freemarker-2.3.32.jar",
+        "sha256": "04d65ec1bde6cea20e3495d5e78ef96ab774d9936434861d3254bd88e7e94f92"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.freemarker:freemarker:2.3.32",
+          "url": "https://repo.maven.apache.org/maven2/org/freemarker/freemarker/2.3.32/freemarker-2.3.32.pom",
+          "sha256": "07a07e2eaf0976022b540567c7df622712b9a0393a6c5f6d20e6ff1579222a01"
+        },
+        "files": [
+          "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "d666ac713e67eac629a5e5cda7cea1ea5a2002290efd4465d130645b03162b7d"
+        ]
+      }
+    },
+    {
+      "recordId": "org.jetbrains:annotations:24.1.0:annotations-24.1.0.jar",
+      "coordinate": "org.jetbrains:annotations:24.1.0",
+      "artifact": {
+        "basename": "annotations-24.1.0.jar",
+        "sha256": "27a770dc7ce50500918bb8c3c0660c98290630ec796b5e3cf6b90f403b3033c6"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains:annotations:24.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/24.1.0/annotations-24.1.0.pom",
+          "sha256": "2e37fd7020a4364b9e5d9f77c5b6742a3bea927dd560ca1e390dc815c9c50820"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10:kotlin-stdlib-jdk7-1.9.10.jar",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10",
+      "artifact": {
+        "basename": "kotlin-stdlib-jdk7-1.9.10.jar",
+        "sha256": "ac6361bf9ad1ed382c2103d9712c47cdec166232b4903ed596e8876b0681c9b7"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.9.10/kotlin-stdlib-jdk7-1.9.10.pom",
+          "sha256": "c7fa67c7961320b89d85a3ca59a2e18c2c65850845595dcae4b46af6945edcd5"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10:kotlin-stdlib-jdk8-1.9.10.jar",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10",
+      "artifact": {
+        "basename": "kotlin-stdlib-jdk8-1.9.10.jar",
+        "sha256": "a4c74d94d64ce1abe53760fe0389dd941f6fc558d0dab35e47c085a11ec80f28"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.10/kotlin-stdlib-jdk8-1.9.10.pom",
+          "sha256": "5f4b94dd3065a7764c37fa15de2ad6d81f40d59f8cb33f17d181c6384fb7a72e"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.kotlin:kotlin-stdlib:1.9.22:kotlin-stdlib-1.9.22.jar",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
+      "artifact": {
+        "basename": "kotlin-stdlib-1.9.22.jar",
+        "sha256": "6abe146c27864138b874ccccfe5f534e3eb923c99a1b7b5d45494ee5694f3e0a"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.22/kotlin-stdlib-1.9.22.pom",
+          "sha256": "cce2f15285ec8078a37746b57308a054042dd5cc25420c43f73b7857c2468f03"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3:kotlinx-coroutines-core-jvm-1.7.3.jar",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3",
+      "artifact": {
+        "basename": "kotlinx-coroutines-core-jvm-1.7.3.jar",
+        "sha256": "1ab3acc38f3e7355c4f9d1ec62107a46fa73c899f3070d055e5d4373dfe67e12"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.7.3/kotlinx-coroutines-core-jvm-1.7.3.pom",
+          "sha256": "753858753decbbb2397343e2b871f062f697812e9422e41c9ee46a66b93eee30"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.3:kotlinx-coroutines-swing-1.7.3.jar",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.3",
+      "artifact": {
+        "basename": "kotlinx-coroutines-swing-1.7.3.jar",
+        "sha256": "3145fd68ad71ec6100924f74f1b6d52d22250dc2771a56b4f164c2a22fb50cac"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.3",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-swing/1.7.3/kotlinx-coroutines-swing-1.7.3.pom",
+          "sha256": "7585490607ef7340a62cb8cc43fcc60da44f51d32b10b1a20123eb9a3dbfbc06"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:commons-jvm:4.1.0:commons-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:commons-jvm:4.1.0",
+      "artifact": {
+        "basename": "commons-jvm-4.1.0.jar",
+        "sha256": "fec8b0335b7e50d0593e1406eeb82eedb8f9b4fcca9bfbcb1c7c008ff08e79a7"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:commons-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/commons-jvm/4.1.0/commons-jvm-4.1.0.pom",
+          "sha256": "93cb79ebe28b751d8ab1885cadada2db235db4a9310749c328dd7800a78f3bca"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:datamodel-jvm:4.1.0:datamodel-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:datamodel-jvm:4.1.0",
+      "artifact": {
+        "basename": "datamodel-jvm-4.1.0.jar",
+        "sha256": "3960e50f5375f14b94b9079860b58ac8e3b00a8f83610c607c4c51c3c7457539"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:datamodel-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/datamodel-jvm/4.1.0/datamodel-jvm-4.1.0.pom",
+          "sha256": "6d3a5f94b8b3fef4fba8d5d945573a99afc5847e43416e993849d47b9b519b5e"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:deprecated-in-v4-jvm:4.1.0:deprecated-in-v4-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:deprecated-in-v4-jvm:4.1.0",
+      "artifact": {
+        "basename": "deprecated-in-v4-jvm-4.1.0.jar",
+        "sha256": "3823c0b0df151673f767015bba240447a281dce5b7b3a22f8d370c1f243ef94d"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:deprecated-in-v4-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/deprecated-in-v4-jvm/4.1.0/deprecated-in-v4-jvm-4.1.0.pom",
+          "sha256": "7c15ccecafd5fa0384bef5c274d947eb1b36572475261977999eebfdb5496efe"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:lets-plot-batik:4.1.0:lets-plot-batik-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:lets-plot-batik:4.1.0",
+      "artifact": {
+        "basename": "lets-plot-batik-4.1.0.jar",
+        "sha256": "bf5c2e4d92bccd91b24126d63be31ae21883ea920e3cc3cd619354baa4a87deb"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:lets-plot-batik:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/lets-plot-batik/4.1.0/lets-plot-batik-4.1.0.pom",
+          "sha256": "1238003e2c1a8e7ad89d5e4e3353ef9135cc3581d9b93b88d93bd87e662663bc"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:lets-plot-common:4.1.0:lets-plot-common-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:lets-plot-common:4.1.0",
+      "artifact": {
+        "basename": "lets-plot-common-4.1.0.jar",
+        "sha256": "bf5c2e4d92bccd91b24126d63be31ae21883ea920e3cc3cd619354baa4a87deb"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:lets-plot-common:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/lets-plot-common/4.1.0/lets-plot-common-4.1.0.pom",
+          "sha256": "218e1353a5b625f90ea529ecd5147ee23b61055f4e3cdbb57779a8559827ae0e"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.5.0:plot-api-jvm-4.5.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.5.0",
+      "artifact": {
+        "basename": "plot-api-jvm-4.5.0.jar",
+        "sha256": "38088741fbf5af08c43ee6942313b753c44ec79348b3be7eb4ec49c1d0a3338f"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.5.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/lets-plot-kotlin-jvm/4.5.0/lets-plot-kotlin-jvm-4.5.0.pom",
+          "sha256": "3595d4f692eabd91483583352d82a18f0bd7d82bb4711b8e4103f9b53e463f1f"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "04288c6a09ac34655cfc111a85b2c7c5af17b6a2c871552f5235685f9f8df64b"
+        ]
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:platf-awt-jvm:4.1.0:platf-awt-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:platf-awt-jvm:4.1.0",
+      "artifact": {
+        "basename": "platf-awt-jvm-4.1.0.jar",
+        "sha256": "c5a5055678c0bc3139d1d1f91465e535a76a070ea60c995e7eddce2520f3f04a"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:platf-awt-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/platf-awt-jvm/4.1.0/platf-awt-jvm-4.1.0.pom",
+          "sha256": "764348f10ca265962cf68bf3b338953f959f40675e7cf3e83e358f96c9e4344f"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:platf-batik-jvm:4.1.0:platf-batik-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:platf-batik-jvm:4.1.0",
+      "artifact": {
+        "basename": "platf-batik-jvm-4.1.0.jar",
+        "sha256": "b02c3ad6b1123610a96cc5fc043a14accca4dd55d423cd92866f01abf2933de4"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:platf-batik-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/platf-batik-jvm/4.1.0/platf-batik-jvm-4.1.0.pom",
+          "sha256": "b239b4772a6905c204d8aafef0868e30c725e7a63fbf599e7c106f9d82502087"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:plot-base-jvm:4.1.0:plot-base-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:plot-base-jvm:4.1.0",
+      "artifact": {
+        "basename": "plot-base-jvm-4.1.0.jar",
+        "sha256": "444fc9e37f3b8db0ccc91e9d43938d954b0bb379b023b12b89b3d9791b644a23"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:plot-base-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/plot-base-jvm/4.1.0/plot-base-jvm-4.1.0.pom",
+          "sha256": "7834230ceb2855c9e6fba4e60016dc1dca810b9c2d9c22135d9d412b9ec840bd"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ]
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:plot-builder-jvm:4.1.0:plot-builder-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:plot-builder-jvm:4.1.0",
+      "artifact": {
+        "basename": "plot-builder-jvm-4.1.0.jar",
+        "sha256": "4edf24b72ec64f1b3af5c0abbd7efe18bc25ca1b25a97a64c875600383cb8520"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:plot-builder-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/plot-builder-jvm/4.1.0/plot-builder-jvm-4.1.0.pom",
+          "sha256": "5aa0a5c0b3b3b71dfc796ec4f37194702ce22f21235e495a9ea2f59854506acd"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jetbrains.lets-plot:plot-stem-jvm:4.1.0:plot-stem-jvm-4.1.0.jar",
+      "coordinate": "org.jetbrains.lets-plot:plot-stem-jvm:4.1.0",
+      "artifact": {
+        "basename": "plot-stem-jvm-4.1.0.jar",
+        "sha256": "94e5a3102d70cc814abf6c5d6f1a76b2d1377dd01310574ad0a92ab71c3bb953"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jetbrains.lets-plot:plot-stem-jvm:4.1.0",
+          "url": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/plot-stem-jvm/4.1.0/plot-stem-jvm-4.1.0.pom",
+          "sha256": "ae89c54a04ae5af996f68276e363d81421f22b6d4e77f7047edfe2b63a12451b"
+        },
+        "files": [
+          "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jodd:jodd-core:5.0.13:jodd-core-5.0.13.jar",
+      "coordinate": "org.jodd:jodd-core:5.0.13",
+      "artifact": {
+        "basename": "jodd-core-5.0.13.jar",
+        "sha256": "a77cf7400ef90c946a70ffa410920e9b62ac6bf9e0d8b2d6d185e894313b285b"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jodd:jodd-core:5.0.13",
+          "url": "https://repo.maven.apache.org/maven2/org/jodd/jodd-core/5.0.13/jodd-core-5.0.13.pom",
+          "sha256": "799908b50b39a89eaf90709201571c23568857b74e4346d4875e1c38f5abd75a"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jodd:jodd-lagarto:5.0.13:jodd-lagarto-5.0.13.jar",
+      "coordinate": "org.jodd:jodd-lagarto:5.0.13",
+      "artifact": {
+        "basename": "jodd-lagarto-5.0.13.jar",
+        "sha256": "47b35d8323e8ebc716f6a88d217b438d36dffafbdefa7724c5e9c85ac7c8bff2"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jodd:jodd-lagarto:5.0.13",
+          "url": "https://repo.maven.apache.org/maven2/org/jodd/jodd-lagarto/5.0.13/jodd-lagarto-5.0.13.pom",
+          "sha256": "1cf766f3b66282e5589a4079bf1826000e7294fd1fe0e889eb07c3c2c518ca59"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jodd:jodd-log:5.0.13:jodd-log-5.0.13.jar",
+      "coordinate": "org.jodd:jodd-log:5.0.13",
+      "artifact": {
+        "basename": "jodd-log-5.0.13.jar",
+        "sha256": "0fdf30d3b6c27ac78545a226a62c9f2f5675d3168ca91561968a5e0db73c232d"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jodd:jodd-log:5.0.13",
+          "url": "https://repo.maven.apache.org/maven2/org/jodd/jodd-log/5.0.13/jodd-log-5.0.13.pom",
+          "sha256": "ec99479a69a1b81fbdc5d58efac262cb68d966ea1f468f9c89a8de9ec7ba4631"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jodd:jodd-props:5.0.13:jodd-props-5.0.13.jar",
+      "coordinate": "org.jodd:jodd-props:5.0.13",
+      "artifact": {
+        "basename": "jodd-props-5.0.13.jar",
+        "sha256": "f1029ee3be973df0c4a65dac2d18c718116d83c11a0e2fa526344dc7537a4f45"
+      },
+      "license": {
+        "expression": "BSD-2-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jodd:jodd-props:5.0.13",
+          "url": "https://repo.maven.apache.org/maven2/org/jodd/jodd-props/5.0.13/jodd-props-5.0.13.pom",
+          "sha256": "259da83a2f5b781f9c807898d6a18c88caf6c9c63b7a437ce772ff7aba1b5982"
+        },
+        "files": [
+          "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.jsoup:jsoup:1.17.1:jsoup-1.17.1.jar",
+      "coordinate": "org.jsoup:jsoup:1.17.1",
+      "artifact": {
+        "basename": "jsoup-1.17.1.jar",
+        "sha256": "9da350a86ec44adbe152a7258dbebad0030cb98aff74384b8b83f126223e51a5"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.jsoup:jsoup:1.17.1",
+          "url": "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.17.1/jsoup-1.17.1.pom",
+          "sha256": "322b80113d8b10e75f36009832119ff59fb7c6a15bbaac88d41a303d5932a526"
+        },
+        "files": [
+          "1dcd34a384e31707af7678fd60bda296d03b4f9bf6be36a7d9d2e6c33c8b0860"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.mozilla:rhino:1.7.14:rhino-1.7.14.jar",
+      "coordinate": "org.mozilla:rhino:1.7.14",
+      "artifact": {
+        "basename": "rhino-1.7.14.jar",
+        "sha256": "c9290b0d801bf0dbbbc44338e0f769b7650a0c5d04e6bb1aeb85775c0211b003"
+      },
+      "license": {
+        "expression": "MPL-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.mozilla:rhino:1.7.14",
+          "url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino/1.7.14/rhino-1.7.14.pom",
+          "sha256": "946022832cfb8265cec1eb1bf3e18657fb061281ee375f179572df32053af812"
+        },
+        "files": [
+          "ada0787f27b581e024972a18b51db92c8e8508d0f05017d104a1c70a61b59951"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "9246f7f820e791b7328d46ba341bb5a2bb08c3e2e1b9d36803ab0c3899e0462f",
+          "dd4baa87ecb0f65aa0df9240a8d61b45dc68b232e39a93024fa3d8cc119617c9"
+        ]
+      }
+    },
+    {
+      "recordId": "org.ow2.asm:asm:9.6:asm-9.6.jar",
+      "coordinate": "org.ow2.asm:asm:9.6",
+      "artifact": {
+        "basename": "asm-9.6.jar",
+        "sha256": "3c6fac2424db3d4a853b669f4e3d1d9c3c552235e19a319673f887083c2303a1"
+      },
+      "license": {
+        "expression": "BSD-3-Clause",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.ow2.asm:asm:9.6",
+          "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.pom",
+          "sha256": "92eee24bc3c843e4881d46c1dd6505471ee3142facfb466b428cfea5a56c6b60"
+        },
+        "files": [
+          "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.slf4j:jcl-over-slf4j:1.7.36:jcl-over-slf4j-1.7.36.jar",
+      "coordinate": "org.slf4j:jcl-over-slf4j:1.7.36",
+      "artifact": {
+        "basename": "jcl-over-slf4j-1.7.36.jar",
+        "sha256": "ab57ca8fd223772c17365d121f59e94ecbf0ae59d08c03a3cb5b81071c019195"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.slf4j:jcl-over-slf4j:1.7.36",
+          "url": "https://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.pom",
+          "sha256": "bd96243d7d4218cd7cc7d45c0e30fa13480a1a4f91d356edd7dfe93f1ffb68e6"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.slf4j:slf4j-api:1.7.36:slf4j-api-1.7.36.jar",
+      "coordinate": "org.slf4j:slf4j-api:1.7.36",
+      "artifact": {
+        "basename": "slf4j-api-1.7.36.jar",
+        "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0"
+      },
+      "license": {
+        "expression": "MIT",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.slf4j:slf4j-parent:1.7.36",
+          "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom",
+          "status": 200,
+          "sha256": "bb388d37fbcdd3cde64c3cede21838693218dc451f04040c5df360a78ed7e812"
+        },
+        "files": [
+          "00af0c745e49dd49db724a9f81df512ed6468e7ac6a9488c4ebe728887d28139",
+          "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6",
+          "a271aa9d288b06d150a9071764cf38c3fccc27b22f70f09dafb773aaee3bf557",
+          "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.xmlresolver:xmlresolver:5.2.1:xmlresolver-5.2.1-data.jar",
+      "coordinate": "org.xmlresolver:xmlresolver:5.2.1",
+      "artifact": {
+        "basename": "xmlresolver-5.2.1-data.jar",
+        "sha256": "101ea528ca9007493b2c3bb2c4aaa8ce75d750fb8d95a0b409518b7b562a99b0"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.xmlresolver:xmlresolver:5.2.1",
+          "url": "https://repo.maven.apache.org/maven2/org/xmlresolver/xmlresolver/5.2.1/xmlresolver-5.2.1.pom",
+          "sha256": "510518bc9fffe37df024072c5fb56f87f22d8e89ce1ee809ea9673b169d2857d"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.xmlresolver:xmlresolver:5.2.1:xmlresolver-5.2.1.jar",
+      "coordinate": "org.xmlresolver:xmlresolver:5.2.1",
+      "artifact": {
+        "basename": "xmlresolver-5.2.1.jar",
+        "sha256": "18c7b2d0a99c95d24c2ec9a7566afb88f3dc2bc5086666634d882c679a2037b4"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.xmlresolver:xmlresolver:5.2.1",
+          "url": "https://repo.maven.apache.org/maven2/org/xmlresolver/xmlresolver/5.2.1/xmlresolver-5.2.1.pom",
+          "sha256": "510518bc9fffe37df024072c5fb56f87f22d8e89ce1ee809ea9673b169d2857d"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "org.yaml:snakeyaml:2.2:snakeyaml-2.2.jar",
+      "coordinate": "org.yaml:snakeyaml:2.2",
+      "artifact": {
+        "basename": "snakeyaml-2.2.jar",
+        "sha256": "1467931448a0817696ae2805b7b8b20bfb082652bf9c4efaed528930dc49389b"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "org.yaml:snakeyaml:2.2",
+          "url": "https://repo.maven.apache.org/maven2/org/yaml/snakeyaml/2.2/snakeyaml-2.2.pom",
+          "sha256": "e982eadc788c69cf2e4de50a9f632b182c31dba50612830d348fc4b4ba8dd7d6"
+        },
+        "files": [
+          "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "oro:oro:2.0.8:oro-2.0.8.jar",
+      "coordinate": "oro:oro:2.0.8",
+      "artifact": {
+        "basename": "oro-2.0.8.jar",
+        "sha256": "e00ccdad5df7eb43fdee44232ef64602bf63807c2d133a7be83ba09fd49af26e"
+      },
+      "license": {
+        "expression": "Apache-1.1",
+        "authority": {
+          "kind": "exact_binary_jar_entry",
+          "artifactSha256": "e00ccdad5df7eb43fdee44232ef64602bf63807c2d133a7be83ba09fd49af26e",
+          "entry": "META-INF/LICENSE",
+          "sha256": "632072c545bc4a542196d2baac36842a108f39c991c4b6b2d0fb01fd645b9365"
+        },
+        "files": [
+          "632072c545bc4a542196d2baac36842a108f39c991c4b6b2d0fb01fd645b9365"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    },
+    {
+      "recordId": "xalan:serializer:2.7.3:serializer-2.7.3.jar",
+      "coordinate": "xalan:serializer:2.7.3",
+      "artifact": {
+        "basename": "serializer-2.7.3.jar",
+        "sha256": "5f6804bacdfdb3ccc52d2538536fab8986696d61559b081054a420c653806667"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "official_release_archive_entry",
+          "archiveUrl": "https://archive.apache.org/dist/xalan/xalan-j/source/xalan-j_2_7_3-src.tar.gz",
+          "transportMirrorUrl": "https://apache.root.lu/xalan/xalan-j/source/xalan-j_2_7_3-src.tar.gz",
+          "archiveSha512": "fe4b2b9471f95a2cd3607550a6c97b46b7d2576d1e814305f4564df88aaf4fdc9f88ba43dad4a5741521b2c2f5137e3e70d2d4e31b232d403a66dc1e889c8b6b",
+          "entry": "xalan-j_2_7_3/LICENSE.txt",
+          "sha256": "1e79545d82ffaf1597999989fcce3d0ca11c460acc1a43ee6c7b580b622684d3"
+        },
+        "files": [
+          "1e79545d82ffaf1597999989fcce3d0ca11c460acc1a43ee6c7b580b622684d3"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "bd4dfb34a03e740eebced8f5ba1161ad1ba81d9a9d67788dd02d5775de94fd06"
+        ]
+      }
+    },
+    {
+      "recordId": "xalan:xalan:2.7.3:xalan-2.7.3.jar",
+      "coordinate": "xalan:xalan:2.7.3",
+      "artifact": {
+        "basename": "xalan-2.7.3.jar",
+        "sha256": "febd48bb133a96c447282213951a6b74ea7fb45c0d896121296c014316bda6b0"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "exact_binary_jar_entry",
+          "artifactSha256": "febd48bb133a96c447282213951a6b74ea7fb45c0d896121296c014316bda6b0",
+          "entry": "META-INF/LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        "files": [
+          "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "b678c89821ec8be27d16b9b6d0f9af0d967b7b5e97e35edfe012aa40d229bfc3",
+          "bd4dfb34a03e740eebced8f5ba1161ad1ba81d9a9d67788dd02d5775de94fd06"
+        ]
+      }
+    },
+    {
+      "recordId": "xerces:xercesImpl:2.12.2:xercesImpl-2.12.2.jar",
+      "coordinate": "xerces:xercesImpl:2.12.2",
+      "artifact": {
+        "basename": "xercesImpl-2.12.2.jar",
+        "sha256": "6fc991829af1708d15aea50c66f0beadcd2cfeb6968e0b2f55c1b0909883fe16"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "xerces:xercesImpl:2.12.2",
+          "url": "https://repo.maven.apache.org/maven2/xerces/xercesImpl/2.12.2/xercesImpl-2.12.2.pom",
+          "sha256": "b098c63df1a6cfea88cb5bf3c6bad902ed421faf7128e2f92083ba13517728d9"
+        },
+        "files": [
+          "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "a0c7cb70cb043224881345123591b3bbf34504990b3b3dfd9069d2be3b5331ba"
+        ]
+      }
+    },
+    {
+      "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+      "coordinate": "xml-apis:xml-apis-ext:1.3.04",
+      "artifact": {
+        "basename": "xml-apis-ext-1.3.04.jar",
+        "sha256": "d0b4887dc34d57de49074a58affad439a013d0baffa1a8034f8ef2a5ea191646"
+      },
+      "license": {
+        "expression": "Apache-2.0",
+        "authority": {
+          "kind": "maven_parent_pom",
+          "coordinate": "org.apache:apache:3",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/3/apache-3.pom",
+          "status": 200,
+          "sha256": "393c50afb4b7aa6eb57e5377a55a1a0610b19f75b52ece01308db04a1187a20e"
+        },
+        "files": [
+          "1eb5ef36287b5a184476b1156bc7ec42c87e0702b28e9f0c979d09414bca389c",
+          "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+          "4cb80054a604d9fe512e8ff1152db4032ae70fe362b83e5f17c104481a44c8fa",
+          "69f46f492f7e33d21c5ef3261fa4c90123357546784e00b44a1f8daf05a8b96e",
+          "a6dbf46a8a820e353a5ff9e559b940f2409892d853e0cc4a31dd4a54a3688a8a"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "7832ea5e9c3720bae0436725358f144519c64770f5e0ae6fc23fe023048ec13b"
+        ]
+      }
+    },
+    {
+      "recordId": "xml-apis:xml-apis:1.4.01:xml-apis-1.4.01.jar",
+      "coordinate": "xml-apis:xml-apis:1.4.01",
+      "artifact": {
+        "basename": "xml-apis-1.4.01.jar",
+        "sha256": "a840968176645684bb01aed376e067ab39614885f9eee44abe35a5f20ebe7fad"
+      },
+      "license": {
+        "expression": "Apache-2.0 AND LicenseRef-SAX-Public-Domain AND LicenseRef-W3C-20021231",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "xml-apis:xml-apis:1.4.01",
+          "url": "https://repo.maven.apache.org/maven2/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.pom",
+          "sha256": "09a82ff150ac86bfa31145e0a6afd89a02e4504785f5da112e4fae1425020e92"
+        },
+        "files": [
+          "163b1b572778c6e509270a104c23876ed71cbaf04d12790ca38a30619c289507",
+          "1eb5ef36287b5a184476b1156bc7ec42c87e0702b28e9f0c979d09414bca389c",
+          "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+          "4f379b6af6ecfebff566986c16d463012033bcd0112a9dd0d34b294fa4fd9c9b",
+          "a6dbf46a8a820e353a5ff9e559b940f2409892d853e0cc4a31dd4a54a3688a8a",
+          "add61f525baf71c63a6f96cc10976efecfe3ad111036048d6e3096530b709731"
+        ]
+      },
+      "notice": {
+        "required": true,
+        "files": [
+          "12dfffe0023154f8af47627cde701399a621f650ca3d37f9fd5520e0cc60c753"
+        ]
+      }
+    },
+    {
+      "recordId": "xmlpull:xmlpull:1.1.3.1:xmlpull-1.1.3.1.jar",
+      "coordinate": "xmlpull:xmlpull:1.1.3.1",
+      "artifact": {
+        "basename": "xmlpull-1.1.3.1.jar",
+        "sha256": "34e08ee62116071cbb69c0ed70d15a7a5b208d62798c59f2120bb8929324cb63"
+      },
+      "license": {
+        "expression": "LicenseRef-Public-Domain",
+        "authority": {
+          "kind": "maven_coordinate_pom",
+          "coordinate": "xmlpull:xmlpull:1.1.3.1",
+          "url": "https://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.pom",
+          "sha256": "8f10ffd8df0d3e9819c8cc8402709c6b248bc53a954ef6e45470d9ae3a5735fb"
+        },
+        "files": [
+          "4eeafa29d1d9a0cdbdad0f5178cd553527329b57b5808ffe912cb9c698343612"
+        ]
+      },
+      "notice": {
+        "required": false,
+        "files": []
+      }
+    }
+  ],
+  "texts": [
+    {
+      "sha256": "00af0c745e49dd49db724a9f81df512ed6468e7ac6a9488c4ebe728887d28139",
+      "path": "META-INF/j4a/release-licenses/00af0c745e49dd49db724a9f81df512ed6468e7ac6a9488c4ebe728887d28139.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+        "entry": "META-INF/PBJAR_LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "04288c6a09ac34655cfc111a85b2c7c5af17b6a2c871552f5235685f9f8df64b",
+      "path": "META-INF/j4a/release-licenses/04288c6a09ac34655cfc111a85b2c7c5af17b6a2c871552f5235685f9f8df64b.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/04288c6a09ac34655cfc111a85b2c7c5af17b6a2c871552f5235685f9f8df64b.base64",
+        "authorityUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/lets-plot-kotlin-jvm/4.5.0/lets-plot-kotlin-jvm-4.5.0-sources.jar",
+        "entry": "commonMain/org/jetbrains/letsPlot/util/pngj/NOTICE.txt",
+        "sourceArtifactSha256": "8397415cbdaf3d9d88fdd105f7f612b86648d89d836d39ba5f9c4e4b1ff8b1f5"
+      }
+    },
+    {
+      "sha256": "0a0042db627fe915c6a1d9ef74927af5081446063e8888494be6718d692dd2b8",
+      "path": "META-INF/j4a/release-licenses/0a0042db627fe915c6a1d9ef74927af5081446063e8888494be6718d692dd2b8.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fasterxml.jackson.core:jackson-core:2.16.1:jackson-core-2.16.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "10203d78a651da05754be398e7df4c5a0b421522a34211a6fa6a1c42f557a2f2",
+      "path": "META-INF/j4a/release-licenses/10203d78a651da05754be398e7df4c5a0b421522a34211a6fa6a1c42f557a2f2.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-collections4:4.4:commons-collections4-4.4.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "10f3b2b1bbdbba01667bfb3bee47ec989e7c577c244ba74846d55f31d8e2093c",
+      "path": "META-INF/j4a/release-licenses/10f3b2b1bbdbba01667bfb3bee47ec989e7c577c244ba74846d55f31d8e2093c.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "javax.mail:mail:1.5.0-b01:mail-1.5.0-b01.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "12dfffe0023154f8af47627cde701399a621f650ca3d37f9fd5520e0cc60c753",
+      "path": "META-INF/j4a/release-licenses/12dfffe0023154f8af47627cde701399a621f650ca3d37f9fd5520e0cc60c753.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis:1.4.01:xml-apis-1.4.01.jar",
+        "entry": "license/NOTICE"
+      }
+    },
+    {
+      "sha256": "163b1b572778c6e509270a104c23876ed71cbaf04d12790ca38a30619c289507",
+      "path": "META-INF/j4a/release-licenses/163b1b572778c6e509270a104c23876ed71cbaf04d12790ca38a30619c289507.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis:1.4.01:xml-apis-1.4.01.jar",
+        "entry": "license/LICENSE.dom-software.txt"
+      }
+    },
+    {
+      "sha256": "1dcd34a384e31707af7678fd60bda296d03b4f9bf6be36a7d9d2e6c33c8b0860",
+      "path": "META-INF/j4a/release-licenses/1dcd34a384e31707af7678fd60bda296d03b4f9bf6be36a7d9d2e6c33c8b0860.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.jsoup:jsoup:1.17.1:jsoup-1.17.1.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "1e79545d82ffaf1597999989fcce3d0ca11c460acc1a43ee6c7b580b622684d3",
+      "path": "META-INF/j4a/release-licenses/1e79545d82ffaf1597999989fcce3d0ca11c460acc1a43ee6c7b580b622684d3.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/1e79545d82ffaf1597999989fcce3d0ca11c460acc1a43ee6c7b580b622684d3.base64",
+        "authorityUrl": "https://archive.apache.org/dist/xalan/xalan-j/source/xalan-j_2_7_3-src.tar.gz",
+        "entry": "xalan-j_2_7_3/LICENSE.txt",
+        "sourceArtifactSha512": "fe4b2b9471f95a2cd3607550a6c97b46b7d2576d1e814305f4564df88aaf4fdc9f88ba43dad4a5741521b2c2f5137e3e70d2d4e31b232d403a66dc1e889c8b6b"
+      }
+    },
+    {
+      "sha256": "1eb5ef36287b5a184476b1156bc7ec42c87e0702b28e9f0c979d09414bca389c",
+      "path": "META-INF/j4a/release-licenses/1eb5ef36287b5a184476b1156bc7ec42c87e0702b28e9f0c979d09414bca389c.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+        "entry": "license/README.dom.txt"
+      }
+    },
+    {
+      "sha256": "2254574ad82687764e97a182763118379a948d6d6408cce25f0ba716a7b9ac08",
+      "path": "META-INF/j4a/release-licenses/2254574ad82687764e97a182763118379a948d6d6408cce25f0ba716a7b9ac08.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-lang3:3.14.0:commons-lang3-3.14.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "25267e0ef4b0a316b17b040172e2d1eb6f643d361e70b752ff201e7e49683ff3",
+      "path": "META-INF/j4a/release-licenses/25267e0ef4b0a316b17b040172e2d1eb6f643d361e70b752ff201e7e49683ff3.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.tika:tika-parsers:1.28.5:tika-parsers-1.28.5.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "2a8908b6a276d18ec83f94a918a04babaa48e3b5a9b8018aea7d5562648a8179",
+      "path": "META-INF/j4a/release-licenses/2a8908b6a276d18ec83f94a918a04babaa48e3b5a9b8018aea7d5562648a8179.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.logging.log4j:log4j-api:2.22.1:log4j-api-2.22.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "36e05b0ed24aba581a7cc0ba736eab9f34fb24b12210f70c8f46d25cd6768e1d",
+      "path": "META-INF/j4a/release-licenses/36e05b0ed24aba581a7cc0ba736eab9f34fb24b12210f70c8f46d25cd6768e1d.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+        "entry": "META-INF/INTELLIJ_NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "376e8bd54f6d2f4eccfae7ba67871d0e9de4b10c75c2ecb6fe098f68def2480c",
+      "path": "META-INF/j4a/release-licenses/376e8bd54f6d2f4eccfae7ba67871d0e9de4b10c75c2ecb6fe098f68def2480c.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.helger.commons:ph-commons:10.2.5:ph-commons-10.2.5.jar",
+        "entry": "NOTICE"
+      }
+    },
+    {
+      "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+      "path": "META-INF/j4a/release-licenses/3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-collections4:4.4:commons-collections4-4.4.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "443ffaefcfa714c401a0847d0e1b3aefb21ef10ffbc665884d5855803a86df99",
+      "path": "META-INF/j4a/release-licenses/443ffaefcfa714c401a0847d0e1b3aefb21ef10ffbc665884d5855803a86df99.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "commons-logging:commons-logging:1.3.0:commons-logging-1.3.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "47481ebb980fb2d78204a80da2ccdb897c41aa34f43e0e5bcc06c1a32ea9ff48",
+      "path": "META-INF/j4a/release-licenses/47481ebb980fb2d78204a80da2ccdb897c41aa34f43e0e5bcc06c1a32ea9ff48.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.logging.log4j:log4j-core:2.22.1:log4j-core-2.22.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "4ad1973880c25e0c41fdf45fb47fbb3cb935b322982cca535d4dbf8062cc5a47",
+      "path": "META-INF/j4a/release-licenses/4ad1973880c25e0c41fdf45fb47fbb3cb935b322982cca535d4dbf8062cc5a47.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents.client5:httpclient5:5.3:httpclient5-5.3.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "4cb80054a604d9fe512e8ff1152db4032ae70fe362b83e5f17c104481a44c8fa",
+      "path": "META-INF/j4a/release-licenses/4cb80054a604d9fe512e8ff1152db4032ae70fe362b83e5f17c104481a44c8fa.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+        "entry": "license/LICENSE.dom-software.txt"
+      }
+    },
+    {
+      "sha256": "4eeafa29d1d9a0cdbdad0f5178cd553527329b57b5808ffe912cb9c698343612",
+      "path": "META-INF/j4a/release-licenses/4eeafa29d1d9a0cdbdad0f5178cd553527329b57b5808ffe912cb9c698343612.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/4eeafa29d1d9a0cdbdad0f5178cd553527329b57b5808ffe912cb9c698343612.base64",
+        "authorityUrl": "https://www.xmlpull.org/v1/download/unpacked/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "4f379b6af6ecfebff566986c16d463012033bcd0112a9dd0d34b294fa4fd9c9b",
+      "path": "META-INF/j4a/release-licenses/4f379b6af6ecfebff566986c16d463012033bcd0112a9dd0d34b294fa4fd9c9b.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis:1.4.01:xml-apis-1.4.01.jar",
+        "entry": "license/README.sax.txt"
+      }
+    },
+    {
+      "sha256": "53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807",
+      "path": "META-INF/j4a/release-licenses/53dc8793eda0df906606cbcf6f80095bbb04081a05abd73ab239c938e3bbf807.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.jmeter:ApacheJMeter_components:5.6.3:ApacheJMeter_components-5.6.3.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "5495442a32bfc2b93b4a8f2c34c5c218d16cca434aa5684fb953d9419120e3fa",
+      "path": "META-INF/j4a/release-licenses/5495442a32bfc2b93b4a8f2c34c5c218d16cca434aa5684fb953d9419120e3fa.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-math3:3.6.1:commons-math3-3.6.1.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18",
+      "path": "META-INF/j4a/release-licenses/5bf623383a96228ce3d9d15b093768e31fb0f865c75fd850a9a6f00422b30f18.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.xmlgraphics:batik-anim:1.16:batik-anim-1.16.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "612b14bc77c944ce229cbba0d14919162cfea8ed802cbf06a8e865e032d03201",
+      "path": "META-INF/j4a/release-licenses/612b14bc77c944ce229cbba0d14919162cfea8ed802cbf06a8e865e032d03201.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fasterxml.jackson.core:jackson-annotations:2.16.1:jackson-annotations-2.16.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "6198f21d20d5611ca32d12a8b0900d9e093f678725f99eae40ece9962cd10404",
+      "path": "META-INF/j4a/release-licenses/6198f21d20d5611ca32d12a8b0900d9e093f678725f99eae40ece9962cd10404.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.logging.log4j:log4j-slf4j-impl:2.22.1:log4j-slf4j-impl-2.22.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "632072c545bc4a542196d2baac36842a108f39c991c4b6b2d0fb01fd645b9365",
+      "path": "META-INF/j4a/release-licenses/632072c545bc4a542196d2baac36842a108f39c991c4b6b2d0fb01fd645b9365.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "oro:oro:2.0.8:oro-2.0.8.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "64f23963615950bad9ddd31569a7f09afbbe11b81d94873ffd9b1cac6081a11d",
+      "path": "META-INF/j4a/release-licenses/64f23963615950bad9ddd31569a7f09afbbe11b81d94873ffd9b1cac6081a11d.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-math3:3.6.1:commons-math3-3.6.1.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "66269c3471a65854f170cc0038b1403a68617c54585cbe593a7bfcd4328ff700",
+      "path": "META-INF/j4a/release-licenses/66269c3471a65854f170cc0038b1403a68617c54585cbe593a7bfcd4328ff700.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.helger:ph-css:6.5.0:ph-css-6.5.0.jar",
+        "entry": "NOTICE"
+      }
+    },
+    {
+      "sha256": "6716ab14ccc5f6cdd842c17c12cef90731ed58e14dd086e938e7d602619b5688",
+      "path": "META-INF/j4a/release-licenses/6716ab14ccc5f6cdd842c17c12cef90731ed58e14dd086e938e7d602619b5688.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.xmlgraphics:xmlgraphics-commons:2.9:xmlgraphics-commons-2.9.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "69f46f492f7e33d21c5ef3261fa4c90123357546784e00b44a1f8daf05a8b96e",
+      "path": "META-INF/j4a/release-licenses/69f46f492f7e33d21c5ef3261fa4c90123357546784e00b44a1f8daf05a8b96e.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+        "entry": "license/LICENSE.sac.html"
+      }
+    },
+    {
+      "sha256": "6d1d968fb225eca367cb7f0b8831ab012a35d92b547e945e17ef8e7b05c3e5cc",
+      "path": "META-INF/j4a/release-licenses/6d1d968fb225eca367cb7f0b8831ab012a35d92b547e945e17ef8e7b05c3e5cc.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.helger:ph-css:6.5.0:ph-css-6.5.0.jar",
+        "entry": "LICENSE"
+      }
+    },
+    {
+      "sha256": "6e3b048ff02c055b938a07320191d9faf5d0ddb8b4d591bdcf5f4e3f3fda575f",
+      "path": "META-INF/j4a/release-licenses/6e3b048ff02c055b938a07320191d9faf5d0ddb8b4d591bdcf5f4e3f3fda575f.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents:httpasyncclient:4.1.5:httpasyncclient-4.1.5.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "715b44cce5a2ef3cbd825f774fcbcf5ff091472669ffe2f868f4fb33fb45038b",
+      "path": "META-INF/j4a/release-licenses/715b44cce5a2ef3cbd825f774fcbcf5ff091472669ffe2f868f4fb33fb45038b.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents:httpcore-nio:4.4.16:httpcore-nio-4.4.16.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "75917685c268f9c473af270fc0ba576194be3411ae18251705b311ca2c2fb264",
+      "path": "META-INF/j4a/release-licenses/75917685c268f9c473af270fc0ba576194be3411ae18251705b311ca2c2fb264.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "commons-net:commons-net:3.10.0:commons-net-3.10.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "7832ea5e9c3720bae0436725358f144519c64770f5e0ae6fc23fe023048ec13b",
+      "path": "META-INF/j4a/release-licenses/7832ea5e9c3720bae0436725358f144519c64770f5e0ae6fc23fe023048ec13b.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+        "entry": "license/NOTICE"
+      }
+    },
+    {
+      "sha256": "79f77e2e1ab271375ee45e3d9673fc78c024fe781ba6e3212d76f98bf3e60734",
+      "path": "META-INF/j4a/release-licenses/79f77e2e1ab271375ee45e3d9673fc78c024fe781ba6e3212d76f98bf3e60734.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "io.github.x-stream:mxparser:1.2.2:mxparser-1.2.2.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "7a20dd0c72b88b8d33e5d41b403e945e5aef94e1e59d76e925c38556a248c94c",
+      "path": "META-INF/j4a/release-licenses/7a20dd0c72b88b8d33e5d41b403e945e5aef94e1e59d76e925c38556a248c94c.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "net.sf.jtidy:jtidy:r938:jtidy-r938.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "7b618f2fcf2949dcc749cf71b9ef24692393cf8cd0e5bd6f7bc0467fc68c5001",
+      "path": "META-INF/j4a/release-licenses/7b618f2fcf2949dcc749cf71b9ef24692393cf8cd0e5bd6f7bc0467fc68c5001.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.codehaus.groovy:groovy:3.0.20:groovy-3.0.20.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6",
+      "path": "META-INF/j4a/release-licenses/80eb036658f26636ddb81661c6fba7df5ea0482a6316f5b5152dcedf76fce6d6.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "8842303d7eb3ab21179def02cbcf139dbf8f24ff5cf8b73d7cb54f78a79590f1",
+      "path": "META-INF/j4a/release-licenses/8842303d7eb3ab21179def02cbcf139dbf8f24ff5cf8b73d7cb54f78a79590f1.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-pool2:2.12.0:commons-pool2-2.12.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "896bc4810113dd9a1e5b86d4ba49ee7f335075d903913365d4a7460969d5afd7",
+      "path": "META-INF/j4a/release-licenses/896bc4810113dd9a1e5b86d4ba49ee7f335075d903913365d4a7460969d5afd7.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents:httpmime:4.5.14:httpmime-4.5.14.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac",
+      "path": "META-INF/j4a/release-licenses/8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "bsf:bsf:2.4.0:bsf-2.4.0.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "8f8441a968c10a65a27d75935cb16937775e2fcfc2d73066ca4b2ae9a6597b4f",
+      "path": "META-INF/j4a/release-licenses/8f8441a968c10a65a27d75935cb16937775e2fcfc2d73066ca4b2ae9a6597b4f.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-pool2:2.12.0:commons-pool2-2.12.0.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60",
+      "path": "META-INF/j4a/release-licenses/9064263dc918ba81d390be85ac1a97af81ad63a5d7cd314c08abca5b5b73cc60.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fifesoft:rsyntaxtextarea:3.3.4:rsyntaxtextarea-3.3.4.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "908eccd700fb68db2628eba3318ebe0cdce1fe8bbf79089b21530f2aef9f6adf",
+      "path": "META-INF/j4a/release-licenses/908eccd700fb68db2628eba3318ebe0cdce1fe8bbf79089b21530f2aef9f6adf.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "commons-collections:commons-collections:3.2.2:commons-collections-3.2.2.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "9246f7f820e791b7328d46ba341bb5a2bb08c3e2e1b9d36803ab0c3899e0462f",
+      "path": "META-INF/j4a/release-licenses/9246f7f820e791b7328d46ba341bb5a2bb08c3e2e1b9d36803ab0c3899e0462f.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.mozilla:rhino:1.7.14:rhino-1.7.14.jar",
+        "entry": "META-INF/NOTICE-tools.txt"
+      }
+    },
+    {
+      "sha256": "93a47176ace8e5ded45c32d89ab9045e4fc1d4b4b181414a1c0d3827e0c22f4d",
+      "path": "META-INF/j4a/release-licenses/93a47176ace8e5ded45c32d89ab9045e4fc1d4b4b181414a1c0d3827e0c22f4d.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "commons-codec:commons-codec:1.16.0:commons-codec-1.16.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "94a71d64ef74b0ca85db2d5e538118a4265ff8eed2f978eda58d2cfa5d88a310",
+      "path": "META-INF/j4a/release-licenses/94a71d64ef74b0ca85db2d5e538118a4265ff8eed2f978eda58d2cfa5d88a310.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents.core5:httpcore5:5.2.4:httpcore5-5.2.4.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "9798f8a331a824364d0507bc2e8ccf58ded9204f6839f48ec4f10556116e40ac",
+      "path": "META-INF/j4a/release-licenses/9798f8a331a824364d0507bc2e8ccf58ded9204f6839f48ec4f10556116e40ac.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.tika:tika-core:1.28.5:tika-core-1.28.5.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "9c9b2e926919e38adf222b3191267806a742ce1adcd1e13dc91d11014b85bd57",
+      "path": "META-INF/j4a/release-licenses/9c9b2e926919e38adf222b3191267806a742ce1adcd1e13dc91d11014b85bd57.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents.core5:httpcore5-h2:5.2.4:httpcore5-h2-5.2.4.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "a0c7cb70cb043224881345123591b3bbf34504990b3b3dfd9069d2be3b5331ba",
+      "path": "META-INF/j4a/release-licenses/a0c7cb70cb043224881345123591b3bbf34504990b3b3dfd9069d2be3b5331ba.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xerces:xercesImpl:2.12.2:xercesImpl-2.12.2.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "a14851d626df4d0298a117ac41788bca73a9c24c2ecc2a12fa2a1101ee9fddc8",
+      "path": "META-INF/j4a/release-licenses/a14851d626df4d0298a117ac41788bca73a9c24c2ecc2a12fa2a1101ee9fddc8.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.sun.activation:javax.activation:1.2.0:javax.activation-1.2.0.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "a271aa9d288b06d150a9071764cf38c3fccc27b22f70f09dafb773aaee3bf557",
+      "path": "META-INF/j4a/release-licenses/a271aa9d288b06d150a9071764cf38c3fccc27b22f70f09dafb773aaee3bf557.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+        "entry": "META-INF/INTELLIJ_LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+      "path": "META-INF/j4a/release-licenses/a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.jmeter:ApacheJMeter_components:5.6.3:ApacheJMeter_components-5.6.3.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "a6dbf46a8a820e353a5ff9e559b940f2409892d853e0cc4a31dd4a54a3688a8a",
+      "path": "META-INF/j4a/release-licenses/a6dbf46a8a820e353a5ff9e559b940f2409892d853e0cc4a31dd4a54a3688a8a.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis-ext:1.3.04:xml-apis-ext-1.3.04.jar",
+        "entry": "license/LICENSE.dom-documentation.txt"
+      }
+    },
+    {
+      "sha256": "a8ff0d486f1bdd29331e0e244f96245354779ef818ec25ecd60545ad335b68da",
+      "path": "META-INF/j4a/release-licenses/a8ff0d486f1bdd29331e0e244f96245354779ef818ec25ecd60545ad335b68da.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents:httpcore:4.4.16:httpcore-4.4.16.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "ada0787f27b581e024972a18b51db92c8e8508d0f05017d104a1c70a61b59951",
+      "path": "META-INF/j4a/release-licenses/ada0787f27b581e024972a18b51db92c8e8508d0f05017d104a1c70a61b59951.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.mozilla:rhino:1.7.14:rhino-1.7.14.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "add61f525baf71c63a6f96cc10976efecfe3ad111036048d6e3096530b709731",
+      "path": "META-INF/j4a/release-licenses/add61f525baf71c63a6f96cc10976efecfe3ad111036048d6e3096530b709731.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xml-apis:xml-apis:1.4.01:xml-apis-1.4.01.jar",
+        "entry": "license/LICENSE.sax.txt"
+      }
+    },
+    {
+      "sha256": "af7665038395c689289c7b4c86e1fc61bb082e7eaf4fa5d233f8a5375123c7a4",
+      "path": "META-INF/j4a/release-licenses/af7665038395c689289c7b4c86e1fc61bb082e7eaf4fa5d233f8a5375123c7a4.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "bsf:bsf:2.4.0:bsf-2.4.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc",
+      "path": "META-INF/j4a/release-licenses/af8dd528b15a332941e11bbea44d3b8f471f50eef04293275a6fae67c844a8cc.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.jetbrains.lets-plot:commons-jvm:4.1.0:commons-jvm-4.1.0.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "path": "META-INF/j4a/release-licenses/b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apiguardian:apiguardian-api:1.1.2:apiguardian-api-1.1.2.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "b678c89821ec8be27d16b9b6d0f9af0d967b7b5e97e35edfe012aa40d229bfc3",
+      "path": "META-INF/j4a/release-licenses/b678c89821ec8be27d16b9b6d0f9af0d967b7b5e97e35edfe012aa40d229bfc3.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "xalan:xalan:2.7.3:xalan-2.7.3.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "bd4dfb34a03e740eebced8f5ba1161ad1ba81d9a9d67788dd02d5775de94fd06",
+      "path": "META-INF/j4a/release-licenses/bd4dfb34a03e740eebced8f5ba1161ad1ba81d9a9d67788dd02d5775de94fd06.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/bd4dfb34a03e740eebced8f5ba1161ad1ba81d9a9d67788dd02d5775de94fd06.base64",
+        "authorityUrl": "https://archive.apache.org/dist/xalan/xalan-j/source/xalan-j_2_7_3-src.tar.gz",
+        "entry": "xalan-j_2_7_3/NOTICE.txt",
+        "sourceArtifactSha512": "fe4b2b9471f95a2cd3607550a6c97b46b7d2576d1e814305f4564df88aaf4fdc9f88ba43dad4a5741521b2c2f5137e3e70d2d4e31b232d403a66dc1e889c8b6b"
+      }
+    },
+    {
+      "sha256": "c3b688392014011a0e25533edece0879768871288de6b182f6febd1899d5e5ab",
+      "path": "META-INF/j4a/release-licenses/c3b688392014011a0e25533edece0879768871288de6b182f6febd1899d5e5ab.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.logging.log4j:log4j-1.2-api:2.22.1:log4j-1.2-api-2.22.1.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "c5642fe8d9afaa1e18a07435073ce2f079634b5747e41a6bb7140fbbaa970325",
+      "path": "META-INF/j4a/release-licenses/c5642fe8d9afaa1e18a07435073ce2f079634b5747e41a6bb7140fbbaa970325.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.tika:tika-core:1.28.5:tika-core-1.28.5.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+      "path": "META-INF/j4a/release-licenses/c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-core:2.7.3:darklaf-core-2.7.3.jar",
+        "entry": "META-INF/DARCULA_LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "path": "META-INF/j4a/release-licenses/c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "projectFile",
+        "path": "LICENSE",
+        "authorityUrl": "https://github.com/ThisCCL/jmx-for-agents/blob/main/LICENSE"
+      }
+    },
+    {
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "path": "META-INF/j4a/release-licenses/cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fasterxml.jackson.core:jackson-annotations:2.16.1:jackson-annotations-2.16.1.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "d666ac713e67eac629a5e5cda7cea1ea5a2002290efd4465d130645b03162b7d",
+      "path": "META-INF/j4a/release-licenses/d666ac713e67eac629a5e5cda7cea1ea5a2002290efd4465d130645b03162b7d.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/d666ac713e67eac629a5e5cda7cea1ea5a2002290efd4465d130645b03162b7d.base64",
+        "authorityUrl": "https://repo.maven.apache.org/maven2/org/freemarker/freemarker/2.3.32/freemarker-2.3.32-sources.jar",
+        "entry": "META-INF/NOTICE",
+        "sourceArtifactSha256": "92a08eb7374e2533b260d700cccc50ba573bd63cbfed6b2bfad527c74ac3e708"
+      }
+    },
+    {
+      "sha256": "d881568c91b929923350fa3b9db693a0b1e6ae9de972087822e4e87802561c6a",
+      "path": "META-INF/j4a/release-licenses/d881568c91b929923350fa3b9db693a0b1e6ae9de972087822e4e87802561c6a.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "commons-io:commons-io:2.15.1:commons-io-2.15.1.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "d8b47586de51c2540fa76de98ae6bfef4de4b7024c35b23cb7e60bfbac58504b",
+      "path": "META-INF/j4a/release-licenses/d8b47586de51c2540fa76de98ae6bfef4de4b7024c35b23cb7e60bfbac58504b.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4:darklaf-extensions-rsyntaxarea-0.3.4.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d",
+      "path": "META-INF/j4a/release-licenses/d92a946963232d6d81e81b4617cb9754b0acfaf3f8d24d2357bba9bdb90a825d.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.xmlgraphics:batik-anim:1.16:batik-anim-1.16.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "dd4baa87ecb0f65aa0df9240a8d61b45dc68b232e39a93024fa3d8cc119617c9",
+      "path": "META-INF/j4a/release-licenses/dd4baa87ecb0f65aa0df9240a8d61b45dc68b232e39a93024fa3d8cc119617c9.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.mozilla:rhino:1.7.14:rhino-1.7.14.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "e118ad8e5f2d3c71f0e7d6202d5829e7580ccd9e3609a546c692788e657afbe2",
+      "path": "META-INF/j4a/release-licenses/e118ad8e5f2d3c71f0e7d6202d5829e7580ccd9e3609a546c692788e657afbe2.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.logging.log4j:log4j-core:2.22.1:log4j-core-2.22.1.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "META-INF/j4a/release-licenses/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "empty",
+        "authorityUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/lets-plot/plot-base-jvm/4.1.0/plot-base-jvm-4.1.0-sources.jar",
+        "entry": "commonMain/org/jetbrains/letsPlot/core/plot/base/stat/math3/NOTICE",
+        "sourceArtifactSha256": "8b31e0786b84a05c1b2ae2690b15d35ef834d1ea2c4f77e34bd120a1f457271c"
+      }
+    },
+    {
+      "sha256": "e7c368dc3fc83d9493a30284322d7cc22caf6f8860b19e55d83644beaff494f1",
+      "path": "META-INF/j4a/release-licenses/e7c368dc3fc83d9493a30284322d7cc22caf6f8860b19e55d83644beaff494f1.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.tika:tika-parsers:1.28.5:tika-parsers-1.28.5.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "e90eaa08dea089df10f2bf7f9dba63a5f6237c01562c4741e2e86773e78582d5",
+      "path": "META-INF/j4a/release-licenses/e90eaa08dea089df10f2bf7f9dba63a5f6237c01562c4741e2e86773e78582d5.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.checkerframework:checker-qual:3.42.0:checker-qual-3.42.0.jar",
+        "entry": "META-INF/LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "ebedffcca675b7865b622a9f8d9e25005be10a8afb52a007225aaaf4ee936e66",
+      "path": "META-INF/j4a/release-licenses/ebedffcca675b7865b622a9f8d9e25005be10a8afb52a007225aaaf4ee936e66.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.commons:commons-text:1.11.0:commons-text-1.11.0.jar",
+        "entry": "META-INF/NOTICE.txt"
+      }
+    },
+    {
+      "sha256": "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df",
+      "path": "META-INF/j4a/release-licenses/f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "base64File",
+        "path": "config/release-licenses/f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df.base64",
+        "authorityUrl": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    },
+    {
+      "sha256": "f5783fbb52e5fcfb26b6916ce3bb9c717d22759b030cee6deaa03145f1f8d819",
+      "path": "META-INF/j4a/release-licenses/f5783fbb52e5fcfb26b6916ce3bb9c717d22759b030cee6deaa03145f1f8d819.txt",
+      "kinds": [
+        "NOTICE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.apache.httpcomponents:httpclient:4.5.14:httpclient-4.5.14.jar",
+        "entry": "META-INF/NOTICE"
+      }
+    },
+    {
+      "sha256": "f594431f26247b3c75f10d8114ef114f69246958636a7011ed5c755de5ad2e27",
+      "path": "META-INF/j4a/release-licenses/f594431f26247b3c75f10d8114ef114f69246958636a7011ed5c755de5ad2e27.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "org.codehaus.groovy:groovy:3.0.20:groovy-3.0.20.jar",
+        "entry": "META-INF/LICENSE"
+      }
+    },
+    {
+      "sha256": "0fe84bf6f8990a28699a23353e1d30b3ed87e76ebe3db337cbe21c4dcbd68663",
+      "path": "META-INF/j4a/release-licenses/0fe84bf6f8990a28699a23353e1d30b3ed87e76ebe3db337cbe21c4dcbd68663.txt",
+      "kinds": [
+        "SUPPORTING"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fasterxml.jackson.core:jackson-core:2.16.1:jackson-core-2.16.1.jar",
+        "entry": "META-INF/FastDoubleParser-NOTICE"
+      }
+    },
+    {
+      "sha256": "13f5c6a183ee37457487fb1cb4c1b01f9d246a12465d7a139430f57fd9fdac7f",
+      "path": "META-INF/j4a/release-licenses/13f5c6a183ee37457487fb1cb4c1b01f9d246a12465d7a139430f57fd9fdac7f.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.github.weisj:darklaf-native-utils:2.7.3:darklaf-native-utils-2.7.3.jar",
+        "entry": "META-INF/NATIVEUTIL_LICENSE.txt"
+      }
+    },
+    {
+      "sha256": "6e0e5b6e6389568c1669163fdf40cee2143be58960be0a4e2f1428805505170d",
+      "path": "META-INF/j4a/release-licenses/6e0e5b6e6389568c1669163fdf40cee2143be58960be0a4e2f1428805505170d.txt",
+      "kinds": [
+        "LICENSE"
+      ],
+      "source": {
+        "type": "runtimeArtifactEntry",
+        "recordId": "com.fasterxml.jackson.core:jackson-core:2.16.1:jackson-core-2.16.1.jar",
+        "entry": "META-INF/thirdparty-LICENSE"
+      }
+    }
+  ]
+}

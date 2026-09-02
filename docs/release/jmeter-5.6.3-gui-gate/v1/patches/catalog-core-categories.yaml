@@ -1,0 +1,99 @@
+changes:
+  - add:
+      parent: jmx_d62893619b1f
+      position: last
+      component: org.apache.jmeter.control.gui.TestFragmentControllerGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - Test Fragment
+          type: string
+  - add:
+      parent: jmx_d62893619b1f
+      position: last
+      component: org.apache.jmeter.visualizers.PropertyControlGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - Property Display
+          type: string
+  - add:
+      parent: jmx_19871e6efa95
+      position: first
+      component: org.apache.jmeter.control.gui.LogicControllerGui
+      as: controller
+      properties:
+        - property: [TestElement.name]
+          value: Category - Simple Controller
+          type: string
+  - add:
+      parent: $controller
+      position: last
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      as: sampler
+      properties:
+        - property: [TestElement.name]
+          value: Category - HTTP Request
+          type: string
+        - property: [HTTPSampler.method]
+          value: GET
+          type: string
+  - add:
+      parent: $sampler
+      position: last
+      component: org.apache.jmeter.extractor.gui.RegexExtractorGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - Regular Expression Extractor
+          type: string
+  - add:
+      parent: $sampler
+      position: last
+      component: org.apache.jmeter.modifiers.gui.UserParametersGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - User Parameters
+          type: string
+  - add:
+      parent: $sampler
+      position: last
+      component: org.apache.jmeter.assertions.gui.AssertionGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - Response Assertion
+          type: string
+  - add:
+      parent: $controller
+      position: last
+      component: org.apache.jmeter.timers.gui.ConstantTimerGui
+      properties:
+        - property: [TestElement.name]
+          value: Category - Constant Timer
+          type: string
+  - add:
+      parent: jmx_19871e6efa95
+      position: last
+      component: org.apache.jmeter.visualizers.SummaryReport
+      properties:
+        - property: [TestElement.name]
+          value: Category - Summary Report
+          type: string
+  - add:
+      parent: jmx_19871e6efa95
+      position: last
+      component: org.apache.jmeter.protocol.http.gui.HeaderPanel
+      properties:
+        - property: [TestElement.name]
+          value: Structured - Empty Header Manager
+          type: string
+  - add:
+      parent: jmx_19871e6efa95
+      position: last
+      component: org.apache.jmeter.protocol.http.gui.HeaderPanel
+      as: populated_headers
+      properties:
+        - property: [TestElement.name]
+          value: Structured - Populated Header Manager
+          type: string
+  - append:
+      ref: $populated_headers
+      property: [HeaderManager.headers]
+      row: {Header.name: X-J4A-GUI-Gate, Header.value: sanitized}

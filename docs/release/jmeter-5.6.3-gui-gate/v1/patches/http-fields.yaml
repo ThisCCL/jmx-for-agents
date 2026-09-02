@@ -1,0 +1,37 @@
+changes:
+  - set:
+      ref: jmx_d62893619b1f
+      component: org.apache.jmeter.control.gui.TestPlanGui
+      properties:
+        - property: [TestElement.name]
+          value: J4A GUI Gate - Populated HTTP Fields
+          type: string
+        - property: [TestPlan.comments]
+          value: Existing-property seed used to prove J4A writes protocol/domain/port/path/method; no sampler execution.
+          type: string
+  - set:
+      ref: jmx_330976848c8e
+      component: org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
+      properties:
+        - property: [TestElement.name]
+          value: Populated HTTP Request
+          type: string
+        - property: [HTTPSampler.protocol]
+          value: https
+          type: string
+        - property: [HTTPSampler.domain]
+          value: api.example.invalid
+          type: string
+        - property: [HTTPSampler.port]
+          value: "8443"
+          type: string
+        - property: [HTTPSampler.path]
+          value: /api/orders
+          type: string
+        - property: [HTTPSampler.method]
+          value: POST
+          type: string
+  - append:
+      ref: jmx_330976848c8e
+      property: [HTTPsampler.Arguments]
+      row: {Argument.name: tenant, Argument.value: gui-gate, Argument.metadata: '=', HTTPArgument.always_encode: true, HTTPArgument.use_equals: true, HTTPArgument.content_type: text/plain}

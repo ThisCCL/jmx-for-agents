@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Property Graph Nested Element" enabled="true">
+      <elementProp name="qa.element" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Nested Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="entry" elementType="org.apache.jmeter.config.Argument">
+            <stringProp name="Argument.name">entry</stringProp>
+            <stringProp name="Argument.value">nested-value</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
