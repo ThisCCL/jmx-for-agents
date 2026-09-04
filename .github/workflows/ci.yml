@@ -46,7 +46,7 @@ jobs:
         run: pnpm run verify:public
       - name: Prepare and inspect the exact release inputs
         run: |
-          pnpm run release:prepare -- --tag v$(node -p "require('./package.json').version")
+          pnpm run release:prepare -- --tag "v$(node -p 'require("./package.json").version')"
           node scripts/ci-inspect-release.mjs
       - name: Rehearse a consumer from the exact package
         run: |
