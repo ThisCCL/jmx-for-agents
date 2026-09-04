@@ -15,9 +15,9 @@ async function workflowSource() {
   return readFile(workflowPath, "utf8")
 }
 
-function commentChecksum(source, archive) {
+function commentChecksum(source) {
   return source.replace(
-    new RegExp(`^(\\s*)(printf .*${archive.replaceAll(".", "\\.")}.*sha512sum --check --strict)$`, "m"),
+    /^(\s*)(printf .*sha512sum --check --strict)$/m,
     "$1# $2",
   )
 }
@@ -137,7 +137,7 @@ test("CI workflow validator rejects unsafe or incomplete contract variants", asy
     },
     {
       name: "commented JMeter 5.6.3 checksum is not executable",
-      source: commentChecksum(source, "apache-jmeter-5.6.3.tgz"),
+      source: commentChecksum(source),
       error: "jmeter-checksum-before-extract",
     },
     {
@@ -184,7 +184,7 @@ test("workflow validator CLI reports valid and invalid workflow files", async ()
       },
       {
         name: "commented-5.6.3-checksum",
-        source: commentChecksum(source, "apache-jmeter-5.6.3.tgz"),
+        source: commentChecksum(source),
         error: "jmeter-checksum-before-extract",
       },
       {

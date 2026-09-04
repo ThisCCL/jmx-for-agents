@@ -21,9 +21,12 @@ const REQUIRED_COMMANDS = Object.freeze([
 const JMETER_ARCHIVE = "apache-jmeter-5.6.3.tgz"
 const JMETER_SHA512 = "5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083"
 const CANONICAL_JMETER_RUN = [
-  `curl --fail --location --retry 3 --output "$RUNNER_TEMP/${JMETER_ARCHIVE}" https://archive.apache.org/dist/jmeter/binaries/${JMETER_ARCHIVE}`,
-  `printf '%s  %s\\n' '${JMETER_SHA512}' "$RUNNER_TEMP/${JMETER_ARCHIVE}" | sha512sum --check --strict`,
-  `tar -xzf "$RUNNER_TEMP/${JMETER_ARCHIVE}" -C "$RUNNER_TEMP"`,
+  `JMETER_ARCHIVE="$RUNNER_TEMP/${JMETER_ARCHIVE}"`,
+  `if ! curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://downloads.apache.org/jmeter/binaries/${JMETER_ARCHIVE}; then`,
+  `curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://archive.apache.org/dist/jmeter/binaries/${JMETER_ARCHIVE}`,
+  "fi",
+  `printf '%s  %s\\n' '${JMETER_SHA512}' "$JMETER_ARCHIVE" | sha512sum --check --strict`,
+  `tar -xzf "$JMETER_ARCHIVE" -C "$RUNNER_TEMP"`,
   `echo "JMETER_HOME=$RUNNER_TEMP/${JMETER_ARCHIVE.slice(0, -4)}" >> "$GITHUB_ENV"`,
 ].join("\n")
 
@@ -158,6 +161,7 @@ export function validateCiWorkflow(source) {
   const checksumIndex = jmeterRun?.indexOf("sha512sum --check --strict") ?? -1
   const extractIndex = jmeterRun?.indexOf("tar -xzf") ?? -1
   if (jmeterRun === undefined
+    || !jmeterRun.includes(`https://downloads.apache.org/jmeter/binaries/${JMETER_ARCHIVE}`)
     || !jmeterRun.includes(`https://archive.apache.org/dist/jmeter/binaries/${JMETER_ARCHIVE}`)
     || !jmeterRun.includes(JMETER_SHA512)
     || checksumIndex < 0

@@ -11,6 +11,8 @@ const ACTIONS = Object.freeze({
 })
 const JMETER_ARCHIVE = "apache-jmeter-5.6.3.tgz"
 const JMETER_SHA512 = "5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083"
+const JMETER_PRIMARY_URL = `https://downloads.apache.org/jmeter/binaries/${JMETER_ARCHIVE}`
+const JMETER_FALLBACK_URL = `https://archive.apache.org/dist/jmeter/binaries/${JMETER_ARCHIVE}`
 const PUBLIC_RELEASE_DOWNLOAD = 'curl --fail --location --max-redirs 5 --output "$RUNNER_TEMP/public-release.jar"'
 
 export function parseReleaseWorkflow(source) {
@@ -180,6 +182,8 @@ export function validateReleaseWorkflow(source) {
   }
   const jmeterArchives = [...new Set(commands.flatMap(line => line.match(/apache-jmeter-[0-9.]+\.tgz/g) ?? []))]
   if (JSON.stringify(jmeterArchives) !== JSON.stringify([JMETER_ARCHIVE])
+    || !command(JMETER_PRIMARY_URL)
+    || !command(JMETER_FALLBACK_URL)
     || !command(JMETER_SHA512)
     || !command('echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3" >> "$GITHUB_ENV"')) {
     errors.push("jmeter-runtime")

@@ -285,6 +285,8 @@ test("release workflow has the pinned tag-publication contract", async () => {
   assert.ok(preflight.command.includes('gh api "repos/$GITHUB_REPOSITORY/rulesets/$RULESET_ID"'))
   assert.ok(jmeterProvision, "release workflow must provision exact JMeter 5.6.3")
   assert.ok(jmeterProvision.command.includes("apache-jmeter-5.6.3.tgz"))
+  assert.ok(jmeterProvision.command.includes("https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.6.3.tgz"))
+  assert.ok(jmeterProvision.command.includes("https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz"))
   assert.ok(jmeterProvision.command.includes('echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3"'))
   assert.equal(
     workflow.release.steps.find(step => step.action?.startsWith("actions/attest@"))?.condition,
