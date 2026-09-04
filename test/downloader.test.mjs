@@ -97,7 +97,7 @@ test("downloadJar rejects tampered final redirect bytes without committing a cac
   ])
 })
 
-test("downloadJar reports friendly Chinese progress while downloading", async () => {
+test("downloadJar reports English byte-aware progress while downloading", async () => {
   const body = Buffer.from("fake jar bytes", "utf8")
   const messages = []
 
@@ -117,9 +117,9 @@ test("downloadJar reports friendly Chinese progress while downloading", async ()
   })
 
   assert.deepEqual(messages, [
-    "j4a: 正在下载 j4a 运行时，请稍候...",
-    "j4a: 下载进度 [####################] 100%",
-    "j4a: 下载完成，运行时已准备好。",
+    "j4a: Downloading runtime...",
+    "j4a: Downloading runtime [####################] 100% (14 B / 14 B)",
+    "j4a: Runtime download complete.",
   ])
 })
 

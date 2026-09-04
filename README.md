@@ -18,6 +18,8 @@ npx -y @jmx-for-agents/j4a install --with-skills
 
 Use Node.js 18 or later, Java 8 or later, and a local Apache JMeter 5.6.3 installation. Set `JMX_AGENT_JMETER_HOME` or `JMETER_HOME` before running j4a.
 
+Runtime downloads honor `HTTPS_PROXY`, `HTTP_PROXY`, and `NO_PROXY` (including lowercase variants). Proxy values may be full URLs or scheme-less `host:port` values, so both `http://127.0.0.1:18888` and `127.0.0.1:18888` work.
+
 ## Quickstart
 
 j4a supports both CLI and MCP surfaces. For iterative work, MCP is recommended because its long-lived process keeps one JVM alive and keeps the selected JMeter libraries and runtime loaded across tool calls. This avoids repeated Java process startup, JMeter library loading, and runtime initialization; structured tool discovery and results also make each call explicit.

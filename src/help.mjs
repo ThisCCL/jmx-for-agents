@@ -37,6 +37,11 @@ const INSTALL_HELP = [
   "                     With --with-skills, also replace the existing j4a-master skill directory.",
   "  --with-skills      After the runtime jar is ready, copy j4a-master into <cwd>/.agents/skills/j4a-master.",
   "  --help             Show this install help.",
+  "",
+  "Environment:",
+  "  HTTPS_PROXY        Proxy HTTPS runtime downloads; HTTP_PROXY is the fallback.",
+  "                     Both URLs and scheme-less host:port values are accepted.",
+  "  NO_PROXY           Comma-separated hosts that bypass the proxy.",
 ].join("\n")
 
 export function writeWrapperHelp(write) {

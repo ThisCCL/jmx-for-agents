@@ -18,11 +18,13 @@ export async function runJ4a({
   javaCommand = env.J4A_JAVA_COMMAND ?? "java",
   stdout = (message) => process.stdout.write(message),
   stderr = (message) => process.stderr.write(message),
-  reporter = (message) => stderr(`${message}\n`),
+  reporter,
+  stderrInteractive = process.stderr.isTTY === true,
   releaseConfig = defaultReleaseConfig,
   requestImpl,
   skillSourceDir = defaultSkillSourceDir(import.meta.url),
 } = {}) {
+  const report = reporter ?? createCliReporter(stderr, { interactive: stderrInteractive })
   const command = parseWrapperCommand(argv)
   if (command.kind === "wrapper-help") {
     writeWrapperHelp(stdout)
@@ -44,7 +46,8 @@ export async function runJ4a({
     return installRuntime({
       cacheDir,
       cwd,
-      reporter,
+      reporter: report,
+      env,
       releaseConfig,
       requestImpl,
       skillSourceDir,
@@ -57,7 +60,8 @@ export async function runJ4a({
     const jarPath = await requireMcpRuntimeJar({
       cacheDir,
       cwd,
-      reporter,
+      reporter: report,
+      env,
       releaseConfig,
       requestImpl,
       skillSourceDir,
@@ -71,6 +75,25 @@ export async function runJ4a({
   })
 
   return spawnJava(javaCommand, ["-jar", jarPath, ...argv], env)
+}
+
+export function createCliReporter(write, { interactive = false } = {}) {
+  let progressActive = false
+  let progressWidth = 0
+  return (message, { kind = "status" } = {}) => {
+    if (kind === "progress") {
+      if (!interactive) return
+      const padding = " ".repeat(Math.max(0, progressWidth - message.length))
+      write(`\r${message}${padding}`)
+      progressActive = true
+      progressWidth = message.length
+      return
+    }
+    if (progressActive) write("\n")
+    write(`${message}\n`)
+    progressActive = false
+    progressWidth = 0
+  }
 }
 
 function spawnJava(command, args, env) {

@@ -23,14 +23,15 @@ export async function createPreparedReleaseConsumer() {
 
   try {
     await copyReleaseProject(root, projectDir)
-    await runBounded("pnpm", ["run", "release:prepare", "--", "--tag", "v1.0.0"], { cwd: projectDir, timeoutMs: 600_000 })
+    const version = JSON.parse(await readFile(path.join(projectDir, "package.json"), "utf8")).version
+    await runBounded("pnpm", ["run", "release:prepare", "--", "--tag", `v${version}`], { cwd: projectDir, timeoutMs: 600_000 })
     const prepared = await readPreparedRelease(projectDir)
     await runBounded("openssl", certificateArgs(keyPath, certificatePath), { timeoutMs: 120_000 })
     server = await createAssetServer({ certificatePath, jarBytes: await readFile(prepared.jarPath), keyPath, onRequest: (kind) => {
       if (kind === "direct") directRequests += 1
       if (kind === "redirect") redirectRequests += 1
       if (kind === "asset") assetRequests += 1
-    } })
+    }, version: prepared.manifest.version })
     await mkdir(consumerDir, { recursive: true })
     await writeFile(path.join(consumerDir, "package.json"), '{"private":true}\n', "utf8")
     await runBounded("npm", ["install", "--ignore-scripts", "--offline", "--no-audit", "--no-fund", prepared.tarballPath], { cwd: consumerDir, timeoutMs: 120_000 })
@@ -50,7 +51,7 @@ export async function createPreparedReleaseConsumer() {
       installedCommand: j4aCommand(consumerDir),
       installedConfigPath,
       projectDir,
-      redirectUrl: `${endpoint}/releases/download/v1.0.0/j4a-1.0.0.jar`,
+      redirectUrl: releaseUrl(endpoint, prepared.manifest.version),
       workDir,
       get assetRequests() { return assetRequests },
       get directRequests() { return directRequests },
@@ -59,7 +60,7 @@ export async function createPreparedReleaseConsumer() {
         return patchInstalledReleaseConfig({
           consumerDir,
           jarSha256: prepared.jarSha256,
-          jarUrl: `${endpoint}/releases/download/v1.0.0/j4a-1.0.0.jar`,
+          jarUrl: releaseUrl(endpoint, prepared.manifest.version),
         })
       },
       async cleanup() {
@@ -86,7 +87,9 @@ async function copyReleaseProject(root, target) {
   })
 }
 
-async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest }) {
+async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest, version }) {
+  const redirectPath = `/releases/download/v${version}/j4a-${version}.jar`
+  const assetPath = `/assets/j4a-${version}.jar`
   const server = createServer({ cert: await readFile(certificatePath), key: await readFile(keyPath) }, (request, response) => {
     if (request.url === "/direct/j4a.jar") {
       onRequest("direct")
@@ -94,13 +97,13 @@ async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest
       response.end(jarBytes)
       return
     }
-    if (request.url === "/releases/download/v1.0.0/j4a-1.0.0.jar") {
+    if (request.url === redirectPath) {
       onRequest("redirect")
-      response.writeHead(302, { location: "/assets/j4a-1.0.0.jar" })
+      response.writeHead(302, { location: assetPath })
       response.end()
       return
     }
-    if (request.url === "/assets/j4a-1.0.0.jar") {
+    if (request.url === assetPath) {
       onRequest("asset")
       response.writeHead(200, { "content-type": "application/java-archive" })
       response.end(jarBytes)
@@ -114,6 +117,10 @@ async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest
     server.listen(0, "127.0.0.1", () => resolve(server.address().port))
   })
   return { port, server, sockets: trackOwnedServerSockets(server) }
+}
+
+function releaseUrl(endpoint, version) {
+  return `${endpoint}/releases/download/v${version}/j4a-${version}.jar`
 }
 
 async function patchInstalledReleaseConfig({ consumerDir, jarSha256, jarUrl }) {

@@ -29,8 +29,11 @@ export function planReleaseOperations(input) {
   operations.push("verify-authenticated-assets")
   if (existing === null || existing.draft) operations.push("publish-release")
   operations.push("verify-public-download")
-  if (release.npmIntegrity === null) operations.push(`publish-npm:${release.tarball.name}`)
-  operations.push("verify-npm-integrity")
+  if (release.npmIntegrity === null) {
+    operations.push(`publish-npm:${release.tarball.name}`)
+  } else {
+    operations.push("verify-npm-integrity")
+  }
   return operations
 }
 

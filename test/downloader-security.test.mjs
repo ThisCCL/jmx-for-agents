@@ -1,10 +1,13 @@
 import assert from "node:assert/strict"
 import { readFile, writeFile } from "node:fs/promises"
+import { createServer as createHttpServer } from "node:http"
 import { createServer as createHttpsServer } from "node:https"
+import { connect } from "node:net"
 import path from "node:path"
 import test from "node:test"
 
 import { downloadJar } from "../src/downloader.mjs"
+import { proxyUrlFor } from "../src/proxy.mjs"
 import { responseFrom, sha256Of, withCacheDir } from "./helpers/downloader.mjs"
 
 const STALLED_SERVER_KEY = Buffer.from(
@@ -28,6 +31,129 @@ function listen(server) {
     })
   })
 }
+
+function close(server) {
+  return new Promise((resolve, reject) => {
+    server.close((error) => error === undefined ? resolve() : reject(error))
+  })
+}
+
+test("proxy selection supports lowercase fallback and rejects non-HTTP proxy protocols", () => {
+  const target = new URL("https://downloads.example.test/j4a.jar")
+  assert.equal(
+    proxyUrlFor(target, { http_proxy: "proxy.example.test:8080" })?.href,
+    "http://proxy.example.test:8080/",
+  )
+  assert.equal(
+    proxyUrlFor(target, { https_proxy: "https://proxy.example.test:8443" })?.href,
+    "https://proxy.example.test:8443/",
+  )
+  assert.throws(
+    () => proxyUrlFor(target, { HTTPS_PROXY: "socks5://proxy.example.test:1080" }),
+    /proxy URL must use HTTP or HTTPS/,
+  )
+})
+
+test("downloadJar uses a scheme-less HTTPS_PROXY for every HTTPS redirect", async () => {
+  const body = Buffer.from("proxied jar bytes", "utf8")
+  const target = createHttpsServer({ key: STALLED_SERVER_KEY, cert: STALLED_SERVER_CERT }, (request, response) => {
+    if (request.url === "/start") {
+      response.writeHead(302, { location: "/j4a.jar" })
+      response.end()
+      return
+    }
+    response.writeHead(200, {
+      "content-length": String(body.length),
+      "content-type": "application/java-archive",
+    })
+    response.end(body)
+  })
+  const authorities = []
+  const tunnels = new Set()
+  const proxy = createHttpServer()
+  proxy.on("connect", (request, client, head) => {
+    authorities.push(request.url)
+    const destination = new URL(`http://${request.url}`)
+    const upstream = connect(Number(destination.port), destination.hostname, () => {
+      client.write("HTTP/1.1 200 Connection Established\r\n\r\n")
+      if (head.length > 0) upstream.write(head)
+      upstream.pipe(client)
+      client.pipe(upstream)
+    })
+    tunnels.add(client)
+    tunnels.add(upstream)
+    client.once("close", () => tunnels.delete(client))
+    upstream.once("close", () => tunnels.delete(upstream))
+    upstream.once("error", (error) => client.destroy(error))
+  })
+  const previousTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED
+
+  try {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+    const targetPort = await listen(target)
+    const proxyPort = await listen(proxy)
+    await withCacheDir(async (cacheDir) => {
+      const jarPath = await downloadJar({
+        jarUrl: `https://127.0.0.1:${targetPort}/start`,
+        sha256: sha256Of(body),
+        cacheDir,
+        env: { HTTPS_PROXY: `127.0.0.1:${proxyPort}` },
+      })
+      assert.deepEqual(await readFile(jarPath), body)
+    })
+    assert.deepEqual(authorities, [
+      `127.0.0.1:${targetPort}`,
+      `127.0.0.1:${targetPort}`,
+    ])
+  } finally {
+    if (previousTlsRejectUnauthorized === undefined) {
+      delete process.env.NODE_TLS_REJECT_UNAUTHORIZED
+    } else {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = previousTlsRejectUnauthorized
+    }
+    target.closeAllConnections?.()
+    proxy.closeAllConnections?.()
+    for (const socket of tunnels) socket.destroy()
+    await Promise.all([close(target), close(proxy)])
+  }
+})
+
+test("downloadJar honors NO_PROXY before opening a proxy connection", async () => {
+  const body = Buffer.from("direct jar bytes", "utf8")
+  const target = createHttpsServer({ key: STALLED_SERVER_KEY, cert: STALLED_SERVER_CERT }, (_request, response) => {
+    response.writeHead(200, {
+      "content-length": String(body.length),
+      "content-type": "application/java-archive",
+    })
+    response.end(body)
+  })
+  const previousTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED
+
+  try {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+    const targetPort = await listen(target)
+    await withCacheDir(async (cacheDir) => {
+      const jarPath = await downloadJar({
+        jarUrl: `https://127.0.0.1:${targetPort}/j4a.jar`,
+        sha256: sha256Of(body),
+        cacheDir,
+        env: {
+          HTTPS_PROXY: "127.0.0.1:1",
+          NO_PROXY: "127.0.0.1",
+        },
+      })
+      assert.deepEqual(await readFile(jarPath), body)
+    })
+  } finally {
+    if (previousTlsRejectUnauthorized === undefined) {
+      delete process.env.NODE_TLS_REJECT_UNAUTHORIZED
+    } else {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = previousTlsRejectUnauthorized
+    }
+    target.closeAllConnections?.()
+    await close(target)
+  }
+})
 
 test("downloadJar accepts uppercase sha256 config while verifying downloaded bytes", async () => {
   const body = Buffer.from("fake jar bytes", "utf8")

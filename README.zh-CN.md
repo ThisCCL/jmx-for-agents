@@ -18,6 +18,8 @@ npx -y @jmx-for-agents/j4a install --with-skills
 
 需要 Node.js 18 或更高版本、Java 8 或更高版本，以及本地 Apache JMeter 5.6.3 安装。运行 j4a 前请设置 `JMX_AGENT_JMETER_HOME` 或 `JMETER_HOME`。
 
+运行时下载支持 `HTTPS_PROXY`、`HTTP_PROXY` 和 `NO_PROXY`（包括对应的小写变量）。代理值既可以是完整 URL，也可以是不带协议的 `host:port`，因此 `http://127.0.0.1:18888` 与 `127.0.0.1:18888` 均可使用。
+
 ## 快速开始
 
 j4a 同时提供 CLI 和 MCP 两种使用界面。需要多次迭代时，推荐使用 MCP，因为长期运行的 MCP 进程可以保持同一个 JVM，并在多次工具调用之间持续加载选定的 JMeter 库和运行时。这可以避免反复启动 Java 进程、加载 JMeter 库和初始化运行时；结构化的工具发现和调用结果也会让每次调用更加明确。

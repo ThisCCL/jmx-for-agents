@@ -140,7 +140,7 @@ class McpSession {
     assertEqual(response.result.protocolVersion, "2025-06-18", "MCP protocol version")
     assertEqual(response.result.capabilities?.tools?.listChanged, false, "MCP tools listChanged")
     assertEqual(response.result.serverInfo?.name, "j4a", "MCP server name")
-    assertEqual(response.result.serverInfo?.version, "1.0.0", "MCP server version")
+    assertEqual(response.result.serverInfo?.version, packageVersion, "MCP server version")
     this.notify("notifications/initialized", {})
   }
 
@@ -198,6 +198,7 @@ class McpSession {
 
 const options = parseArguments(process.argv.slice(2))
 const root = process.cwd()
+const packageVersion = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version
 const jar = absolute(options.jar)
 const jmeterHome = absolute(options.jmeterHome)
 const fixture = absolute(options.fixture)

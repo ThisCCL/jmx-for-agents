@@ -97,7 +97,6 @@ test("release state machine creates all absent objects in the only permitted ord
     "publish-release",
     "verify-public-download",
     "publish-npm:jmx-for-agents-j4a-1.0.0.tgz",
-    "verify-npm-integrity",
   ])
 })
 
@@ -291,6 +290,14 @@ test("release workflow has the pinned tag-publication contract", async () => {
     workflow.release.steps.find(step => step.action?.startsWith("actions/attest@"))?.condition,
     "steps.attestation.outputs.required == 'true'",
   )
+  const npmPublishStep = workflow.release.steps.find(
+    step => step.command.includes('npm publish "$RELEASE_TARBALL"'),
+  )
+  assert.equal(npmPublishStep, workflow.release.steps.at(-1))
+  const publishLine = npmPublishStep.command.split("\n").findIndex(
+    line => line.includes('npm publish "$RELEASE_TARBALL"'),
+  )
+  assert.deepEqual(npmPublishStep.command.split("\n").slice(publishLine + 1), ["fi"])
   assert.deepEqual(validateReleaseWorkflow(source), [])
 })
 
@@ -335,14 +342,16 @@ test("release workflow validator rejects trigger, permission, pin, and ordering 
   ]) {
     await t.test(`post-registry mutation: ${mutation}`, () => {
       const fixture = `${source}\n      - name: forbidden post-registry mutation\n        run: ${mutation}\n`
-      assert.ok(validateReleaseWorkflow(fixture).includes("final-registry-terminal"))
+      assert.ok(validateReleaseWorkflow(fixture).includes("npm-publication-terminal"))
     })
   }
-  await t.test("same-step npm publication after final verification", () => {
-    const assertion = 'test "$ACTUAL_INTEGRITY" = "$RELEASE_INTEGRITY"'
-    const index = source.lastIndexOf(assertion)
-    const fixture = `${source.slice(0, index)}${assertion}\n          npm publish other.tgz --access public --provenance${source.slice(index + assertion.length)}`
-    assert.ok(validateReleaseWorkflow(fixture).includes("final-registry-terminal"))
+  await t.test("same-step registry readback after npm publication", () => {
+    const publication = 'npm publish "$RELEASE_TARBALL" --access public --provenance'
+    const fixture = source.replace(
+      publication,
+      `${publication}\n            npm view "$PACKAGE_NAME@$RELEASE_VERSION" dist.integrity --json`,
+    )
+    assert.ok(validateReleaseWorkflow(fixture).includes("npm-publication-terminal"))
   })
 })
 

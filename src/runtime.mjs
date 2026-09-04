@@ -13,6 +13,7 @@ export async function installRuntime({
   stdout,
   force,
   withSkills,
+  env,
 }) {
   const jarPath = await downloadJar({
     jarUrl: releaseConfig.jarUrl,
@@ -21,6 +22,7 @@ export async function installRuntime({
     force,
     reporter,
     requestImpl,
+    env,
   })
   stdout(`j4a: runtime ready at ${jarPath}\n`)
   if (!withSkills) {
@@ -51,6 +53,7 @@ export async function requireMcpRuntimeJar({
   releaseConfig,
   requestImpl,
   skillSourceDir,
+  env,
 }) {
   try {
     return await requireInstalledJar({
@@ -74,6 +77,7 @@ export async function requireMcpRuntimeJar({
       stdout: (message) => reporter(message.trimEnd()),
       force: false,
       withSkills: false,
+      env,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)

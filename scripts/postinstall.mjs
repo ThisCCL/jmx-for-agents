@@ -19,12 +19,13 @@ export async function runPostinstall({
       cacheDir: defaultCacheDir(env),
       reporter,
       requestImpl,
+      env,
     })
-    reporter(`j4a: jar 已缓存到 ${jarPath}`)
+    reporter(`j4a: Runtime cached at ${jarPath}`)
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
-    reporter(`j4a: 安装后下载未完成：${message}`)
-    reporter("j4a: 首次运行 j4a 时会再次尝试下载。")
+    reporter(`j4a: Post-install download did not complete: ${message}`)
+    reporter("j4a: The download will be retried the next time j4a starts.")
   }
 }
 

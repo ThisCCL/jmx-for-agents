@@ -1,10 +1,10 @@
 import { createHash, randomUUID } from "node:crypto"
 import { createWriteStream } from "node:fs"
-import http from "node:http"
-import https from "node:https"
 import { mkdir, readFile, rename, rm } from "node:fs/promises"
 import path from "node:path"
 import { pipeline } from "node:stream/promises"
+
+import { requestUrl } from "./proxy.mjs"
 
 const activeDownloads = new Map()
 const MAX_REDIRECT_HOPS = 5
@@ -16,7 +16,8 @@ export async function downloadJar({
   force = false,
   reporter = () => {},
   timeoutMs = 30_000,
-  requestImpl = request,
+  requestImpl,
+  env = process.env,
 }) {
   const normalizedSha256 = validateReleaseArtifactConfig(jarUrl, sha256)
   await mkdir(cacheDir, { recursive: true })
@@ -40,7 +41,7 @@ export async function downloadJar({
     cacheDir,
     reporter,
     timeoutMs,
-    requestImpl,
+    requestImpl: requestImpl ?? ((url, timeout) => requestUrl(url, timeout, env)),
   })
   activeDownloads.set(jarPath, download)
   try {
@@ -61,12 +62,13 @@ export async function requireCachedJar({ cacheDir, sha256 }) {
 async function downloadFreshJar({ jarUrl, sha256, jarPath, cacheDir, reporter, timeoutMs, requestImpl }) {
   const tempPath = path.join(cacheDir, `j4a.${process.pid}.${randomUUID()}.tmp`)
   try {
-    reporter("j4a: 正在下载 j4a 运行时，请稍候...")
+    reporter("j4a: Downloading runtime...")
     await downloadToFile(jarUrl, tempPath, reporter, timeoutMs, requestImpl)
     await verifySha256(tempPath, sha256)
     await rename(tempPath, jarPath)
-    reporter("j4a: 下载完成，运行时已准备好。")
+    reporter("j4a: Runtime download complete.")
   } catch (error) {
+    reporter("j4a: Runtime download failed.")
     await rm(tempPath, { force: true })
     throw error
   }
@@ -126,7 +128,10 @@ async function downloadToFile(jarUrl, outputPath, reporter, timeoutMs, requestIm
     const percent = totalBytes > 0 ? Math.floor((downloadedBytes / totalBytes) * 100) : 0
     if (percent !== lastPercent && (percent === 100 || percent - lastPercent >= 10)) {
       lastPercent = percent
-      reporter(`j4a: 下载进度 ${progressBar(percent)} ${percent}%`)
+      reporter(
+        `j4a: Downloading runtime ${progressBar(percent)} ${percent}% (${formatBytes(downloadedBytes)} / ${formatBytes(totalBytes)})`,
+        { kind: "progress" },
+      )
     }
   })
   await pipeline(response, createWriteStream(outputPath, { flags: "w" }))
@@ -136,24 +141,6 @@ function requestIdentity(url) {
   const requestUrl = new URL(url)
   requestUrl.hash = ""
   return requestUrl.href
-}
-
-function request(jarUrl, timeoutMs) {
-  return new Promise((resolve, reject) => {
-    const url = new URL(jarUrl)
-    const client = url.protocol === "https:" ? https : http
-    let response
-    const req = client.get(url, { timeout: timeoutMs }, (receivedResponse) => {
-      response = receivedResponse
-      resolve(receivedResponse)
-    })
-    req.once("timeout", () => {
-      const error = new Error("download failed: timeout")
-      response?.destroy(error)
-      req.destroy(error)
-    })
-    req.once("error", reject)
-  })
 }
 
 async function verifySha256(filePath, sha256) {
@@ -187,4 +174,10 @@ function requireSha256(sha256) {
 function progressBar(percent) {
   const filled = Math.max(0, Math.min(20, Math.round(percent / 5)))
   return `[${"#".repeat(filled)}${"-".repeat(20 - filled)}]`
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KiB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`
 }

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os"
 import path from "node:path"
 import test from "node:test"
 
-import { runJ4a } from "../src/main.mjs"
+import { createCliReporter, runJ4a } from "../src/main.mjs"
 import { responseFrom, sha256Of } from "./helpers/downloader.mjs"
 
 test("runJ4a prints wrapper help without an installed jar", async () => {
@@ -32,6 +32,29 @@ test("runJ4a prints wrapper help without an installed jar", async () => {
   } finally {
     await rm(workDir, { recursive: true, force: true })
   }
+})
+
+test("createCliReporter keeps progress on one TTY line and non-TTY logs quiet", () => {
+  const tty = createRecorder()
+  const ttyReporter = createCliReporter(tty.write, { interactive: true })
+  ttyReporter("j4a: Downloading runtime...")
+  ttyReporter("j4a: Downloading runtime [##------------------] 10% (1 MiB / 10 MiB)", { kind: "progress" })
+  ttyReporter("j4a: Downloading runtime [####################] 100% (10 MiB / 10 MiB)", { kind: "progress" })
+  ttyReporter("j4a: Runtime download complete.")
+  assert.equal(
+    tty.text(),
+    "j4a: Downloading runtime...\n"
+      + "\rj4a: Downloading runtime [##------------------] 10% (1 MiB / 10 MiB)"
+      + "\rj4a: Downloading runtime [####################] 100% (10 MiB / 10 MiB)\n"
+      + "j4a: Runtime download complete.\n",
+  )
+
+  const log = createRecorder()
+  const logReporter = createCliReporter(log.write, { interactive: false })
+  logReporter("j4a: Downloading runtime...")
+  logReporter("transient progress", { kind: "progress" })
+  logReporter("j4a: Runtime download complete.")
+  assert.equal(log.text(), "j4a: Downloading runtime...\nj4a: Runtime download complete.\n")
 })
 
 test("runJ4a reports the package version without cache, download, or Java", async () => {
@@ -104,6 +127,8 @@ test("runJ4a prints install help without an installed jar", async () => {
     assert.equal(result.exitCode, 0)
     assert.match(stdout.text(), /j4a install/)
     assert.match(stdout.text(), /install --with-skills/)
+    assert.match(stdout.text(), /HTTPS_PROXY.*HTTP_PROXY/s)
+    assert.match(stdout.text(), /scheme-less host:port/)
   } finally {
     await rm(workDir, { recursive: true, force: true })
   }

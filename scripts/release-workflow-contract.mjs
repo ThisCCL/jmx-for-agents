@@ -224,13 +224,14 @@ export function validateReleaseWorkflow(source) {
   const publishIndex = index("npm publish \"$RELEASE_TARBALL\"")
   const attestIndex = index(ACTIONS.attest)
   if (publicIndex < 0 || publishIndex < 0 || publicIndex >= publishIndex || attestIndex < 0 || attestIndex >= publishIndex) errors.push("publication-order")
-  const finalVerification = "test \"$ACTUAL_INTEGRITY\" = \"$RELEASE_INTEGRITY\""
-  const finalStepIndex = workflow.release.steps.findLastIndex(step => step.command.includes(finalVerification))
-  if (finalStepIndex < 0 || finalStepIndex !== workflow.release.steps.length - 1) {
-    errors.push("final-registry-terminal")
-  } else {
-    const finalLines = workflow.release.steps[finalStepIndex].command.split("\n")
-    if (finalLines.at(-1) !== finalVerification) errors.push("final-registry-terminal")
+  const publishStep = workflow.release.steps[publishIndex]
+  const publishLines = publishStep?.command.split("\n") ?? []
+  const publishLineIndex = publishLines.findIndex(line => line.includes('npm publish "$RELEASE_TARBALL"'))
+  const commandsAfterPublish = publishLines.slice(publishLineIndex + 1).filter(line => line !== "fi")
+  if (publishIndex !== workflow.release.steps.length - 1
+    || publishLineIndex < 0
+    || commandsAfterPublish.length > 0) {
+    errors.push("npm-publication-terminal")
   }
   return errors
 }

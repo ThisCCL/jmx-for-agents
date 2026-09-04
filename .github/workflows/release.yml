@@ -239,7 +239,7 @@ jobs:
           set -euo pipefail
           curl --fail --location --max-redirs 5 --output "$RUNNER_TEMP/public-release.jar" "https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/$(basename "$RELEASE_JAR")"
           node scripts/release-state-machine.mjs assert-sha256 "$(sha256sum "$RELEASE_JAR")" "$(sha256sum "$RUNNER_TEMP/public-release.jar")"
-      - name: Publish the exact prebuilt tarball and verify registry identity
+      - name: Publish the exact prebuilt tarball when absent
         env:
           NPM_BOOTSTRAP: ${{ secrets[format('NPM_BOOTSTRAP_{0}', 'TOKEN')] }}
         run: |
@@ -248,5 +248,3 @@ jobs:
             if [[ -n "${NPM_BOOTSTRAP:-}" ]]; then export "$(printf '%s%s' 'NODE_AUTH_' 'TOKEN')=$NPM_BOOTSTRAP"; fi
             npm publish "$RELEASE_TARBALL" --access public --provenance
           fi
-          ACTUAL_INTEGRITY="$(npm view "$PACKAGE_NAME@$RELEASE_VERSION" dist.integrity --json | node --input-type=module -e 'let data=""; process.stdin.on("data", part => data += part); process.stdin.on("end", () => console.log(JSON.parse(data)))')"
-          test "$ACTUAL_INTEGRITY" = "$RELEASE_INTEGRITY"

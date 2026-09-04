@@ -3,7 +3,9 @@ import { createHash } from "node:crypto"
 import { readFile, readdir } from "node:fs/promises"
 import path from "node:path"
 
-const RELEASE_FILES = ["j4a-1.0.0.jar", "j4a-1.0.0.jar.sha256", "jmx-for-agents-j4a-1.0.0.tgz"]
+function expectedReleaseFiles(version) {
+  return [`j4a-${version}.jar`, `j4a-${version}.jar.sha256`, `jmx-for-agents-j4a-${version}.tgz`]
+}
 const REQUIRED_PACKAGE_ENTRIES = [
   "package/LICENSE",
   "package/README.md",
@@ -37,7 +39,7 @@ export async function readPreparedRelease(projectDir) {
 }
 
 export function assertPreparedReleaseContract({ manifest, releaseFiles, jarSha256, tarballSha512 }) {
-  assert.deepEqual([...releaseFiles].sort(), RELEASE_FILES)
+  assert.deepEqual([...releaseFiles].sort(), expectedReleaseFiles(manifest.version))
   assert.equal(manifest.tag, `v${manifest.version}`)
   assert.equal(manifest.jar.file, `build/release/j4a-${manifest.version}.jar`)
   assert.equal(manifest.jar.checksumFile, `${manifest.jar.file}.sha256`)

@@ -12,7 +12,7 @@ const REQUIRED_COMMANDS = Object.freeze([
   "./gradlew clean test",
   "pnpm test",
   "pnpm run verify:public",
-  "pnpm run release:prepare -- --tag v1.0.0",
+  "pnpm run release:prepare -- --tag v$(node -p \"require('./package.json').version\")",
   "node scripts/ci-inspect-release.mjs",
   "node test/qa/release-rehearsal.mjs",
   "git diff --exit-code",

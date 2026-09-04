@@ -22,6 +22,7 @@ const PACKAGED_INVENTORY = [
   "dist/help.mjs",
   "dist/main.mjs",
   "dist/paths.mjs",
+  "dist/proxy.mjs",
   "dist/release-config.mjs",
   "dist/runtime.mjs",
   "dist/skills.mjs",
@@ -46,7 +47,7 @@ test("package manifest defines the exact public j4a contract", async () => {
   const workspaceYaml = await readFile("pnpm-workspace.yaml", "utf8")
 
   assert.equal(packageJson.name, "@jmx-for-agents/j4a")
-  assert.equal(packageJson.version, "1.0.0")
+  assert.equal(packageJson.version, "1.0.1")
   assert.equal(packageJson.private, false)
   assert.equal(packageJson.type, "module")
   assert.equal(packageJson.packageManager, "pnpm@11.5.1")
@@ -127,17 +128,18 @@ test("release preparation creates the one public tarball with allowlisted bytes 
   const trackedDiff = await snapshotTrackedDiff()
   const preparedRoot = await createPreparedPackageRoot()
   const extractDir = await mkdtemp(path.join(tmpdir(), "j4a-package-extract-"))
+  const { version } = await readPackageJson()
 
   try {
-    const tarballName = "jmx-for-agents-j4a-1.0.0.tgz"
+    const tarballName = `jmx-for-agents-j4a-${version}.tgz`
     let smokeSha512
     const prepared = await prepareRelease({
       root: preparedRoot,
-      tag: "v1.0.0",
+      tag: `v${version}`,
       runGradle: async () => {
         const libs = path.join(preparedRoot, "build", "libs")
         await mkdir(libs, { recursive: true })
-        await writeFile(path.join(libs, "j4a-1.0.0-all.jar"), "package-test-jar")
+        await writeFile(path.join(libs, `j4a-${version}-all.jar`), "package-test-jar")
       },
       verifyLicenses: async () => {},
       verifyVersions: async () => {},
@@ -155,8 +157,8 @@ test("release preparation creates the one public tarball with allowlisted bytes 
     assert.deepEqual(JSON.parse(verified.stdout.trim().split("\n").at(-1)), { prebuiltTarball: tarball })
 
     assert.deepEqual((await readdir(path.dirname(tarball))).sort(), [
-      "j4a-1.0.0.jar",
-      "j4a-1.0.0.jar.sha256",
+      `j4a-${version}.jar`,
+      `j4a-${version}.jar.sha256`,
       tarballName,
     ])
     assert.ok((await readFile(tarball)).byteLength > 0)
@@ -172,7 +174,7 @@ test("release preparation creates the one public tarball with allowlisted bytes 
     const mutation = process.env.J4A_PACKAGE_EMBEDDED_MUTATION
     if (mutation) delete embedded[mutation]
     assert.equal(embedded.name, "@jmx-for-agents/j4a")
-    assert.equal(embedded.version, "1.0.0")
+    assert.equal(embedded.version, version)
     assert.equal(embedded.private, false, "embedded.private must remain false")
     assert.equal(embedded.type, "module", "embedded.type must remain module")
     assert.equal(embedded.packageManager, undefined)
