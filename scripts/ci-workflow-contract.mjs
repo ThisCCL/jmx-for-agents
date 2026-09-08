@@ -8,7 +8,7 @@ const REQUIRED_ACTIONS = Object.freeze([
 const REQUIRED_COMMANDS = Object.freeze([
   "corepack prepare pnpm@11.5.1 --activate",
   "pnpm install --frozen-lockfile",
-  "go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml",
+  "go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml",
   "./gradlew clean test",
   "pnpm test",
   "pnpm run verify:public",

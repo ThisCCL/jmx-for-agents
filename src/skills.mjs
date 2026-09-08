@@ -23,7 +23,7 @@ export async function installPackagedSkill({
   if (existing.kind === "file" && !force) {
     throw new Error(
       `skill installation failed: ${targetDir} exists but is not a directory. `
-        + "Fix the workspace path and rerun `j4a install --with-skills`.",
+        + "Fix the workspace path and rerun `j4a install --only-skills`.",
     )
   }
 
@@ -37,7 +37,7 @@ export async function installPackagedSkill({
     const message = error instanceof Error ? error.message : String(error)
     throw new Error(
       `skill installation failed: ${message}. `
-        + "Fix the workspace filesystem state and rerun `j4a install --with-skills`.",
+        + "Fix the workspace filesystem state and rerun `j4a install --only-skills`.",
     )
   }
 

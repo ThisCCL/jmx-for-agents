@@ -12,6 +12,7 @@ const PUBLIC_INVENTORY = [
   "package/bin/j4a.js",
   "package/dist/main.mjs",
   "package/dist/release-config.mjs",
+  "package/dist/runtime-config.mjs",
   "package/dist/runtime.mjs",
   "package/dist/skills/j4a-master/SKILL.md",
   "package/package.json",
@@ -19,22 +20,23 @@ const PUBLIC_INVENTORY = [
 
 function preparedManifest(inventory) {
   return {
-    tag: "v1.0.0",
-    version: "1.0.0",
+    schemaVersion: 2,
+    wrapper: { version: "2.0.0", tag: "v2.0.0" },
+    runtime: { version: "1.0.0", releaseTag: "runtime-v1.0.0", launcherProtocol: 1 },
     jar: {
       file: "build/release/j4a-1.0.0.jar",
       checksumFile: "build/release/j4a-1.0.0.jar.sha256",
-      url: "https://github.com/ThisCCL/jmx-for-agents/releases/download/v1.0.0/j4a-1.0.0.jar",
+      url: "https://github.com/ThisCCL/jmx-for-agents/releases/download/runtime-v1.0.0/j4a-1.0.0.jar",
       sha256: JAR_SHA256,
     },
     tarball: {
-      file: "build/release/jmx-for-agents-j4a-1.0.0.tgz",
+      file: "build/release/jmx-for-agents-j4a-2.0.0.tgz",
       sha512: TARBALL_SHA512,
       integrity: `sha512-${Buffer.from(TARBALL_SHA512, "hex").toString("base64")}`,
       inventory,
     },
     smoke: {
-      tarballFile: "build/release/jmx-for-agents-j4a-1.0.0.tgz",
+      tarballFile: "build/release/jmx-for-agents-j4a-2.0.0.tgz",
       tarballSha512: TARBALL_SHA512,
     },
   }
@@ -47,6 +49,7 @@ test("Given a prepared public artifact, when its inventory contains only runtime
     "package/bin/j4a.js",
     "package/dist/main.mjs",
     "package/dist/release-config.mjs",
+    "package/dist/runtime-config.mjs",
     "package/dist/runtime.mjs",
     "package/dist/skills/j4a-master/SKILL.md",
     "package/package.json",
@@ -57,7 +60,7 @@ test("Given a prepared public artifact, when its inventory contains only runtime
     releaseFiles: [
       "j4a-1.0.0.jar",
       "j4a-1.0.0.jar.sha256",
-      "jmx-for-agents-j4a-1.0.0.tgz",
+      "jmx-for-agents-j4a-2.0.0.tgz",
     ],
     jarSha256: JAR_SHA256,
     tarballSha512: TARBALL_SHA512,
@@ -73,7 +76,7 @@ test("Given a prepared public artifact, when its npm inventory adds a source or 
       releaseFiles: [
         "j4a-1.0.0.jar",
         "j4a-1.0.0.jar.sha256",
-        "jmx-for-agents-j4a-1.0.0.tgz",
+        "jmx-for-agents-j4a-2.0.0.tgz",
       ],
       jarSha256: JAR_SHA256,
       tarballSha512: TARBALL_SHA512,
@@ -96,7 +99,7 @@ test("Given a prepared public artifact, when a canonical release file is missing
   assert.throws(
     () => assertPreparedReleaseContract({
       manifest,
-      releaseFiles: ["j4a-1.0.0.jar", "jmx-for-agents-j4a-1.0.0.tgz"],
+      releaseFiles: ["j4a-1.0.0.jar", "jmx-for-agents-j4a-2.0.0.tgz"],
       jarSha256: JAR_SHA256,
       tarballSha512: TARBALL_SHA512,
     }),
@@ -117,7 +120,7 @@ for (const entry of [
     assert.throws(
       () => assertPreparedReleaseContract({
         manifest,
-        releaseFiles: ["j4a-1.0.0.jar", "j4a-1.0.0.jar.sha256", "jmx-for-agents-j4a-1.0.0.tgz"],
+        releaseFiles: ["j4a-1.0.0.jar", "j4a-1.0.0.jar.sha256", "jmx-for-agents-j4a-2.0.0.tgz"],
         jarSha256: JAR_SHA256,
         tarballSha512: TARBALL_SHA512,
       }),
@@ -141,6 +144,7 @@ test("release rehearsal asserts packaged compatibility guidance and all three ve
     "serverInfo?.version",
     "javaVersion.stdout.trim()",
     "packageVersion.stdout.trim()",
+    '["install", "--only-skills"]',
   ]) assert.match(rehearsal, new RegExp(escapeRegExp(observable)))
 })
 

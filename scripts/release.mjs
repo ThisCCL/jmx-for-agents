@@ -39,10 +39,15 @@ export async function verifyVersionSync({
 export async function verifyBuiltVersionSurfaces({
   root = projectRoot,
   jarPath,
-  version,
+  wrapperVersion,
+  runtimeVersion,
   runSurface = runVersionSurfaceDefault,
 } = {}) {
-  const expectedVersion = requireString(version, "version")
+  const expectedVersions = {
+    wrapper: requireString(wrapperVersion, "wrapperVersion"),
+    java: requireString(runtimeVersion, "runtimeVersion"),
+    mcp: requireString(runtimeVersion, "runtimeVersion"),
+  }
   const surfaces = ["wrapper", "java", "mcp"]
   for (const surface of surfaces) {
     const result = await runSurface(surface, { root, jarPath })
@@ -52,11 +57,11 @@ export async function verifyBuiltVersionSurfaces({
     const actualVersion = surface === "mcp"
       ? mcpServerVersion(result.stdout)
       : exactVersionOutput(result.stdout)
-    if (actualVersion !== expectedVersion) {
-      throw new Error(`${surface} version mismatch: expected ${expectedVersion}, received ${actualVersion}`)
+    if (actualVersion !== expectedVersions[surface]) {
+      throw new Error(`${surface} version mismatch: expected ${expectedVersions[surface]}, received ${actualVersion}`)
     }
   }
-  return expectedVersion
+  return { wrapperVersion: expectedVersions.wrapper, runtimeVersion: expectedVersions.java }
 }
 
 export async function prepareRelease({
@@ -67,10 +72,14 @@ export async function prepareRelease({
   verifyVersions = verifyBuiltVersionSurfaces,
   smoke = smokeTarballDefault,
 } = {}) {
-  const version = await verifyVersionSync({
+  const wrapperVersion = await verifyVersionSync({
     tag,
     packageJsonPath: path.join(root, "package.json"),
   })
+  const runtimeMetadata = requireRuntimeMetadata(
+    JSON.parse(await readFile(path.join(root, "config", "runtime.json"), "utf8")),
+  )
+  const runtimeVersion = runtimeMetadata.version
   const releaseDir = path.join(root, "build", "release")
   const manifestPath = path.join(root, "build", "release-manifest.json")
   if (await pathExists(releaseDir) || await pathExists(manifestPath)) {
@@ -78,9 +87,9 @@ export async function prepareRelease({
   }
 
   await runGradle({ command: gradleCommand(), args: ["clean", "shadowJar"], cwd: root })
-  const shadowJar = await findOnlyShadowJar(path.join(root, "build", "libs"), version)
+  const shadowJar = await findOnlyShadowJar(path.join(root, "build", "libs"), runtimeVersion)
   await mkdir(releaseDir, { recursive: true })
-  const jarName = `j4a-${version}.jar`
+  const jarName = `j4a-${runtimeVersion}.jar`
   const jarPath = path.join(releaseDir, jarName)
   await copyFile(shadowJar, jarPath)
   const jarSha256 = await sha256File(jarPath)
@@ -90,15 +99,15 @@ export async function prepareRelease({
 
   const releaseConfig = await buildReleaseConfig({
     rootDir: root,
-    packageJsonPath: path.join(root, "package.json"),
+    runtimeJsonPath: path.join(root, "config", "runtime.json"),
     releaseJsonPath: path.join(root, "config", "release.json"),
     outputPath: path.join(root, "src", "release-config.mjs"),
     jarPath,
   })
   await buildDist({ rootDir: root })
-  await verifyVersions({ root, jarPath, version })
+  await verifyVersions({ root, jarPath, wrapperVersion, runtimeVersion })
 
-  const tarballName = `jmx-for-agents-j4a-${version}.tgz`
+  const tarballName = `jmx-for-agents-j4a-${wrapperVersion}.tgz`
   await packOnce({ root, releaseDir })
   const releaseFiles = await readdir(releaseDir)
   const tarballs = releaseFiles.filter(file => file.endsWith(".tgz"))
@@ -115,9 +124,16 @@ export async function prepareRelease({
   }
 
   const manifest = {
-    schemaVersion: 1,
-    tag,
-    version,
+    schemaVersion: 2,
+    wrapper: {
+      version: wrapperVersion,
+      tag,
+    },
+    runtime: {
+      version: runtimeVersion,
+      releaseTag: releaseConfig.releaseTag,
+      launcherProtocol: releaseConfig.launcherProtocol,
+    },
     jar: {
       file: `build/release/${jarName}`,
       checksumFile: `build/release/${jarName}.sha256`,
@@ -166,10 +182,13 @@ export async function assertPreparedRelease({
   manifestPath = path.join(root, "build", "release-manifest.json"),
 } = {}) {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"))
-  await verifyVersionSync({
-    tag: manifest.tag,
+  const wrapperVersion = await verifyVersionSync({
+    tag: manifest.wrapper?.tag,
     packageJsonPath: path.join(root, "package.json"),
   })
+  if (manifest.schemaVersion !== 2 || manifest.wrapper?.version !== wrapperVersion) {
+    throw new Error("prepared wrapper identity mismatch")
+  }
   const jarPath = path.join(root, manifest.jar.file)
   if (await sha256File(jarPath) !== manifest.jar.sha256) {
     throw new Error("prepared JAR SHA-256 mismatch")
@@ -178,8 +197,17 @@ export async function assertPreparedRelease({
   if (checksum !== `${manifest.jar.sha256}  ${path.basename(jarPath)}\n`) {
     throw new Error("prepared JAR checksum sidecar mismatch")
   }
+  const runtimeMetadata = JSON.parse(await readFile(path.join(root, "config", "runtime.json"), "utf8"))
+  if (manifest.runtime?.version !== runtimeMetadata.version
+    || manifest.runtime?.releaseTag !== runtimeMetadata.releaseTag
+    || manifest.runtime?.launcherProtocol !== runtimeMetadata.launcherProtocol) {
+    throw new Error("prepared runtime identity mismatch")
+  }
   const expectedConfig = [
     "export const releaseConfig = {",
+    `  runtimeVersion: ${JSON.stringify(runtimeMetadata.version)},`,
+    `  releaseTag: ${JSON.stringify(runtimeMetadata.releaseTag)},`,
+    `  launcherProtocol: ${runtimeMetadata.launcherProtocol},`,
     `  jarUrl: ${JSON.stringify(manifest.jar.url)},`,
     `  jarSha256: ${JSON.stringify(manifest.jar.sha256)},`,
     "}",
@@ -292,6 +320,24 @@ function requireString(value, name) {
     throw new TypeError(`${name} must be a non-empty string`)
   }
   return value
+}
+
+function requireRuntimeMetadata(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new TypeError("config/runtime.json must contain an object")
+  }
+  const version = requireString(value.version, "config/runtime.json version")
+  if (!SEMVER_PATTERN.test(version)) {
+    throw new TypeError("config/runtime.json version must be SemVer-compatible")
+  }
+  const releaseTag = requireString(value.releaseTag, "config/runtime.json releaseTag")
+  if (releaseTag !== `v${version}` && releaseTag !== `runtime-v${version}`) {
+    throw new TypeError(`config/runtime.json releaseTag must equal v${version} or runtime-v${version}`)
+  }
+  if (!Number.isSafeInteger(value.launcherProtocol) || value.launcherProtocol < 1) {
+    throw new TypeError("config/runtime.json launcherProtocol must be a positive integer")
+  }
+  return { version, releaseTag, launcherProtocol: value.launcherProtocol }
 }
 
 function exactVersionOutput(stdout) {

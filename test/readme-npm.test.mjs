@@ -75,7 +75,7 @@ test("maintainer details live in CONTRIBUTING and exact authoring details stay o
     assert.match(readme, /\[j4a-master .+\]\(skills\/j4a-master\/SKILL\.md\)/)
     assert.match(readme, /\[CONTRIBUTING\.md\]\(CONTRIBUTING\.md\)/)
     assert.match(readme, /\[RELEASE\.md\]\(RELEASE\.md\)/)
-    assert.doesNotMatch(readme, /J4A_CACHE_DIR|J4A_JAVA_COMMAND|SHA-256|postinstall/)
+    assert.doesNotMatch(readme, /J4A_JAVA_COMMAND|postinstall/)
     assert.doesNotMatch(readme, /## (?:Project layout|项目结构|Development|开发|Release|发布)/)
     assert.doesNotMatch(readme, /properties: writable|none\|key\|all\|writable|cursor v[34]|退出 [234]/i)
   }

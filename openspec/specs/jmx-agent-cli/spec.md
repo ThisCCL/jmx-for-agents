@@ -393,19 +393,19 @@ Read, components, categories, set, and apply SHALL use exact runtime FQCN `compo
 - **THEN** set SHALL accept the same representation subject to existing safety rules
 
 ### Requirement: Packaged wrapper help is available before runtime installation
-The packaged `j4a` npm wrapper SHALL provide wrapper-local help for install-first usage without requiring the cached runtime jar. `j4a --help` and `j4a install --help` SHALL describe `install`, `install --with-skills`, and how ordinary commands are forwarded to the Java runtime after installation.
+The packaged `j4a` npm wrapper SHALL provide wrapper-local help for install-first usage without requiring the cached runtime jar. `j4a --help` and `j4a install --help` SHALL describe `install`, `install --with-skills`, `install --only-skills`, and how ordinary commands are forwarded to the Java runtime after installation. Wrapper help SHALL also advertise the wrapper-local `runtime-info --json` diagnostics command.
 
 #### Scenario: Wrapper help works without installed jar
 - **WHEN** the user runs `j4a --help`
 - **AND** the configured cached jar is missing
 - **THEN** the wrapper exits zero without downloading the jar
-- **AND** the help output documents `j4a install` and `j4a install --with-skills`
+- **AND** the help output documents `j4a install`, `j4a install --with-skills`, and `j4a install --only-skills`
 
 #### Scenario: Install help works without installed jar
 - **WHEN** the user runs `j4a install --help`
 - **AND** the configured cached jar is missing
 - **THEN** the wrapper exits zero without downloading the jar
-- **AND** the help output documents `j4a install` and `j4a install --with-skills`
+- **AND** the help output documents `j4a install`, `j4a install --with-skills`, and `j4a install --only-skills`
 
 ### Requirement: Packaged wrapper installs runtime explicitly
 The packaged `j4a` npm wrapper SHALL provide an explicit `install` subcommand for runtime preparation. `j4a install` SHALL download or reuse the configured cached `j4a.jar` and verify it against the configured SHA-256 before reporting success. `j4a install --with-skills` SHALL complete the same jar installation flow first and only then continue to skill installation.
@@ -426,6 +426,50 @@ The packaged `j4a` npm wrapper SHALL provide an explicit `install` subcommand fo
 - **AND** the jar cannot be downloaded or verified
 - **THEN** the wrapper exits nonzero
 - **AND** it does not create or modify `<cwd>/.agents/skills/j4a-master`
+
+#### Scenario: Skills-only install avoids the runtime surface
+- **WHEN** the user runs `j4a install --only-skills`
+- **THEN** the wrapper installs the packaged skill into `<cwd>/.agents/skills/j4a-master`
+- **AND** it does not read, create, verify, download, or execute the runtime jar
+- **AND** `--force` retains its existing skill-directory replacement meaning
+
+#### Scenario: Conflicting skill install modes fail before mutation
+- **WHEN** the user combines `--only-skills` with `--with-skills`
+- **THEN** the wrapper exits with usage status 2
+- **AND** it does not access the network, runtime cache, Java process, or skill target
+
+### Requirement: Wrapper and runtime identities evolve independently
+The npm wrapper version SHALL be authored by `package.json`, while the Java JAR and MCP server version SHALL be authored by validated runtime metadata. The wrapper SHALL accept a runtime whose semantic version differs from the wrapper version when its launcher protocol equals the wrapper's supported launcher protocol. It SHALL fail closed before cache, network, or Java activity when the runtime metadata is malformed or names an incompatible launcher protocol.
+
+#### Scenario: Different wrapper and runtime versions are compatible
+- **WHEN** the wrapper metadata names version `9.8.7`
+- **AND** the runtime metadata names version `1.2.3` and the supported launcher protocol
+- **THEN** `j4a --version` reports `9.8.7`
+- **AND** Java `--version` and MCP `serverInfo.version` report `1.2.3`
+- **AND** wrapper commands may launch that runtime without a version-equality gate
+
+#### Scenario: Incompatible launcher protocol fails closed
+- **WHEN** the runtime metadata names a launcher protocol the wrapper does not support
+- **THEN** wrapper-local runtime inspection and runtime-backed commands fail with both protocol values
+- **AND** the wrapper does not create cache paths, contact the network, or start Java
+
+### Requirement: Runtime metadata and cache location are locally inspectable
+The wrapper SHALL expose `j4a runtime-info --json` without requiring a cached JAR, network access, or Java. Its JSON SHALL report wrapper version, runtime version, launcher protocol, release tag, download URL, SHA-256, cache root, and the exact selected JAR path. The selected JAR path SHALL be `<cache-root>/runtimes/<runtime-version>/j4a.jar`, where the cache root retains the existing platform default and `J4A_CACHE_DIR` override behavior.
+
+#### Scenario: Runtime info supports manual installation
+- **WHEN** the user runs `j4a runtime-info --json`
+- **THEN** the wrapper exits zero without reading or creating the cache
+- **AND** the reported URL, SHA-256, and JAR path are sufficient to download and place the configured runtime manually
+
+#### Scenario: Verified legacy cache migrates without network
+- **WHEN** `<cache-root>/j4a.jar` matches the configured runtime SHA-256
+- **AND** the selected versioned JAR path is absent
+- **THEN** the wrapper copies the verified legacy JAR into the selected versioned path
+- **AND** it does not contact the network
+
+#### Scenario: Malformed runtime identity cannot escape the cache root
+- **WHEN** runtime metadata contains a non-SemVer version, invalid release tag, non-HTTPS URL, invalid digest, or invalid protocol value
+- **THEN** the wrapper rejects the metadata before deriving or mutating an artifact path
 
 ### Requirement: Packaged wrapper materializes whitelisted skills into the caller workspace
 The packaged `j4a` npm wrapper SHALL bundle a whitelist skill payload containing only `skills/j4a-master`. That packaged skill payload SHALL be release-safe for npm consumers: it SHALL direct users to the installed `j4a` command and SHALL NOT require this repository checkout, the repository Gradle wrapper, or a locally built shadow jar. When `j4a install --with-skills` runs after successful jar installation, the wrapper SHALL install that skill into the caller's current working directory at `<cwd>/.agents/skills/j4a-master`.
@@ -1051,3 +1095,20 @@ A J4A release supporting JMeter 5.6.3 SHALL perform documented exploratory and r
 - **WHEN** a J4A release candidate is evaluated
 - **THEN** representative generated plans, including HTTP Request Defaults and HTTP arguments, SHALL be opened and exercised in the real JMeter 5.6.3 GUI
 - **AND** any reproducible J4A structural compatibility failure SHALL block release approval
+
+### Requirement: Wrapper and runtime publication authorities are separated
+The protected wrapper workflow SHALL accept only `v<wrapper-version>` tags and publish only the npm tarball after validating the descriptor-selected public runtime. The protected runtime workflow SHALL accept only `runtime-v<runtime-version>` tags and publish only the JAR, SHA-256 sidecar, attestation, and GitHub Release. The runtime workflow SHALL have no npm credential or registry surface, and the wrapper workflow SHALL have no GitHub Release or attestation write authority.
+
+#### Scenario: Wrapper-only release reuses an existing runtime
+- **WHEN** `package.json` advances while `config/runtime.json` remains unchanged
+- **THEN** the wrapper workflow validates the existing public runtime URL, digest, and Java version
+- **AND** it publishes the npm tarball without creating or modifying a GitHub Release
+
+#### Scenario: Runtime release cannot publish npm
+- **WHEN** a protected `runtime-v<runtime-version>` tag matches runtime metadata
+- **THEN** the runtime workflow builds and verifies the configured JAR before publishing its GitHub artifacts
+- **AND** it neither reads npm package state nor publishes to npm
+
+#### Scenario: New runtime precedes its selecting wrapper
+- **WHEN** both runtime and wrapper identities change
+- **THEN** the runtime Release SHALL be public and digest-verifiable before the wrapper tag may publish an npm package selecting it

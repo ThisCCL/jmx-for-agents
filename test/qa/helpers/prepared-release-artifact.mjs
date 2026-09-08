@@ -3,8 +3,12 @@ import { createHash } from "node:crypto"
 import { readFile, readdir } from "node:fs/promises"
 import path from "node:path"
 
-function expectedReleaseFiles(version) {
-  return [`j4a-${version}.jar`, `j4a-${version}.jar.sha256`, `jmx-for-agents-j4a-${version}.tgz`]
+function expectedReleaseFiles(wrapperVersion, runtimeVersion) {
+  return [
+    `j4a-${runtimeVersion}.jar`,
+    `j4a-${runtimeVersion}.jar.sha256`,
+    `jmx-for-agents-j4a-${wrapperVersion}.tgz`,
+  ]
 }
 const REQUIRED_PACKAGE_ENTRIES = [
   "package/LICENSE",
@@ -12,6 +16,7 @@ const REQUIRED_PACKAGE_ENTRIES = [
   "package/bin/j4a.js",
   "package/dist/main.mjs",
   "package/dist/release-config.mjs",
+  "package/dist/runtime-config.mjs",
   "package/dist/runtime.mjs",
   "package/dist/skills/j4a-master/SKILL.md",
   "package/package.json",
@@ -39,12 +44,18 @@ export async function readPreparedRelease(projectDir) {
 }
 
 export function assertPreparedReleaseContract({ manifest, releaseFiles, jarSha256, tarballSha512 }) {
-  assert.deepEqual([...releaseFiles].sort(), expectedReleaseFiles(manifest.version))
-  assert.equal(manifest.tag, `v${manifest.version}`)
-  assert.equal(manifest.jar.file, `build/release/j4a-${manifest.version}.jar`)
+  assert.equal(manifest.schemaVersion, 2)
+  assert.equal(manifest.wrapper.tag, `v${manifest.wrapper.version}`)
+  assert.ok([`v${manifest.runtime.version}`, `runtime-v${manifest.runtime.version}`].includes(manifest.runtime.releaseTag))
+  assert.equal(Number.isSafeInteger(manifest.runtime.launcherProtocol), true)
+  assert.deepEqual(
+    [...releaseFiles].sort(),
+    expectedReleaseFiles(manifest.wrapper.version, manifest.runtime.version).sort(),
+  )
+  assert.equal(manifest.jar.file, `build/release/j4a-${manifest.runtime.version}.jar`)
   assert.equal(manifest.jar.checksumFile, `${manifest.jar.file}.sha256`)
   assert.equal(manifest.jar.sha256, jarSha256)
-  assert.equal(manifest.tarball.file, `build/release/jmx-for-agents-j4a-${manifest.version}.tgz`)
+  assert.equal(manifest.tarball.file, `build/release/jmx-for-agents-j4a-${manifest.wrapper.version}.tgz`)
   assert.equal(manifest.tarball.sha512, tarballSha512)
   assert.equal(manifest.smoke.tarballFile, manifest.tarball.file)
   assert.equal(manifest.smoke.tarballSha512, tarballSha512)

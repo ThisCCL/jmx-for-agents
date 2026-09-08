@@ -40,7 +40,7 @@ jobs:
           tar -xzf "$JMETER_ARCHIVE" -C "$RUNNER_TEMP"
           echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3" >> "$GITHUB_ENV"
       - name: Lint the workflow
-        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml
       - name: Run retained Java and Node suites
         run: |
           ./gradlew clean test

@@ -19,7 +19,7 @@ try {
   })
 
   assert.equal(result.status, 0)
-  await access(path.join(context.cacheDir, "j4a.jar"))
+  await access(path.join(context.cacheDir, "runtimes", context.manifest.runtime.version, "j4a.jar"))
   assert.equal(
     await readFile(path.join(context.consumerDir, ".agents", "skills", "j4a-master", "SKILL.md"), "utf8"),
     await readFile(path.join(context.consumerDir, "node_modules", "@jmx-for-agents", "j4a", "dist", "skills", "j4a-master", "SKILL.md"), "utf8"),

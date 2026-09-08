@@ -27,6 +27,8 @@ test("runJ4a prints wrapper help without an installed jar", async () => {
     assert.equal(result.exitCode, 0)
     assert.match(stdout.text(), /j4a install/)
     assert.match(stdout.text(), /install --with-skills/)
+    assert.match(stdout.text(), /install --only-skills/)
+    assert.match(stdout.text(), /runtime-info --json/)
     assert.equal(stderr.text(), "")
     assert.equal(existsSync(path.join(workDir, "cache", "j4a.jar")), false)
   } finally {
@@ -84,6 +86,61 @@ test("runJ4a reports the package version without cache, download, or Java", asyn
   }
 })
 
+test("runJ4a runtime-info reports independent wrapper and runtime identities without side effects", async () => {
+  const workDir = await mkdtemp(path.join(tmpdir(), "j4a-cli-runtime-info-"))
+  const packageVersion = JSON.parse(await readFile("package.json", "utf8")).version
+  const cacheDir = path.join(workDir, "missing-cache")
+  const stdout = createRecorder()
+
+  try {
+    const result = await runJ4a({
+      argv: ["runtime-info", "--json"],
+      cacheDir,
+      javaCommand: path.join(workDir, "missing-java"),
+      stdout: stdout.write,
+      releaseConfig: runtimeConfigFor("unused", { runtimeVersion: "7.6.5" }),
+      requestImpl: async () => {
+        assert.fail("runtime-info must not download the jar")
+      },
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.deepEqual(JSON.parse(stdout.text()), {
+      wrapperVersion: packageVersion,
+      runtimeVersion: "7.6.5",
+      launcherProtocol: 1,
+      releaseTag: "runtime-v7.6.5",
+      jarUrl: "https://downloads.example.test/j4a-7.6.5.jar",
+      jarSha256: sha256Of("unused"),
+      cacheRoot: cacheDir,
+      jarPath: path.join(cacheDir, "runtimes", "7.6.5", "j4a.jar"),
+    })
+    assert.equal(existsSync(cacheDir), false)
+  } finally {
+    await rm(workDir, { recursive: true, force: true })
+  }
+})
+
+test("runJ4a rejects an incompatible runtime launcher protocol before side effects", async () => {
+  const workDir = await mkdtemp(path.join(tmpdir(), "j4a-cli-runtime-info-"))
+  const cacheDir = path.join(workDir, "missing-cache")
+
+  try {
+    await assert.rejects(runJ4a({
+      argv: ["runtime-info", "--json"],
+      cacheDir,
+      javaCommand: path.join(workDir, "missing-java"),
+      releaseConfig: runtimeConfigFor("unused", { launcherProtocol: 2 }),
+      requestImpl: async () => {
+        assert.fail("incompatible runtime metadata must not download the jar")
+      },
+    }), /launcher protocol 2.*supported protocol 1/i)
+    assert.equal(existsSync(cacheDir), false)
+  } finally {
+    await rm(workDir, { recursive: true, force: true })
+  }
+})
+
 test("runJ4a rejects arguments after --version without touching the runtime", async () => {
   const workDir = await mkdtemp(path.join(tmpdir(), "j4a-cli-version-"))
   const stdout = createRecorder()
@@ -127,6 +184,7 @@ test("runJ4a prints install help without an installed jar", async () => {
     assert.equal(result.exitCode, 0)
     assert.match(stdout.text(), /j4a install/)
     assert.match(stdout.text(), /install --with-skills/)
+    assert.match(stdout.text(), /install --only-skills/)
     assert.match(stdout.text(), /HTTPS_PROXY.*HTTP_PROXY/s)
     assert.match(stdout.text(), /scheme-less host:port/)
   } finally {
@@ -165,8 +223,10 @@ test("runJ4a keeps ordinary Java forwarding behavior for installed runtimes", as
   const fakeJava = await createFakeJava(workDir)
 
   try {
-    await mkdir(path.join(workDir, "cache"), { recursive: true })
-    await writeFile(path.join(workDir, "cache", "j4a.jar"), jarBytes, "utf8")
+    const releaseConfig = runtimeConfigFor(jarBytes)
+    const jarPath = path.join(workDir, "cache", "runtimes", releaseConfig.runtimeVersion, "j4a.jar")
+    await mkdir(path.dirname(jarPath), { recursive: true })
+    await writeFile(jarPath, jarBytes, "utf8")
 
     const result = await runJ4a({
       argv: ["read", "sample.jmx"],
@@ -176,16 +236,13 @@ test("runJ4a keeps ordinary Java forwarding behavior for installed runtimes", as
       },
       cacheDir: path.join(workDir, "cache"),
       javaCommand: fakeJava.command,
-      releaseConfig: {
-        jarUrl: "https://downloads.example.test/j4a.jar",
-        jarSha256: sha256Of(jarBytes),
-      },
+      releaseConfig,
     })
 
     assert.equal(result.exitCode, 0)
     assert.deepEqual((await readFile(fakeJava.logPath, "utf8")).trim().split(/\r?\n/), [
       "-jar",
-      path.join(workDir, "cache", "j4a.jar"),
+      jarPath,
       "read",
       "sample.jmx",
     ])
@@ -222,4 +279,16 @@ async function createFakeJava(workDir) {
   await chmod(command, 0o755)
 
   return { binDir, command, logPath }
+}
+
+function runtimeConfigFor(jarBytes, overrides = {}) {
+  const runtimeVersion = overrides.runtimeVersion ?? "9.8.7"
+  return {
+    runtimeVersion,
+    releaseTag: `runtime-v${runtimeVersion}`,
+    launcherProtocol: 1,
+    jarUrl: `https://downloads.example.test/j4a-${runtimeVersion}.jar`,
+    jarSha256: sha256Of(jarBytes),
+    ...overrides,
+  }
 }

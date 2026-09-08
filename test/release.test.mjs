@@ -43,16 +43,17 @@ test("version authority derives release tags from package.json alone", async () 
   }
 })
 
-test("release verification rejects wrapper, Java, or MCP version drift", async () => {
-  const fixtureVersion = "7.6.5"
+test("release verification accepts independent wrapper and runtime versions and rejects drift", async () => {
+  const wrapperVersion = "7.6.5"
+  const runtimeVersion = "1.2.3"
   const consistent = {
-    wrapper: { stdout: `${fixtureVersion}\n`, stderr: "" },
-    java: { stdout: `${fixtureVersion}\n`, stderr: "" },
+    wrapper: { stdout: `${wrapperVersion}\n`, stderr: "" },
+    java: { stdout: `${runtimeVersion}\n`, stderr: "" },
     mcp: {
       stdout: `${JSON.stringify({
         jsonrpc: "2.0",
         id: 1,
-        result: { serverInfo: { name: "j4a", version: fixtureVersion } },
+        result: { serverInfo: { name: "j4a", version: runtimeVersion } },
       })}\n`,
       stderr: "",
     },
@@ -60,8 +61,9 @@ test("release verification rejects wrapper, Java, or MCP version drift", async (
 
   await verifyBuiltVersionSurfaces({
     root: process.cwd(),
-    jarPath: path.join(process.cwd(), "build", "libs", `j4a-${fixtureVersion}-all.jar`),
-    version: fixtureVersion,
+    jarPath: path.join(process.cwd(), "build", "libs", `j4a-${runtimeVersion}-all.jar`),
+    wrapperVersion,
+    runtimeVersion,
     runSurface: async surface => consistent[surface],
   })
 
@@ -69,7 +71,7 @@ test("release verification rejects wrapper, Java, or MCP version drift", async (
     const divergent = structuredClone(consistent)
     if (surface === "mcp") {
       divergent.mcp.stdout = divergent.mcp.stdout.replace(
-        `"version":"${fixtureVersion}"`,
+        `"version":"${runtimeVersion}"`,
         '"version":"9.9.9"',
       )
     } else {
@@ -78,8 +80,9 @@ test("release verification rejects wrapper, Java, or MCP version drift", async (
     await assert.rejects(
       verifyBuiltVersionSurfaces({
         root: process.cwd(),
-        jarPath: path.join(process.cwd(), "build", "libs", `j4a-${fixtureVersion}-all.jar`),
-        version: fixtureVersion,
+        jarPath: path.join(process.cwd(), "build", "libs", `j4a-${runtimeVersion}-all.jar`),
+        wrapperVersion,
+        runtimeVersion,
         runSurface: async candidate => divergent[candidate],
       }),
       new RegExp(`${surface} version mismatch`, "i"),

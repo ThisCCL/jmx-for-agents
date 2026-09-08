@@ -1,0 +1,217 @@
+name: Publish Java runtime
+
+on:
+  push:
+    tags: ['runtime-v*.*.*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runtime-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/runtime-v')
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    steps:
+      - name: Check out the pushed tag with ancestry
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.11.1
+          package-manager-cache: false
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: 8
+      - name: Set up Go for actionlint
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version: '1.26'
+          cache: false
+      - name: Enable the pinned pnpm toolchain
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.5.1 --activate
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Provision Apache JMeter 5.6.3
+        run: |
+          JMETER_ARCHIVE="$RUNNER_TEMP/apache-jmeter-5.6.3.tgz"
+          if ! curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.6.3.tgz; then
+            curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          fi
+          printf '%s  %s\n' '5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083' "$JMETER_ARCHIVE" | sha512sum --check --strict
+          tar -xzf "$JMETER_ARCHIVE" -C "$RUNNER_TEMP"
+          echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3" >> "$GITHUB_ENV"
+      - name: Prove this runtime tag is an approved release candidate
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          preflight_fail() {
+            printf 'Runtime release preflight failed: %s\n' "$1" >&2
+            exit 1
+          }
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          RUNTIME_TAG="$GITHUB_REF_NAME"
+          RUNTIME_VERSION="$(node -p "require('./config/runtime.json').version")" || preflight_fail "could not read runtime version"
+          CONFIGURED_TAG="$(node -p "require('./config/runtime.json').releaseTag")" || preflight_fail "could not read runtime release tag"
+          [[ "$RUNTIME_TAG" =~ ^runtime-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || preflight_fail "tag is not strict runtime SemVer: $RUNTIME_TAG"
+          test "$RUNTIME_TAG" = "runtime-v$RUNTIME_VERSION" || preflight_fail "tag $RUNTIME_TAG does not match runtime version $RUNTIME_VERSION"
+          test "$RUNTIME_TAG" = "$CONFIGURED_TAG" || preflight_fail "tag $RUNTIME_TAG does not match runtime metadata $CONFIGURED_TAG"
+          git fetch --no-tags origin main || preflight_fail "could not fetch origin/main"
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main || preflight_fail "tag commit $GITHUB_SHA is not reachable from origin/main"
+          RULESET_IDS="$(gh api --paginate "repos/$GITHUB_REPOSITORY/rulesets?includes_parents=true&targets=tag" --jq '.[].id')" || preflight_fail "could not list repository tag rulesets"
+          test -n "$RULESET_IDS" || preflight_fail "repository has no tag rulesets"
+          if ! while read -r RULESET_ID; do
+            gh api "repos/$GITHUB_REPOSITORY/rulesets/$RULESET_ID"
+          done <<< "$RULESET_IDS" | jq --slurp '.' > "$RUNNER_TEMP/rulesets.json"; then
+            preflight_fail "could not fetch repository tag-ruleset details"
+          fi
+          node scripts/release-state-machine.mjs assert-preflight "$RUNNER_TEMP/rulesets.json" "$RUNTIME_TAG" || preflight_fail "active tag rulesets do not protect $RUNTIME_TAG"
+          {
+            echo "RUNTIME_TAG=$RUNTIME_TAG"
+            echo "RUNTIME_VERSION=$RUNTIME_VERSION"
+          } >> "$GITHUB_ENV"
+      - name: Verify runtime source and workflows
+        run: |
+          set -euo pipefail
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml
+          ./gradlew clean test
+          pnpm test
+          pnpm run verify:public
+      - name: Produce the exact runtime assets
+        id: producer
+        run: |
+          set -euo pipefail
+          ./gradlew clean shadowJar
+          SOURCE_JAR="build/libs/j4a-$RUNTIME_VERSION-all.jar"
+          test -f "$SOURCE_JAR"
+          EXPECTED_SHA256="$(node -p "require('./config/runtime.json').jarSha256")"
+          printf '%s  %s\n' "$EXPECTED_SHA256" "$SOURCE_JAR" | sha256sum --check --strict
+          mkdir -p build/runtime-release
+          RELEASE_JAR="build/runtime-release/j4a-$RUNTIME_VERSION.jar"
+          RELEASE_CHECKSUM="$RELEASE_JAR.sha256"
+          cp "$SOURCE_JAR" "$RELEASE_JAR"
+          printf '%s  %s\n' "$EXPECTED_SHA256" "$(basename "$RELEASE_JAR")" > "$RELEASE_CHECKSUM"
+          {
+            echo "jar=$RELEASE_JAR"
+            echo "checksum=$RELEASE_CHECKSUM"
+          } >> "$GITHUB_OUTPUT"
+      - name: Read the exact runtime identities
+        run: |
+          {
+            echo "RELEASE_JAR=${{ steps.producer.outputs.jar }}"
+            echo "RELEASE_CHECKSUM=${{ steps.producer.outputs.checksum }}"
+          } >> "$GITHUB_ENV"
+      - name: Query and reconcile current runtime release state
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq --slurp '.' > "$RUNNER_TEMP/releases.json"
+          node scripts/release-state-machine.mjs select-release "$RUNNER_TEMP/releases.json" "$RUNTIME_TAG" > "$RUNNER_TEMP/release.json"
+          node --input-type=module - "$RUNNER_TEMP/release.json" "$RELEASE_JAR" "$RELEASE_CHECKSUM" <<'NODE' >> "$GITHUB_ENV"
+          import { createHash } from "node:crypto"
+          import { readFile } from "node:fs/promises"
+          import path from "node:path"
+          const [releasePath, jarPath, checksumPath] = process.argv.slice(2)
+          const release = JSON.parse(await readFile(releasePath, "utf8"))
+          const digest = async file => createHash("sha256").update(await readFile(file)).digest("hex")
+          const expected = new Map([[path.basename(jarPath), await digest(jarPath)], [path.basename(checksumPath), await digest(checksumPath)]])
+          if (release === null) {
+            console.log("RELEASE_EXISTS=false")
+            console.log("RELEASE_DRAFT=true")
+            console.log("MISSING_JAR=true")
+            console.log("MISSING_CHECKSUM=true")
+          } else {
+            if (release.tag_name !== process.env.RUNTIME_TAG || release.prerelease) throw new Error("release identity mismatch")
+            const assets = new Map(release.assets.map(asset => [asset.name, asset]))
+            for (const [name, expectedDigest] of expected) {
+              const asset = assets.get(name)
+              if (asset?.digest !== undefined && asset.digest !== `sha256:${expectedDigest}`) throw new Error(`release asset identity mismatch: ${name}`)
+              console.log(`${name === path.basename(jarPath) ? "MISSING_JAR" : "MISSING_CHECKSUM"}=${asset === undefined}`)
+            }
+            console.log("RELEASE_EXISTS=true")
+            console.log(`RELEASE_DRAFT=${release.draft === true}`)
+            console.log(`RELEASE_ID=${release.id}`)
+          }
+          NODE
+      - name: Create or reuse the identity-matching draft runtime release
+        if: env.RELEASE_EXISTS == 'false'
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          gh release create "$RUNTIME_TAG" --draft --title "$RUNTIME_TAG" --notes ""
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq --slurp '.' > "$RUNNER_TEMP/releases.json"
+          node scripts/release-state-machine.mjs select-release "$RUNNER_TEMP/releases.json" "$RUNTIME_TAG" > "$RUNNER_TEMP/release.json"
+          RELEASE_ID="$(node -p "require('$RUNNER_TEMP/release.json').id")"
+          echo "RELEASE_ID=$RELEASE_ID" >> "$GITHUB_ENV"
+      - name: Upload only missing canonical runtime assets
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          if [[ "$MISSING_JAR" == true ]]; then gh release upload "$RUNTIME_TAG" "$RELEASE_JAR"; fi
+          if [[ "$MISSING_CHECKSUM" == true ]]; then gh release upload "$RUNTIME_TAG" "$RELEASE_CHECKSUM"; fi
+      - name: Detect an existing JAR attestation
+        id: attestation
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          if gh attestation verify "$RELEASE_JAR" --repo "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/attestation.out" 2> "$RUNNER_TEMP/attestation.err"; then
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          elif grep -Fq "No attestations found for subject" "$RUNNER_TEMP/attestation.err" \
+            || grep -Fq "HTTP 404: Not Found (https://api.github.com/repos/$GITHUB_REPOSITORY/attestations/sha256:" "$RUNNER_TEMP/attestation.err"; then
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          else
+            cat "$RUNNER_TEMP/attestation.err" >&2
+            exit 1
+          fi
+      - name: Generate JAR attestation
+        if: steps.attestation.outputs.required == 'true'
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: ${{ steps.producer.outputs.jar }}
+      - name: Verify authenticated runtime assets and attestation
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          mkdir "$RUNNER_TEMP/authenticated-runtime-release"
+          gh release download "$RUNTIME_TAG" --pattern "$(basename "$RELEASE_JAR")" --dir "$RUNNER_TEMP/authenticated-runtime-release"
+          gh release download "$RUNTIME_TAG" --pattern "$(basename "$RELEASE_CHECKSUM")" --dir "$RUNNER_TEMP/authenticated-runtime-release"
+          cmp "$RELEASE_CHECKSUM" "$RUNNER_TEMP/authenticated-runtime-release/$(basename "$RELEASE_CHECKSUM")"
+          node scripts/release-state-machine.mjs assert-sha256 "$(sha256sum "$RELEASE_JAR")" "$(sha256sum "$RUNNER_TEMP/authenticated-runtime-release/$(basename "$RELEASE_JAR")")"
+          gh attestation verify "$RELEASE_JAR" --repo "$GITHUB_REPOSITORY"
+      - name: Publish only the matching draft runtime release
+        if: env.RELEASE_DRAFT == 'true'
+        env:
+          GH_AUTH: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" -F draft=false > /dev/null
+      - name: Verify the public runtime download
+        run: |
+          set -euo pipefail
+          curl --fail --location --max-redirs 5 --output "$RUNNER_TEMP/public-runtime.jar" "https://github.com/$GITHUB_REPOSITORY/releases/download/$RUNTIME_TAG/$(basename "$RELEASE_JAR")"
+          node scripts/release-state-machine.mjs assert-sha256 "$(sha256sum "$RELEASE_JAR")" "$(sha256sum "$RUNNER_TEMP/public-runtime.jar")"

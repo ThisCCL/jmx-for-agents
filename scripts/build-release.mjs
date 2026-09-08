@@ -4,6 +4,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { buildDist } from "./build-dist-lib.mjs"
+import { resolveRuntimeConfig } from "../src/runtime-config.mjs"
 
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 
@@ -11,34 +12,50 @@ export { buildDist }
 
 export async function buildReleaseConfig({
   rootDir = projectRoot,
-  packageJsonPath = path.join(rootDir, "package.json"),
+  runtimeJsonPath = path.join(rootDir, "config", "runtime.json"),
   releaseJsonPath = path.join(rootDir, "config", "release.json"),
   outputPath = path.join(rootDir, "src", "release-config.mjs"),
   jarPath,
 } = {}) {
-  const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"))
+  const runtimeJson = JSON.parse(await readFile(runtimeJsonPath, "utf8"))
   const releaseJson = JSON.parse(await readFile(releaseJsonPath, "utf8"))
-  const version = requireString(packageJson.version, "package.json version")
   requireExact(releaseJson.owner, "ThisCCL", "owner")
   requireExact(releaseJson.repository, "jmx-for-agents", "repository")
   requireExact(releaseJson.artifactBase, "j4a", "artifactBase")
-  const jarSha256 = await sha256File(requireString(jarPath, "jarPath"))
-  const jarName = `${releaseJson.artifactBase}-${version}.jar`
-  const jarUrl = `https://github.com/${releaseJson.owner}/${releaseJson.repository}/releases/download/v${version}/${jarName}`
+  const runtimeVersion = requireString(runtimeJson.version, "config/runtime.json version")
+  const releaseTag = requireString(runtimeJson.releaseTag, "config/runtime.json releaseTag")
+  const jarName = `${releaseJson.artifactBase}-${runtimeVersion}.jar`
+  const jarUrl = `https://github.com/${releaseJson.owner}/${releaseJson.repository}/releases/download/${releaseTag}/${jarName}`
+  const releaseConfig = resolveRuntimeConfig({
+    runtimeVersion,
+    releaseTag,
+    launcherProtocol: runtimeJson.launcherProtocol,
+    jarUrl,
+    jarSha256: runtimeJson.jarSha256,
+  })
+  const actualJarSha256 = await sha256File(requireString(jarPath, "jarPath"))
+  if (actualJarSha256 !== releaseConfig.jarSha256) {
+    throw new Error(
+      `runtime jar SHA-256 mismatch: expected ${releaseConfig.jarSha256}, received ${actualJarSha256}`,
+    )
+  }
 
   await mkdir(path.dirname(outputPath), { recursive: true })
-  const releaseConfig = [
+  const output = [
     "export const releaseConfig = {",
-    `  jarUrl: ${JSON.stringify(jarUrl)},`,
-    `  jarSha256: ${JSON.stringify(jarSha256)},`,
+    `  runtimeVersion: ${JSON.stringify(releaseConfig.runtimeVersion)},`,
+    `  releaseTag: ${JSON.stringify(releaseConfig.releaseTag)},`,
+    `  launcherProtocol: ${releaseConfig.launcherProtocol},`,
+    `  jarUrl: ${JSON.stringify(releaseConfig.jarUrl)},`,
+    `  jarSha256: ${JSON.stringify(releaseConfig.jarSha256)},`,
   ]
-  releaseConfig.push("}", "")
+  output.push("}", "")
   await writeFile(
     outputPath,
-    releaseConfig.join("\n"),
+    output.join("\n"),
     "utf8",
   )
-  return { jarUrl, jarSha256 }
+  return releaseConfig
 }
 
 export async function sha256File(filePath) {
@@ -46,8 +63,8 @@ export async function sha256File(filePath) {
 }
 
 function requireString(value, name) {
-  if (typeof value !== "string") {
-    throw new TypeError(`${name} must be a string`)
+  if (typeof value !== "string" || value.length === 0) {
+    throw new TypeError(`${name} must be a non-empty string`)
   }
   return value
 }

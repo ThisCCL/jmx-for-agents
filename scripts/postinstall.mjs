@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import { downloadJar } from "../src/downloader.mjs"
 import { defaultCacheDir } from "../src/paths.mjs"
 import { releaseConfig } from "../src/release-config.mjs"
+import { resolveRuntimeConfig, runtimeCacheDir } from "../src/runtime-config.mjs"
 
 export async function runPostinstall({
   env = process.env,
@@ -13,10 +14,11 @@ export async function runPostinstall({
   requestImpl,
 } = {}) {
   try {
+    const runtime = resolveRuntimeConfig(config)
     const jarPath = await download({
-      jarUrl: config.jarUrl,
-      sha256: config.jarSha256,
-      cacheDir: defaultCacheDir(env),
+      jarUrl: runtime.jarUrl,
+      sha256: runtime.jarSha256,
+      cacheDir: runtimeCacheDir(defaultCacheDir(env), runtime.runtimeVersion),
       reporter,
       requestImpl,
       env,

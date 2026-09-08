@@ -24,7 +24,7 @@ test("local install creates a self-contained j4a prefix with the matching runtim
   try {
     const result = await installLocal({ root, targetDir, build: async () => {} })
 
-    assert.equal(await readFile(path.join(targetDir, "cache", "j4a.jar"), "utf8"), "first jar")
+    assert.equal(await readFile(runtimeJarIn(targetDir), "utf8"), "first jar")
     assert.match(
       await readFile(path.join(targetDir, "package", "dist", "release-config.mjs"), "utf8"),
       new RegExp(sha256("first jar")),
@@ -50,7 +50,7 @@ test("local install needs no arguments and defaults to build/local-install", asy
 
     assert.equal(result.targetDir, path.join(root, "build", "local-install"))
     assert.equal(
-      await readFile(path.join(result.targetDir, "cache", "j4a.jar"), "utf8"),
+      await readFile(runtimeJarIn(result.targetDir), "utf8"),
       "default jar",
     )
   } finally {
@@ -69,7 +69,7 @@ test("local install updates only an owned prefix and preserves unrelated files",
 
     await installLocal({ root, targetDir, build: async () => {} })
 
-    assert.equal(await readFile(path.join(targetDir, "cache", "j4a.jar"), "utf8"), "second jar")
+    assert.equal(await readFile(runtimeJarIn(targetDir), "utf8"), "second jar")
     assert.equal(await readFile(path.join(targetDir, "notes.txt"), "utf8"), "keep me")
   } finally {
     await rm(root, { recursive: true, force: true })
@@ -92,7 +92,7 @@ test("local install can use a supplied jar without invoking the Gradle build", a
     })
 
     assert.deepEqual(buildModes, [{ buildJar: false }])
-    assert.equal(await readFile(path.join(targetDir, "cache", "j4a.jar"), "utf8"), "supplied jar")
+    assert.equal(await readFile(runtimeJarIn(targetDir), "utf8"), "supplied jar")
   } finally {
     await rm(root, { recursive: true, force: true })
   }
@@ -120,6 +120,7 @@ async function createFixtureRoot(jarBytes) {
   const root = await mkdtemp(path.join(tmpdir(), "j4a-local-install-test-"))
   await Promise.all([
     mkdir(path.join(root, "bin"), { recursive: true }),
+    mkdir(path.join(root, "config"), { recursive: true }),
     mkdir(path.join(root, "dist"), { recursive: true }),
     mkdir(path.join(root, "build", "libs"), { recursive: true }),
   ])
@@ -127,6 +128,12 @@ async function createFixtureRoot(jarBytes) {
     name: "@jmx-for-agents/j4a",
     version: "1.0.0",
     type: "module",
+  }), "utf8")
+  await writeFile(path.join(root, "config", "runtime.json"), JSON.stringify({
+    version: "1.0.0",
+    releaseTag: "runtime-v1.0.0",
+    launcherProtocol: 1,
+    jarSha256: "0".repeat(64),
   }), "utf8")
   await writeFile(path.join(root, "README.md"), "# fixture\n", "utf8")
   await writeFile(path.join(root, "LICENSE"), "fixture license\n", "utf8")
@@ -145,6 +152,10 @@ async function createFixtureRoot(jarBytes) {
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex")
+}
+
+function runtimeJarIn(targetDir) {
+  return path.join(targetDir, "cache", "runtimes", "1.0.0", "j4a.jar")
 }
 
 function runInstalledCommand(command, args) {

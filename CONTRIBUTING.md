@@ -49,10 +49,12 @@ node --test test/readme-npm.test.mjs
 The npm wrapper and Java runtime are separate release artifacts:
 
 - The npm package carries the `j4a` executable, wrapper modules, and `j4a-master` skill.
-- GitHub Releases carries the version-matched runtime JAR and its SHA-256 sidecar.
+- GitHub Releases carries the descriptor-selected runtime JAR and its SHA-256 sidecar.
 - `j4a install` downloads and verifies the JAR without relying on `postinstall`.
 - `j4a mcp` automatically bootstraps a missing runtime; ordinary CLI commands require the verified cache first.
-- `J4A_CACHE_DIR` selects the runtime cache and `J4A_JAVA_COMMAND` selects a non-default Java executable.
+- `J4A_CACHE_DIR` selects the cache root; JARs live under `runtimes/<runtime-version>/j4a.jar`. `J4A_JAVA_COMMAND` selects a non-default Java executable.
+
+`package.json` owns the wrapper version. `config/runtime.json` independently owns the Java/MCP runtime version, release tag, launcher protocol, and digest. See [RELEASE.md](RELEASE.md) before changing either authority or regenerating `src/release-config.mjs`.
 
 Do not duplicate protocol details in the README. Keep exact command behavior in OpenSpec and the packaged `j4a-master` references so consumers and agents use one source of truth.
 

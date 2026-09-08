@@ -17,6 +17,8 @@ import { homedir } from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+import { resolveRuntimeConfig, runtimeJarPath } from "../src/runtime-config.mjs"
+
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 
 export async function installLocal({
@@ -29,37 +31,45 @@ export async function installLocal({
   const sourceRoot = path.resolve(root)
   const target = requireSafeTarget(targetDir ?? path.join(sourceRoot, "build", "local-install"), sourceRoot)
   const packageJson = JSON.parse(await readFile(path.join(sourceRoot, "package.json"), "utf8"))
-  await assertWritableInstallTarget(target, requireString(packageJson.name, "package.json name"))
+  const runtimeMetadata = JSON.parse(await readFile(path.join(sourceRoot, "config", "runtime.json"), "utf8"))
+  const runtimeVersion = requireString(runtimeMetadata.version, "config/runtime.json version")
+  await assertWritableInstallTarget(target, requireString(packageJson.name, "package.json name"), runtimeVersion)
   await build(sourceRoot, { buildJar: jar === undefined })
 
-  const version = requireString(packageJson.version, "package.json version")
   const sourceJar = jar === undefined
-    ? await findShadowJar(sourceRoot, version)
+    ? await findShadowJar(sourceRoot, runtimeVersion)
     : path.resolve(requireString(jar, "local JAR path"))
   const jarSha256 = sha256(await readFile(sourceJar))
+  const config = resolveRuntimeConfig({
+    runtimeVersion,
+    releaseTag: requireString(runtimeMetadata.releaseTag, "config/runtime.json releaseTag"),
+    launcherProtocol: runtimeMetadata.launcherProtocol,
+    jarUrl: `https://local.invalid/j4a-${runtimeVersion}.jar`,
+    jarSha256,
+  })
 
   await mkdir(path.dirname(target), { recursive: true })
   const staging = await mkdtemp(path.join(path.dirname(target), ".j4a-local-install-"))
   try {
-    await stageInstall({ jarSha256, sourceJar, sourceRoot, staging })
+    await stageInstall({ config, sourceJar, sourceRoot, staging })
     await publishInstall(staging, target)
   } finally {
     await rm(staging, { recursive: true, force: true })
   }
 
   const command = path.join(target, "bin", process.platform === "win32" ? "j4a.cmd" : "j4a")
-  const jarPath = path.join(target, "cache", "j4a.jar")
+  const jarPath = runtimeJarPath(path.join(target, "cache"), runtimeVersion)
   stdout(`j4a: local install ready at ${target}\n`)
   stdout(`j4a: command ${command}\n`)
   stdout(`j4a: cache ${jarPath}\n`)
   return { command, jarPath, jarSha256, targetDir: target }
 }
 
-async function stageInstall({ jarSha256, sourceJar, sourceRoot, staging }) {
+async function stageInstall({ config, sourceJar, sourceRoot, staging }) {
   const packageDir = path.join(staging, "package")
   await Promise.all([
     mkdir(path.join(staging, "bin"), { recursive: true }),
-    mkdir(path.join(staging, "cache"), { recursive: true }),
+    mkdir(path.dirname(runtimeJarPath(path.join(staging, "cache"), config.runtimeVersion)), { recursive: true }),
     mkdir(path.join(packageDir, "bin"), { recursive: true }),
   ])
   await Promise.all([
@@ -68,12 +78,12 @@ async function stageInstall({ jarSha256, sourceJar, sourceRoot, staging }) {
     copyFile(path.join(sourceRoot, "package.json"), path.join(packageDir, "package.json")),
     copyFile(path.join(sourceRoot, "README.md"), path.join(packageDir, "README.md")),
     copyFile(path.join(sourceRoot, "LICENSE"), path.join(packageDir, "LICENSE")),
-    copyFile(sourceJar, path.join(staging, "cache", "j4a.jar")),
+    copyFile(sourceJar, runtimeJarPath(path.join(staging, "cache"), config.runtimeVersion)),
   ])
   await chmod(path.join(packageDir, "bin", "j4a.js"), 0o755)
   await writeFile(
     path.join(packageDir, "dist", "release-config.mjs"),
-    releaseConfig(jarSha256),
+    releaseConfig(config),
     "utf8",
   )
   await writeLaunchers(staging)
@@ -107,7 +117,7 @@ async function publishInstall(staging, target) {
   }
 }
 
-async function assertWritableInstallTarget(target, packageName) {
+async function assertWritableInstallTarget(target, packageName, runtimeVersion) {
   let stat
   try {
     stat = await lstat(target)
@@ -126,7 +136,7 @@ async function assertWritableInstallTarget(target, packageName) {
       access(path.join(target, "bin", "j4a")),
       access(path.join(target, "bin", "j4a.cmd")),
       access(path.join(target, "package", "bin", "j4a.js")),
-      access(path.join(target, "cache", "j4a.jar")),
+      access(runtimeJarPath(path.join(target, "cache"), runtimeVersion)),
     ])
     if (installedPackage.name === packageName) return
   } catch {}
@@ -181,11 +191,14 @@ function requireSafeTarget(targetDir, root) {
   return target
 }
 
-function releaseConfig(jarSha256) {
+function releaseConfig(config) {
   return [
     "export const releaseConfig = {",
-    '  jarUrl: "https://local.invalid/j4a.jar",',
-    `  jarSha256: "${jarSha256}",`,
+    `  runtimeVersion: ${JSON.stringify(config.runtimeVersion)},`,
+    `  releaseTag: ${JSON.stringify(config.releaseTag)},`,
+    `  launcherProtocol: ${config.launcherProtocol},`,
+    `  jarUrl: ${JSON.stringify(config.jarUrl)},`,
+    `  jarSha256: ${JSON.stringify(config.jarSha256)},`,
     "}",
     "",
   ].join("\n")

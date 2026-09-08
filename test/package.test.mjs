@@ -24,6 +24,7 @@ const PACKAGED_INVENTORY = [
   "dist/paths.mjs",
   "dist/proxy.mjs",
   "dist/release-config.mjs",
+  "dist/runtime-config.mjs",
   "dist/runtime.mjs",
   "dist/skills.mjs",
   "dist/skills/j4a-master/SKILL.md",
@@ -63,6 +64,7 @@ test("package manifest defines the exact public j4a contract", async () => {
   assert.equal(packageJson.dependencies, undefined)
   assert.equal(packageJson.scripts["release:prepare"], "node scripts/release.mjs")
   assert.equal(packageJson.scripts["release:verify-prebuilt"], "node scripts/release.mjs verify-prebuilt")
+  assert.equal(packageJson.scripts["runtime:sync"], "node scripts/sync-runtime-config.mjs")
   assert.equal(packageJson.scripts["verify:licenses"], "node scripts/verify-release-licenses.mjs")
   assert.equal(packageJson.scripts.prepack, "node scripts/release.mjs reject-pack")
   assert.equal(packageJson.scripts.postinstall, undefined)
@@ -102,8 +104,8 @@ test("package bin reports the exact package version without an installed runtime
   assert.equal(stderr, "")
 })
 
-test("Gradle derives project version and generated Java resource from package.json", async () => {
-  const root = await createGradleVersionFixture("9.8.7")
+test("Gradle derives project version and generated Java resource from runtime metadata", async () => {
+  const root = await createGradleVersionFixture({ wrapperVersion: "9.8.7", runtimeVersion: "1.2.3" })
 
   try {
     const command = path.join(root, process.platform === "win32" ? "gradlew.bat" : "gradlew")
@@ -112,11 +114,11 @@ test("Gradle derives project version and generated Java resource from package.js
       maxBuffer: 4 * 1024 * 1024,
     })
 
-    assert.match(stdout, /^version: 9\.8\.7$/m)
+    assert.match(stdout, /^version: 1\.2\.3$/m)
     assert.equal(stderr, "")
     assert.equal(
       await readFile(path.join(root, "build", "resources", "main", "META-INF", "j4a", "version.properties"), "utf8"),
-      "version=9.8.7\n",
+      "version=1.2.3\n",
     )
   } finally {
     await rm(root, { recursive: true, force: true })
@@ -139,7 +141,12 @@ test("release preparation creates the one public tarball with allowlisted bytes 
       runGradle: async () => {
         const libs = path.join(preparedRoot, "build", "libs")
         await mkdir(libs, { recursive: true })
-        await writeFile(path.join(libs, `j4a-${version}-all.jar`), "package-test-jar")
+        const jarBytes = Buffer.from("package-test-jar")
+        await writeFile(path.join(libs, `j4a-${version}-all.jar`), jarBytes)
+        const runtimeJsonPath = path.join(preparedRoot, "config", "runtime.json")
+        const runtimeJson = JSON.parse(await readFile(runtimeJsonPath, "utf8"))
+        runtimeJson.jarSha256 = sha256(jarBytes)
+        await writeFile(runtimeJsonPath, `${JSON.stringify(runtimeJson, null, 2)}\n`, "utf8")
       },
       verifyLicenses: async () => {},
       verifyVersions: async () => {},
@@ -298,7 +305,7 @@ async function createBuildDistProject(version) {
   return workDir
 }
 
-async function createGradleVersionFixture(version) {
+async function createGradleVersionFixture({ wrapperVersion, runtimeVersion }) {
   const root = await mkdtemp(path.join(tmpdir(), "j4a-gradle-version-"))
   await cp("build.gradle", path.join(root, "build.gradle"))
   await cp("settings.gradle", path.join(root, "settings.gradle"))
@@ -306,7 +313,9 @@ async function createGradleVersionFixture(version) {
   await cp("gradlew", path.join(root, "gradlew"))
   await cp("gradlew.bat", path.join(root, "gradlew.bat"))
   await chmod(path.join(root, "gradlew"), 0o755)
-  await writeFile(path.join(root, "package.json"), `${JSON.stringify({ version })}\n`, "utf8")
+  await mkdir(path.join(root, "config"), { recursive: true })
+  await writeFile(path.join(root, "package.json"), `${JSON.stringify({ version: wrapperVersion })}\n`, "utf8")
+  await writeFile(path.join(root, "config", "runtime.json"), `${JSON.stringify({ version: runtimeVersion })}\n`, "utf8")
   return root
 }
 

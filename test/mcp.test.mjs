@@ -13,10 +13,12 @@ test("runJ4a mcp starts the MCP Java entrypoint from an existing runtime jar", a
   const workDir = await mkdtemp(path.join(tmpdir(), "j4a-mcp-"))
   const fakeJava = await createFakeJava(workDir)
   const stdout = createRecorder()
+  const releaseConfig = runtimeConfigFor(jarBytes)
+  const jarPath = runtimeJarIn(workDir, releaseConfig)
 
   try {
-    await mkdir(path.join(workDir, "cache"), { recursive: true })
-    await writeFile(path.join(workDir, "cache", "j4a.jar"), jarBytes, "utf8")
+    await mkdir(path.dirname(jarPath), { recursive: true })
+    await writeFile(jarPath, jarBytes, "utf8")
 
     const result = await runJ4a({
       argv: ["mcp"],
@@ -27,10 +29,7 @@ test("runJ4a mcp starts the MCP Java entrypoint from an existing runtime jar", a
       cacheDir: path.join(workDir, "cache"),
       javaCommand: fakeJava.command,
       stdout: stdout.write,
-      releaseConfig: {
-        jarUrl: "https://downloads.example.test/j4a.jar",
-        jarSha256: sha256Of(jarBytes),
-      },
+      releaseConfig,
       requestImpl: async () => {
         assert.fail("mcp must not download when the cached runtime jar is valid")
       },
@@ -40,7 +39,7 @@ test("runJ4a mcp starts the MCP Java entrypoint from an existing runtime jar", a
     assert.equal(stdout.text(), "")
     assert.deepEqual((await readFile(fakeJava.logPath, "utf8")).trim().split(/\r?\n/), [
       "-cp",
-      path.join(workDir, "cache", "j4a.jar"),
+      jarPath,
       "io.github.thisccl.j4a.mcp.J4aMcpServer",
     ])
   } finally {
@@ -54,6 +53,8 @@ test("runJ4a mcp installs a missing runtime without force before starting Java",
   const fakeJava = await createFakeJava(workDir)
   const stdout = createRecorder()
   const stderr = createRecorder()
+  const releaseConfig = runtimeConfigFor(jarBytes)
+  const jarPath = runtimeJarIn(workDir, releaseConfig)
   let requests = 0
 
   try {
@@ -68,10 +69,7 @@ test("runJ4a mcp installs a missing runtime without force before starting Java",
       stdout: stdout.write,
       stderr: stderr.write,
       reporter: (message) => stderr.write(`${message}\n`),
-      releaseConfig: {
-        jarUrl: "https://downloads.example.test/j4a.jar",
-        jarSha256: sha256Of(jarBytes),
-      },
+      releaseConfig,
       requestImpl: async () => {
         requests += 1
         return responseFrom(jarBytes, {
@@ -84,10 +82,10 @@ test("runJ4a mcp installs a missing runtime without force before starting Java",
     assert.equal(requests, 1)
     assert.equal(stdout.text(), "")
     assert.match(stderr.text(), /j4a:/)
-    assert.equal(await readFile(path.join(workDir, "cache", "j4a.jar"), "utf8"), jarBytes)
+    assert.equal(await readFile(jarPath, "utf8"), jarBytes)
     assert.deepEqual((await readFile(fakeJava.logPath, "utf8")).trim().split(/\r?\n/), [
       "-cp",
-      path.join(workDir, "cache", "j4a.jar"),
+      jarPath,
       "io.github.thisccl.j4a.mcp.J4aMcpServer",
     ])
   } finally {
@@ -113,10 +111,7 @@ test("runJ4a mcp does not start Java when runtime installation fails", async () 
         javaCommand: fakeJava.command,
         stdout: stdout.write,
         stderr: stderr.write,
-        releaseConfig: {
-          jarUrl: "https://downloads.example.test/j4a.jar",
-          jarSha256: sha256Of("expected jar"),
-        },
+        releaseConfig: runtimeConfigFor("expected jar"),
         requestImpl: async () => responseFrom("wrong jar", {
           headers: { "content-type": "application/java-archive" },
         }),
@@ -160,4 +155,18 @@ async function createFakeJava(workDir) {
   await chmod(command, 0o755)
 
   return { binDir, command, logPath }
+}
+
+function runtimeConfigFor(jarBytes) {
+  return {
+    runtimeVersion: "9.8.7",
+    releaseTag: "runtime-v9.8.7",
+    launcherProtocol: 1,
+    jarUrl: "https://downloads.example.test/j4a-9.8.7.jar",
+    jarSha256: sha256Of(jarBytes),
+  }
+}
+
+function runtimeJarIn(workDir, config) {
+  return path.join(workDir, "cache", "runtimes", config.runtimeVersion, "j4a.jar")
 }

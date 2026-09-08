@@ -8,8 +8,8 @@ import { promisify } from "node:util"
 import test from "node:test"
 
 const execFileAsync = promisify(execFile)
-const packageVersion = JSON.parse(await readFile("package.json", "utf8")).version
-const jarPath = path.resolve(`build/libs/j4a-${packageVersion}-all.jar`)
+const runtimeVersion = JSON.parse(await readFile("config/runtime.json", "utf8")).version
+const jarPath = path.resolve(`build/libs/j4a-${runtimeVersion}-all.jar`)
 let buildPromise
 
 function sha256(bytes) {
@@ -102,7 +102,7 @@ async function pathExists(file) {
 test("two clean builds produce the same Java 8 shadow JAR and stable ZIP metadata", async () => {
   const built = await ensureDeterministicJar()
   const jars = (await readdir("build/libs")).filter(file => file.endsWith(".jar"))
-  assert.deepEqual(jars, [`j4a-${packageVersion}-all.jar`])
+  assert.deepEqual(jars, [`j4a-${runtimeVersion}-all.jar`])
   assert.ok(built.bytes.byteLength > 0)
 
   const { stdout: metadata } = await execFileAsync("zipinfo", ["-T", jarPath], {

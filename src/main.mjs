@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs"
 import { writeInstallHelp, writeWrapperHelp } from "./help.mjs"
 import { defaultCacheDir } from "./paths.mjs"
 import { releaseConfig as defaultReleaseConfig } from "./release-config.mjs"
+import { describeRuntime } from "./runtime-config.mjs"
 import { installRuntime, requireInstalledJar, requireMcpRuntimeJar } from "./runtime.mjs"
 import { defaultSkillSourceDir } from "./skills.mjs"
 
@@ -38,9 +39,25 @@ export async function runJ4a({
     stderr("j4a: --version does not accept additional arguments.\n")
     return { exitCode: 2 }
   }
+  if (command.kind === "runtime-info") {
+    stdout(`${JSON.stringify(describeRuntime({
+      cacheRoot: cacheDir,
+      config: releaseConfig,
+      wrapperVersion: PACKAGE_VERSION,
+    }))}\n`)
+    return { exitCode: 0 }
+  }
+  if (command.kind === "runtime-info-usage-error") {
+    stderr("j4a: usage: j4a runtime-info --json\n")
+    return { exitCode: 2 }
+  }
   if (command.kind === "install-help") {
     writeInstallHelp(stdout)
     return { exitCode: 0 }
+  }
+  if (command.kind === "install-usage-error") {
+    stderr("j4a: --only-skills and --with-skills are mutually exclusive.\n")
+    return { exitCode: 2 }
   }
   if (command.kind === "install") {
     return installRuntime({
@@ -53,6 +70,7 @@ export async function runJ4a({
       skillSourceDir,
       stdout,
       force: command.force,
+      onlySkills: command.onlySkills,
       withSkills: command.withSkills,
     })
   }
@@ -145,6 +163,11 @@ function parseWrapperCommand(argv) {
       ? { kind: "version" }
       : { kind: "version-usage-error" }
   }
+  if (argv[0] === "runtime-info") {
+    return argv.length === 2 && argv[1] === "--json"
+      ? { kind: "runtime-info" }
+      : { kind: "runtime-info-usage-error" }
+  }
   if (argv.length === 0 || isHelpFlag(argv[0]) || argv[0] === "help") {
     return { kind: "wrapper-help" }
   }
@@ -157,16 +180,20 @@ function parseWrapperCommand(argv) {
 
   const flags = new Set(argv.slice(1))
   for (const flag of flags) {
-    if (!isHelpFlag(flag) && flag !== "--with-skills" && !isForceFlag(flag)) {
+    if (!isHelpFlag(flag) && flag !== "--with-skills" && flag !== "--only-skills" && !isForceFlag(flag)) {
       throw new Error(`unknown install option: ${flag}`)
     }
   }
   if (hasHelpFlag(flags)) {
     return { kind: "install-help" }
   }
+  if (flags.has("--only-skills") && flags.has("--with-skills")) {
+    return { kind: "install-usage-error" }
+  }
   return {
     kind: "install",
     force: hasForceFlag(flags),
+    onlySkills: flags.has("--only-skills"),
     withSkills: flags.has("--with-skills"),
   }
 }

@@ -13,16 +13,16 @@ import java.nio.file.Files
 import java.security.MessageDigest
 import java.util.zip.ZipFile
 
-def packageJsonFile = layout.projectDirectory.file('package.json')
-def packageMetadata = new JsonSlurper().parse(packageJsonFile.asFile) as Map
-def packageVersion = packageMetadata.version
-if (!(packageVersion instanceof String)
-        || !(packageVersion ==~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/)) {
-    throw new GradleException('package.json version must be SemVer-compatible')
+def runtimeMetadataFile = layout.projectDirectory.file('config/runtime.json')
+def runtimeMetadata = new JsonSlurper().parse(runtimeMetadataFile.asFile) as Map
+def runtimeVersion = runtimeMetadata.version
+if (!(runtimeVersion instanceof String)
+        || !(runtimeVersion ==~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/)) {
+    throw new GradleException('config/runtime.json version must be SemVer-compatible')
 }
 
 group = 'io.github.thisccl.j4a'
-version = packageVersion
+version = runtimeVersion
 
 def generatedVersionResources = layout.buildDirectory.dir('generated/version-resources')
 def generatedVersionResource = generatedVersionResources.map {
@@ -30,14 +30,14 @@ def generatedVersionResource = generatedVersionResources.map {
 }
 
 tasks.register('generateVersionResource') {
-    inputs.file(packageJsonFile)
-    inputs.property('packageVersion', packageVersion)
+    inputs.file(runtimeMetadataFile)
+    inputs.property('runtimeVersion', runtimeVersion)
     outputs.file(generatedVersionResource)
 
     doLast {
         File output = generatedVersionResource.get().asFile
         output.parentFile.mkdirs()
-        Files.write(output.toPath(), "version=${packageVersion}\n".getBytes(StandardCharsets.UTF_8))
+        Files.write(output.toPath(), "version=${runtimeVersion}\n".getBytes(StandardCharsets.UTF_8))
     }
 }
 

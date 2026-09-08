@@ -22,7 +22,7 @@ class VersionInfoTest {
 
     @Test
     void readsGeneratedVersionResource() throws Exception {
-        assertThat(VersionInfo.version()).isEqualTo(packageVersion());
+        assertThat(VersionInfo.version()).isEqualTo(runtimeVersion());
     }
 
     @Test
@@ -52,9 +52,9 @@ class VersionInfoTest {
     }
 
     @SuppressWarnings("unchecked")
-    private static String packageVersion() throws Exception {
-        Path packageJson = Paths.get(System.getProperty("user.dir"), "package.json");
-        InputStream input = Files.newInputStream(packageJson);
+    private static String runtimeVersion() throws Exception {
+        Path runtimeJson = Paths.get(System.getProperty("user.dir"), "config", "runtime.json");
+        InputStream input = Files.newInputStream(runtimeJson);
         try {
             Map<String, Object> metadata = (Map<String, Object>) new Yaml().load(
                     new java.io.InputStreamReader(input, StandardCharsets.UTF_8));

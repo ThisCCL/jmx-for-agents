@@ -1,4 +1,4 @@
-name: Release
+name: Publish npm wrapper
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.ref_name }}
+  group: wrapper-release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -17,8 +17,7 @@ jobs:
     environment: npm-release
     runs-on: ubuntu-latest
     permissions:
-      attestations: write
-      contents: write
+      contents: read
       id-token: write
     steps:
       - name: Check out the pushed tag with ancestry
@@ -47,202 +46,82 @@ jobs:
           corepack prepare pnpm@11.5.1 --activate
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
-      - name: Provision Apache JMeter 5.6.3
-        run: |
-          JMETER_ARCHIVE="$RUNNER_TEMP/apache-jmeter-5.6.3.tgz"
-          if ! curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.6.3.tgz; then
-            curl --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --output "$JMETER_ARCHIVE" https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
-          fi
-          printf '%s  %s\n' '5978a1a35edb5a7d428e270564ff49d2b1b257a65e17a759d259a9283fc17093e522fe46f474a043864aea6910683486340706d745fcdf3db1505fd71e689083' "$JMETER_ARCHIVE" | sha512sum --check --strict
-          tar -xzf "$JMETER_ARCHIVE" -C "$RUNNER_TEMP"
-          echo "JMETER_HOME=$RUNNER_TEMP/apache-jmeter-5.6.3" >> "$GITHUB_ENV"
-      - name: Prove this tag is an approved release candidate
+      - name: Prove this wrapper tag is an approved release candidate
         env:
           GH_AUTH: ${{ github.token }}
         run: |
           set -euo pipefail
           preflight_fail() {
-            printf 'Release preflight failed: %s\n' "$1" >&2
+            printf 'Wrapper release preflight failed: %s\n' "$1" >&2
             exit 1
           }
           export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          RELEASE_TAG="$GITHUB_REF_NAME"
-          if ! RELEASE_VERSION="$(node -p "require('./package.json').version")"; then
-            preflight_fail "could not read package.json version"
-          fi
-          if ! GRADLE_VERSION="$(./gradlew properties --quiet | sed -n 's/^version: //p')"; then
-            preflight_fail "could not read the evaluated Gradle version"
-          fi
-          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || preflight_fail "tag is not strict SemVer: $RELEASE_TAG"
-          test "$RELEASE_TAG" = "v$RELEASE_VERSION" || preflight_fail "tag $RELEASE_TAG does not match package version $RELEASE_VERSION"
-          test "$RELEASE_VERSION" = "$GRADLE_VERSION" || preflight_fail "package version $RELEASE_VERSION does not match Gradle version ${GRADLE_VERSION:-<empty>}"
+          WRAPPER_TAG="$GITHUB_REF_NAME"
+          WRAPPER_VERSION="$(node -p "require('./package.json').version")" || preflight_fail "could not read package.json version"
+          [[ "$WRAPPER_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || preflight_fail "tag is not strict SemVer: $WRAPPER_TAG"
+          test "$WRAPPER_TAG" = "v$WRAPPER_VERSION" || preflight_fail "tag $WRAPPER_TAG does not match wrapper version $WRAPPER_VERSION"
           git fetch --no-tags origin main || preflight_fail "could not fetch origin/main"
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main || preflight_fail "tag commit $GITHUB_SHA is not reachable from origin/main"
-          if ! RULESET_IDS="$(gh api --paginate "repos/$GITHUB_REPOSITORY/rulesets?includes_parents=true&targets=tag" --jq '.[].id')"; then
-            preflight_fail "could not list repository tag rulesets"
-          fi
+          RULESET_IDS="$(gh api --paginate "repos/$GITHUB_REPOSITORY/rulesets?includes_parents=true&targets=tag" --jq '.[].id')" || preflight_fail "could not list repository tag rulesets"
           test -n "$RULESET_IDS" || preflight_fail "repository has no tag rulesets"
           if ! while read -r RULESET_ID; do
             gh api "repos/$GITHUB_REPOSITORY/rulesets/$RULESET_ID"
           done <<< "$RULESET_IDS" | jq --slurp '.' > "$RUNNER_TEMP/rulesets.json"; then
             preflight_fail "could not fetch repository tag-ruleset details"
           fi
-          node scripts/release-state-machine.mjs assert-preflight "$RUNNER_TEMP/rulesets.json" "$RELEASE_TAG" || preflight_fail "active tag rulesets do not protect $RELEASE_TAG"
+          node scripts/release-state-machine.mjs assert-preflight "$RUNNER_TEMP/rulesets.json" "$WRAPPER_TAG" || preflight_fail "active tag rulesets do not protect $WRAPPER_TAG"
           {
-            echo "RELEASE_TAG=$RELEASE_TAG"
-            echo "RELEASE_VERSION=$RELEASE_VERSION"
+            echo "WRAPPER_TAG=$WRAPPER_TAG"
+            echo "WRAPPER_VERSION=$WRAPPER_VERSION"
             echo "PACKAGE_NAME=$(node -p "require('./package.json').name")"
           } >> "$GITHUB_ENV"
-      - name: Produce the exact release bytes once
-        id: producer
+      - name: Validate workflows and wrapper source
         run: |
           set -euo pipefail
           go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml
-          ./gradlew clean test
           pnpm test
           pnpm run verify:public
-          pnpm run release:prepare -- --tag "$RELEASE_TAG"
+      - name: Validate the configured public runtime
+        run: |
+          set -euo pipefail
+          RUNTIME_VERSION="$(node --input-type=module -e 'import { releaseConfig } from "./src/release-config.mjs"; process.stdout.write(releaseConfig.runtimeVersion)')"
+          RUNTIME_JAR_URL="$(node --input-type=module -e 'import { releaseConfig } from "./src/release-config.mjs"; process.stdout.write(releaseConfig.jarUrl)')"
+          RUNTIME_JAR_SHA256="$(node --input-type=module -e 'import { releaseConfig } from "./src/release-config.mjs"; process.stdout.write(releaseConfig.jarSha256)')"
+          curl --fail --location --max-redirs 5 --output "$RUNNER_TEMP/configured-runtime.jar" "$RUNTIME_JAR_URL"
+          printf '%s  %s\n' "$RUNTIME_JAR_SHA256" "$RUNNER_TEMP/configured-runtime.jar" | sha256sum --check --strict
+          test "$(java -jar "$RUNNER_TEMP/configured-runtime.jar" --version)" = "$RUNTIME_VERSION"
+      - name: Produce and inspect the exact wrapper tarball
+        id: producer
+        run: |
+          set -euo pipefail
+          pnpm run release:prepare -- --tag "$WRAPPER_TAG"
           node scripts/ci-inspect-release.mjs
           node --input-type=module - <<'NODE' >> "$GITHUB_OUTPUT"
           import { readFile } from "node:fs/promises"
           const manifest = JSON.parse(await readFile("build/release-manifest.json", "utf8"))
-          console.log(`jar=${manifest.jar.file}`)
-          console.log(`checksum=${manifest.jar.checksumFile}`)
           console.log(`tarball=${manifest.tarball.file}`)
           console.log(`integrity=${manifest.tarball.integrity}`)
           NODE
-      - name: Read the exact producer identities
-        run: |
-          {
-            echo "RELEASE_JAR=${{ steps.producer.outputs.jar }}"
-            echo "RELEASE_CHECKSUM=${{ steps.producer.outputs.checksum }}"
-            echo "RELEASE_TARBALL=${{ steps.producer.outputs.tarball }}"
-            echo "RELEASE_INTEGRITY=${{ steps.producer.outputs.integrity }}"
-          } >> "$GITHUB_ENV"
-      - name: Query and reconcile current release state before mutation
-        env:
-          GH_AUTH: ${{ github.token }}
+      - name: Reconcile the npm package identity
         run: |
           set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq --slurp '.' > "$RUNNER_TEMP/releases.json"
-          node scripts/release-state-machine.mjs select-release "$RUNNER_TEMP/releases.json" "$RELEASE_TAG" > "$RUNNER_TEMP/release.json"
-          if npm view "$PACKAGE_NAME@$RELEASE_VERSION" dist.integrity --json > "$RUNNER_TEMP/npm-integrity.json" 2> "$RUNNER_TEMP/npm-integrity.error"; then
+          RELEASE_TARBALL="${{ steps.producer.outputs.tarball }}"
+          RELEASE_INTEGRITY="${{ steps.producer.outputs.integrity }}"
+          if npm view "$PACKAGE_NAME@$WRAPPER_VERSION" dist.integrity --json > "$RUNNER_TEMP/npm-integrity.json" 2> "$RUNNER_TEMP/npm-integrity.error"; then
             NPM_EXISTS=true
-          elif grep -Eq 'E404|404|not found' "$RUNNER_TEMP/npm-integrity.error"; then
-            printf 'null\n' > "$RUNNER_TEMP/npm-integrity.json"
+            ACTUAL_INTEGRITY="$(node -p "require('$RUNNER_TEMP/npm-integrity.json')")"
+            test "$ACTUAL_INTEGRITY" = "$RELEASE_INTEGRITY"
+          elif grep -Eqi 'E404|404|not found' "$RUNNER_TEMP/npm-integrity.error"; then
             NPM_EXISTS=false
           else
             cat "$RUNNER_TEMP/npm-integrity.error" >&2
             exit 1
           fi
-          node --input-type=module - "$RUNNER_TEMP/release.json" "$RELEASE_JAR" "$RELEASE_CHECKSUM" <<'NODE' >> "$GITHUB_ENV"
-          import { createHash } from "node:crypto"
-          import { readFile } from "node:fs/promises"
-          import path from "node:path"
-          const [releasePath, jarPath, checksumPath] = process.argv.slice(2)
-          const release = JSON.parse(await readFile(releasePath, "utf8"))
-          const digest = async file => createHash("sha256").update(await readFile(file)).digest("hex")
-          const expected = new Map([[path.basename(jarPath), await digest(jarPath)], [path.basename(checksumPath), await digest(checksumPath)]])
-          if (release === null) {
-            console.log("RELEASE_EXISTS=false")
-            console.log("RELEASE_DRAFT=true")
-            console.log("MISSING_JAR=true")
-            console.log("MISSING_CHECKSUM=true")
-          } else {
-            if (release.tag_name !== process.env.RELEASE_TAG || release.prerelease) throw new Error("release identity mismatch")
-            const assets = new Map(release.assets.map(asset => [asset.name, asset]))
-            for (const [name, expectedDigest] of expected) {
-              const asset = assets.get(name)
-              if (asset?.digest !== undefined && asset.digest !== `sha256:${expectedDigest}`) throw new Error(`release asset identity mismatch: ${name}`)
-              console.log(`${name === path.basename(jarPath) ? "MISSING_JAR" : "MISSING_CHECKSUM"}=${asset === undefined}`)
-            }
-            console.log("RELEASE_EXISTS=true")
-            console.log(`RELEASE_DRAFT=${release.draft === true}`)
-            console.log(`RELEASE_ID=${release.id}`)
-          }
-          NODE
-          if [[ "$NPM_EXISTS" == true ]]; then
-            ACTUAL_INTEGRITY="$(node --input-type=module - "$RUNNER_TEMP/npm-integrity.json" <<'NODE'
-          import { readFile } from "node:fs/promises"
-          const value = JSON.parse(await readFile(process.argv[2], "utf8"))
-          console.log(value ?? "")
-          NODE
-            )"
-            test "$ACTUAL_INTEGRITY" = "$RELEASE_INTEGRITY"
-          fi
-          echo "NPM_EXISTS=$NPM_EXISTS" >> "$GITHUB_ENV"
-      - name: Create or reuse the identity-matching draft release
-        if: env.RELEASE_EXISTS == 'false'
-        env:
-          GH_AUTH: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          gh release create "$RELEASE_TAG" --draft --title "$RELEASE_TAG" --notes ""
-          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq --slurp '.' > "$RUNNER_TEMP/releases.json"
-          node scripts/release-state-machine.mjs select-release "$RUNNER_TEMP/releases.json" "$RELEASE_TAG" > "$RUNNER_TEMP/release.json"
-          node --input-type=module - "$RUNNER_TEMP/release.json" <<'NODE' >> "$GITHUB_ENV"
-          import { readFile } from "node:fs/promises"
-          const release = JSON.parse(await readFile(process.argv[2], "utf8"))
-          if (release.tag_name !== process.env.RELEASE_TAG || release.draft !== true) throw new Error("draft release identity mismatch")
-          console.log(`RELEASE_ID=${release.id}`)
-          NODE
-      - name: Upload only missing canonical assets
-        env:
-          GH_AUTH: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          if [[ "$MISSING_JAR" == true ]]; then gh release upload "$RELEASE_TAG" "$RELEASE_JAR"; fi
-          if [[ "$MISSING_CHECKSUM" == true ]]; then gh release upload "$RELEASE_TAG" "$RELEASE_CHECKSUM"; fi
-      - name: Detect an existing JAR attestation
-        id: attestation
-        env:
-          GH_AUTH: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          if gh attestation verify "$RELEASE_JAR" --repo "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/attestation.out" 2> "$RUNNER_TEMP/attestation.err"; then
-            echo "required=false" >> "$GITHUB_OUTPUT"
-          elif grep -Fq "No attestations found for subject" "$RUNNER_TEMP/attestation.err" \
-            || grep -Fq "HTTP 404: Not Found (https://api.github.com/repos/$GITHUB_REPOSITORY/attestations/sha256:" "$RUNNER_TEMP/attestation.err"; then
-            echo "required=true" >> "$GITHUB_OUTPUT"
-          else
-            cat "$RUNNER_TEMP/attestation.err" >&2
-            exit 1
-          fi
-      - name: Generate JAR attestation
-        if: steps.attestation.outputs.required == 'true'
-        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
-        with:
-          subject-path: ${{ steps.producer.outputs.jar }}
-      - name: Verify the authenticated release assets and attestation
-        env:
-          GH_AUTH: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          mkdir "$RUNNER_TEMP/authenticated-release"
-          gh release download "$RELEASE_TAG" --pattern "$(basename "$RELEASE_JAR")" --dir "$RUNNER_TEMP/authenticated-release"
-          gh release download "$RELEASE_TAG" --pattern "$(basename "$RELEASE_CHECKSUM")" --dir "$RUNNER_TEMP/authenticated-release"
-          cmp "$RELEASE_CHECKSUM" "$RUNNER_TEMP/authenticated-release/$(basename "$RELEASE_CHECKSUM")"
-          node scripts/release-state-machine.mjs assert-sha256 "$(sha256sum "$RELEASE_JAR")" "$(sha256sum "$RUNNER_TEMP/authenticated-release/$(basename "$RELEASE_JAR")")"
-          gh attestation verify "$RELEASE_JAR" --repo "$GITHUB_REPOSITORY"
-      - name: Publish only the matching draft release
-        if: env.RELEASE_DRAFT == 'true'
-        env:
-          GH_AUTH: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" -F draft=false > /dev/null
-      - name: Verify the public JAR download before npm publication
-        run: |
-          set -euo pipefail
-          curl --fail --location --max-redirs 5 --output "$RUNNER_TEMP/public-release.jar" "https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/$(basename "$RELEASE_JAR")"
-          node scripts/release-state-machine.mjs assert-sha256 "$(sha256sum "$RELEASE_JAR")" "$(sha256sum "$RUNNER_TEMP/public-release.jar")"
-      - name: Publish the exact prebuilt tarball when absent
+          {
+            echo "RELEASE_TARBALL=$RELEASE_TARBALL"
+            echo "NPM_EXISTS=$NPM_EXISTS"
+          } >> "$GITHUB_ENV"
+      - name: Publish the exact wrapper tarball when absent
         env:
           NPM_BOOTSTRAP: ${{ secrets[format('NPM_BOOTSTRAP_{0}', 'TOKEN')] }}
         run: |

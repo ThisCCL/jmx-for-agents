@@ -1,6 +1,8 @@
-import path from "node:path"
+import { constants } from "node:fs"
+import { copyFile, mkdir } from "node:fs/promises"
 
 import { downloadJar, requireCachedJar } from "./downloader.mjs"
+import { resolveRuntimeConfig, runtimeCacheDir, runtimeJarPath } from "./runtime-config.mjs"
 import { installPackagedSkill } from "./skills.mjs"
 
 export async function installRuntime({
@@ -12,13 +14,23 @@ export async function installRuntime({
   skillSourceDir,
   stdout,
   force,
+  onlySkills = false,
   withSkills,
   env,
 }) {
-  const jarPath = await downloadJar({
-    jarUrl: releaseConfig.jarUrl,
-    sha256: releaseConfig.jarSha256,
-    cacheDir,
+  if (onlySkills) {
+    return installSkill({ cwd, force, skillSourceDir, stdout })
+  }
+
+  const config = resolveRuntimeConfig(releaseConfig)
+  const versionedCacheDir = runtimeCacheDir(cacheDir, config.runtimeVersion)
+  const migratedJar = force
+    ? undefined
+    : await migrateLegacyRuntimeJar({ cacheDir, config, versionedCacheDir })
+  const jarPath = migratedJar ?? await downloadJar({
+    jarUrl: config.jarUrl,
+    sha256: config.jarSha256,
+    cacheDir: versionedCacheDir,
     force,
     reporter,
     requestImpl,
@@ -29,6 +41,10 @@ export async function installRuntime({
     return { exitCode: 0 }
   }
 
+  return installSkill({ cwd, force, skillSourceDir, stdout })
+}
+
+async function installSkill({ cwd, force, skillSourceDir, stdout }) {
   const result = await installPackagedSkill({
     cwd,
     force,
@@ -90,19 +106,57 @@ export async function requireMcpRuntimeJar({
 }
 
 export async function requireInstalledJar({ cacheDir, releaseConfig }) {
-  const jarPath = path.join(cacheDir, "j4a.jar")
+  const config = resolveRuntimeConfig(releaseConfig)
+  const versionedCacheDir = runtimeCacheDir(cacheDir, config.runtimeVersion)
+  const jarPath = runtimeJarPath(cacheDir, config.runtimeVersion)
   try {
     return await requireCachedJar({
-      cacheDir,
-      sha256: releaseConfig.jarSha256,
+      cacheDir: versionedCacheDir,
+      sha256: config.jarSha256,
     })
   } catch (error) {
     if (error instanceof Error && error.code === "ENOENT") {
-      const missingRuntime = new Error(`runtime jar is missing at ${jarPath}. Run \`j4a install\` first.`)
+      const migratedJar = await migrateLegacyRuntimeJar({ cacheDir, config, versionedCacheDir })
+      if (migratedJar !== undefined) {
+        return migratedJar
+      }
+      const missingRuntime = new Error(
+        `runtime jar is missing at ${jarPath}. Run \`j4a install\` first or place the verified jar at that path.`,
+      )
       missingRuntime.code = "ENOENT"
       throw missingRuntime
     }
     const message = error instanceof Error ? error.message : String(error)
     throw new Error(`runtime jar at ${jarPath} is invalid: ${message}. Run \`j4a install\` to reinstall it.`)
+  }
+}
+
+async function migrateLegacyRuntimeJar({ cacheDir, config, versionedCacheDir }) {
+  let legacyJar
+  try {
+    legacyJar = await requireCachedJar({ cacheDir, sha256: config.jarSha256 })
+  } catch (error) {
+    if (error instanceof Error && (error.code === "ENOENT" || /sha256 mismatch/.test(error.message))) {
+      return undefined
+    }
+    throw error
+  }
+
+  await mkdir(versionedCacheDir, { recursive: true })
+  try {
+    await copyFile(legacyJar, runtimeJarPath(cacheDir, config.runtimeVersion), constants.COPYFILE_EXCL)
+  } catch (error) {
+    if (!(error instanceof Error) || error.code !== "EEXIST") {
+      throw error
+    }
+  }
+
+  try {
+    return await requireCachedJar({ cacheDir: versionedCacheDir, sha256: config.jarSha256 })
+  } catch (error) {
+    if (error instanceof Error && /sha256 mismatch/.test(error.message)) {
+      return undefined
+    }
+    throw error
   }
 }

@@ -19,6 +19,7 @@
     "local:install": "node scripts/local-install.mjs",
     "release:prepare": "node scripts/release.mjs",
     "release:verify-prebuilt": "node scripts/release.mjs verify-prebuilt",
+    "runtime:sync": "node scripts/sync-runtime-config.mjs",
     "verify:licenses": "node scripts/verify-release-licenses.mjs",
     "verify:public": "node scripts/verify-public-sanitization.mjs",
     "prepack": "node scripts/release.mjs reject-pack",

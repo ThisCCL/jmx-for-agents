@@ -46,7 +46,7 @@ try {
   })
 
   assert.equal(postInstall.status, 0)
-  await access(path.join(context.cacheDir, "j4a.jar"))
+  await access(path.join(context.cacheDir, "runtimes", context.manifest.runtime.version, "j4a.jar"))
   assert.match(await readFile(context.javaLog, "utf8"), /-jar[\r\n]+.*j4a\.jar[\r\n]+read[\r\n]+sample\.jmx/)
   assert.equal(context.requestCount, 1)
   console.log("PASS installed-command-contract")

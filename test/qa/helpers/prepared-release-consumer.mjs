@@ -27,11 +27,18 @@ export async function createPreparedReleaseConsumer() {
     await runBounded("pnpm", ["run", "release:prepare", "--", "--tag", `v${version}`], { cwd: projectDir, timeoutMs: 600_000 })
     const prepared = await readPreparedRelease(projectDir)
     await runBounded("openssl", certificateArgs(keyPath, certificatePath), { timeoutMs: 120_000 })
-    server = await createAssetServer({ certificatePath, jarBytes: await readFile(prepared.jarPath), keyPath, onRequest: (kind) => {
-      if (kind === "direct") directRequests += 1
-      if (kind === "redirect") redirectRequests += 1
-      if (kind === "asset") assetRequests += 1
-    }, version: prepared.manifest.version })
+    server = await createAssetServer({
+      certificatePath,
+      jarBytes: await readFile(prepared.jarPath),
+      keyPath,
+      onRequest(kind) {
+        if (kind === "direct") directRequests += 1
+        if (kind === "redirect") redirectRequests += 1
+        if (kind === "asset") assetRequests += 1
+      },
+      releaseTag: prepared.manifest.runtime.releaseTag,
+      version: prepared.manifest.runtime.version,
+    })
     await mkdir(consumerDir, { recursive: true })
     await writeFile(path.join(consumerDir, "package.json"), '{"private":true}\n', "utf8")
     await runBounded("npm", ["install", "--ignore-scripts", "--offline", "--no-audit", "--no-fund", prepared.tarballPath], { cwd: consumerDir, timeoutMs: 120_000 })
@@ -40,6 +47,7 @@ export async function createPreparedReleaseConsumer() {
       consumerDir,
       jarSha256: prepared.jarSha256,
       jarUrl: `${endpoint}/direct/j4a.jar`,
+      runtime: prepared.manifest.runtime,
     })
 
     return {
@@ -51,7 +59,7 @@ export async function createPreparedReleaseConsumer() {
       installedCommand: j4aCommand(consumerDir),
       installedConfigPath,
       projectDir,
-      redirectUrl: releaseUrl(endpoint, prepared.manifest.version),
+      redirectUrl: releaseUrl(endpoint, prepared.manifest.runtime.releaseTag, prepared.manifest.runtime.version),
       workDir,
       get assetRequests() { return assetRequests },
       get directRequests() { return directRequests },
@@ -60,7 +68,8 @@ export async function createPreparedReleaseConsumer() {
         return patchInstalledReleaseConfig({
           consumerDir,
           jarSha256: prepared.jarSha256,
-          jarUrl: releaseUrl(endpoint, prepared.manifest.version),
+          jarUrl: releaseUrl(endpoint, prepared.manifest.runtime.releaseTag, prepared.manifest.runtime.version),
+          runtime: prepared.manifest.runtime,
         })
       },
       async cleanup() {
@@ -87,8 +96,8 @@ async function copyReleaseProject(root, target) {
   })
 }
 
-async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest, version }) {
-  const redirectPath = `/releases/download/v${version}/j4a-${version}.jar`
+async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest, releaseTag, version }) {
+  const redirectPath = `/releases/download/${releaseTag}/j4a-${version}.jar`
   const assetPath = `/assets/j4a-${version}.jar`
   const server = createServer({ cert: await readFile(certificatePath), key: await readFile(keyPath) }, (request, response) => {
     if (request.url === "/direct/j4a.jar") {
@@ -119,13 +128,22 @@ async function createAssetServer({ certificatePath, jarBytes, keyPath, onRequest
   return { port, server, sockets: trackOwnedServerSockets(server) }
 }
 
-function releaseUrl(endpoint, version) {
-  return `${endpoint}/releases/download/v${version}/j4a-${version}.jar`
+function releaseUrl(endpoint, releaseTag, version) {
+  return `${endpoint}/releases/download/${releaseTag}/j4a-${version}.jar`
 }
 
-async function patchInstalledReleaseConfig({ consumerDir, jarSha256, jarUrl }) {
+async function patchInstalledReleaseConfig({ consumerDir, jarSha256, jarUrl, runtime }) {
   const configPath = path.join(consumerDir, "node_modules", "@jmx-for-agents", "j4a", "dist", "release-config.mjs")
-  await writeFile(configPath, ["export const releaseConfig = {", `  jarUrl: ${JSON.stringify(jarUrl)},`, `  jarSha256: ${JSON.stringify(jarSha256)},`, "}", ""].join("\n"), "utf8")
+  await writeFile(configPath, [
+    "export const releaseConfig = {",
+    `  runtimeVersion: ${JSON.stringify(runtime.version)},`,
+    `  releaseTag: ${JSON.stringify(runtime.releaseTag)},`,
+    `  launcherProtocol: ${runtime.launcherProtocol},`,
+    `  jarUrl: ${JSON.stringify(jarUrl)},`,
+    `  jarSha256: ${JSON.stringify(jarSha256)},`,
+    "}",
+    "",
+  ].join("\n"), "utf8")
   return configPath
 }
 

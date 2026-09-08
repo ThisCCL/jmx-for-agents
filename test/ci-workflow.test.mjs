@@ -89,6 +89,7 @@ test("CI workflow has the exact public build contract", async () => {
     workflow.actionInputs["actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16"].cache,
     "false",
   )
+  assert.ok(workflow.runs.includes("go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml"))
   assert.deepEqual(validateCiWorkflow(await workflowSource()), [])
 })
 

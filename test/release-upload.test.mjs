@@ -22,6 +22,7 @@ test("prepareRelease assembles one local JAR, checksum, and exact prebuilt npm t
         calls.push({ surface: "gradle", command, args, cwd })
         await mkdir(path.join(root, "build", "libs"), { recursive: true })
         await writeFile(path.join(root, "build", "libs", "j4a-1.0.0-all.jar"), jarBytes)
+        await writeRuntimeMetadata(root, jarBytes)
       },
       verifyLicenses: async (jarPath) => {
         calls.push({ surface: "licenses", jarPath })
@@ -47,7 +48,7 @@ test("prepareRelease assembles one local JAR, checksum, and exact prebuilt npm t
       `${jarSha256}  j4a-1.0.0.jar\n`,
     )
     assert.equal(result.tarballPath, smokeTarball)
-    assert.equal(result.manifest.jar.url, "https://github.com/ThisCCL/jmx-for-agents/releases/download/v1.0.0/j4a-1.0.0.jar")
+    assert.equal(result.manifest.jar.url, "https://github.com/ThisCCL/jmx-for-agents/releases/download/runtime-v1.0.0/j4a-1.0.0.jar")
     assert.equal(result.manifest.jar.sha256, jarSha256)
     assert.equal(result.manifest.tarball.sha512, calls.find(call => call.surface === "smoke").sha512)
     assert.equal(result.manifest.tarball.integrity, `sha512-${Buffer.from(result.manifest.tarball.sha512, "hex").toString("base64")}`)
@@ -59,7 +60,13 @@ test("prepareRelease assembles one local JAR, checksum, and exact prebuilt npm t
     assert.deepEqual(calls.slice(0, 3), [
       { surface: "gradle", command: "./gradlew", args: ["clean", "shadowJar"], cwd: root },
       { surface: "licenses", jarPath: result.jarPath },
-      { surface: "versions", root, jarPath: result.jarPath, version: fixtureVersion },
+      {
+        surface: "versions",
+        root,
+        jarPath: result.jarPath,
+        wrapperVersion: fixtureVersion,
+        runtimeVersion: fixtureVersion,
+      },
     ])
     assert.deepEqual(
       JSON.parse(await readFile(path.join(root, "build", "release-manifest.json"), "utf8")),
@@ -67,6 +74,39 @@ test("prepareRelease assembles one local JAR, checksum, and exact prebuilt npm t
     )
     assert.match(await readFile(path.join(root, "src", "release-config.mjs"), "utf8"), new RegExp(jarSha256))
     assert.equal((await readdir(root)).includes("dist"), true)
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
+test("prepareRelease keeps wrapper and runtime artifact identities independent", async () => {
+  const root = await createReleaseFixture({ wrapperVersion: "2.0.0", runtimeVersion: "1.2.3" })
+  const jarBytes = Buffer.from("independent runtime jar")
+  try {
+    const result = await prepareRelease({
+      root,
+      tag: "v2.0.0",
+      runGradle: async () => {
+        await mkdir(path.join(root, "build", "libs"), { recursive: true })
+        await writeFile(path.join(root, "build", "libs", "j4a-1.2.3-all.jar"), jarBytes)
+        await writeRuntimeMetadata(root, jarBytes)
+      },
+      verifyLicenses: async () => {},
+      verifyVersions: async ({ wrapperVersion, runtimeVersion }) => {
+        assert.equal(wrapperVersion, "2.0.0")
+        assert.equal(runtimeVersion, "1.2.3")
+      },
+      smoke: async () => {},
+    })
+
+    assert.equal(path.basename(result.jarPath), "j4a-1.2.3.jar")
+    assert.equal(path.basename(result.tarballPath), "jmx-for-agents-j4a-2.0.0.tgz")
+    assert.deepEqual(result.manifest.wrapper, { version: "2.0.0", tag: "v2.0.0" })
+    assert.deepEqual(result.manifest.runtime, {
+      version: "1.2.3",
+      releaseTag: "runtime-v1.2.3",
+      launcherProtocol: 1,
+    })
   } finally {
     await rm(root, { recursive: true, force: true })
   }
@@ -106,6 +146,7 @@ test("prepareRelease fails closed for missing/multiple JARs and a second prepara
       runGradle: async () => {
         await mkdir(path.join(repeated, "build", "libs"), { recursive: true })
         await writeFile(path.join(repeated, "build", "libs", "j4a-1.0.0-all.jar"), "jar")
+        await writeRuntimeMetadata(repeated, "jar")
       },
       verifyLicenses: noop,
       verifyVersions: noop,
@@ -182,7 +223,7 @@ test("prepareRelease stops at the license gate before config, dist, or tar assem
   }
 })
 
-async function createReleaseFixture() {
+async function createReleaseFixture({ wrapperVersion = "1.0.0", runtimeVersion = "1.0.0" } = {}) {
   const root = await mkdtemp(path.join(tmpdir(), "j4a-release-prepare-"))
   await mkdir(path.join(root, "config"), { recursive: true })
   await mkdir(path.join(root, "src"), { recursive: true })
@@ -190,18 +231,24 @@ async function createReleaseFixture() {
   await mkdir(path.join(root, "bin"), { recursive: true })
   await writeFile(path.join(root, "package.json"), `${JSON.stringify({
     name: "@jmx-for-agents/j4a",
-    version: "1.0.0",
+    version: wrapperVersion,
     private: false,
     type: "module",
     bin: { j4a: "./bin/j4a.js" },
     license: "Apache-2.0",
     files: ["bin/j4a.js", "dist/**/*", "package.json", "README.md", "LICENSE"],
   }, null, 2)}\n`)
-  await writeFile(path.join(root, "build.gradle"), "version = '1.0.0'\n")
+  await writeFile(path.join(root, "build.gradle"), `version = '${runtimeVersion}'\n`)
   await writeFile(path.join(root, "config", "release.json"), `${JSON.stringify({
     owner: "ThisCCL",
     repository: "jmx-for-agents",
     artifactBase: "j4a",
+  }, null, 2)}\n`)
+  await writeFile(path.join(root, "config", "runtime.json"), `${JSON.stringify({
+    version: runtimeVersion,
+    releaseTag: `runtime-v${runtimeVersion}`,
+    launcherProtocol: 1,
+    jarSha256: "0".repeat(64),
   }, null, 2)}\n`)
   await writeFile(path.join(root, "src", "main.mjs"), "export const main = async () => {}\n")
   await writeFile(path.join(root, "skills", "j4a-master", "SKILL.md"), "# j4a\n")
@@ -209,6 +256,13 @@ async function createReleaseFixture() {
   await writeFile(path.join(root, "README.md"), "# j4a\n")
   await writeFile(path.join(root, "LICENSE"), "Apache License\n")
   return root
+}
+
+async function writeRuntimeMetadata(root, jarBytes) {
+  const runtimeJsonPath = path.join(root, "config", "runtime.json")
+  const runtimeJson = JSON.parse(await readFile(runtimeJsonPath, "utf8"))
+  runtimeJson.jarSha256 = createHash("sha256").update(jarBytes).digest("hex")
+  await writeFile(runtimeJsonPath, `${JSON.stringify(runtimeJson, null, 2)}\n`)
 }
 
 function sha512(bytes) {

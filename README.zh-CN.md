@@ -20,6 +20,30 @@ npx -y @jmx-for-agents/j4a install --with-skills
 
 运行时下载支持 `HTTPS_PROXY`、`HTTP_PROXY` 和 `NO_PROXY`（包括对应的小写变量）。代理值既可以是完整 URL，也可以是不带协议的 `host:port`，因此 `http://127.0.0.1:18888` 与 `127.0.0.1:18888` 均可使用。
 
+### 网络受限时安装
+
+如果无法访问 GitHub Releases，先查看准确的运行时文件信息：
+
+```sh
+npx -y @jmx-for-agents/j4a runtime-info --json
+```
+
+通过其他网络下载其中 `jarUrl` 指向的文件，按 `jarSha256` 校验 SHA-256，再保存到 `jarPath`。当前运行时版本为 `1.0.1`，默认路径如下：
+
+- Windows：`%LOCALAPPDATA%\j4a\runtimes\1.0.1\j4a.jar`
+- macOS：`~/Library/Application Support/j4a/runtimes/1.0.1/j4a.jar`
+- Linux：`~/.local/share/j4a/runtimes/1.0.1/j4a.jar`
+
+如果设置了 `J4A_CACHE_DIR`，请改用 `<J4A_CACHE_DIR>/runtimes/1.0.1/j4a.jar`。然后执行 `npx -y @jmx-for-agents/j4a install`；只有摘要匹配时文件才会被接受，并且不会重复下载。
+
+如果只需安装项目内的工作流，不下载或检查 Java 运行时文件：
+
+```sh
+npx -y @jmx-for-agents/j4a install --only-skills
+```
+
+npm wrapper 与 Java runtime 采用独立版本。请始终以 `runtime-info --json` 为准，不要根据 npm 包版本推导 JAR 版本或路径。
+
 ## 快速开始
 
 j4a 同时提供 CLI 和 MCP 两种使用界面。需要多次迭代时，推荐使用 MCP，因为长期运行的 MCP 进程可以保持同一个 JVM，并在多次工具调用之间持续加载选定的 JMeter 库和运行时。这可以避免反复启动 Java 进程、加载 JMeter 库和初始化运行时；结构化的工具发现和调用结果也会让每次调用更加明确。

@@ -26,7 +26,7 @@ try {
   })
   assert.equal(packageVersion.status, 0)
   assert.equal(packageVersion.stderr, "")
-  assert.equal(packageVersion.stdout.trim(), context.manifest.version)
+  assert.equal(packageVersion.stdout.trim(), context.manifest.wrapper.version)
 
   const packageHelp = await runBounded(context.installedCommand, ["--help"], {
     cwd: context.consumerDir,
@@ -35,6 +35,16 @@ try {
   })
   assert.equal(packageHelp.status, 0)
   assert.match(packageHelp.stdout, /j4a mcp/)
+
+  const skillsOnly = await runBounded(context.installedCommand, ["install", "--only-skills"], {
+    cwd: context.consumerDir,
+    env: runtimeEnv,
+    timeoutMs: 120_000,
+  })
+  assert.equal(skillsOnly.status, 0)
+  assert.match(skillsOnly.stdout, /installed j4a-master/)
+  await assert.rejects(access(context.cacheDir), { code: "ENOENT" })
+  assert.equal(context.directRequests, 0)
 
   const missingCache = await runBounded(context.installedCommand, ["read", fixturePath], {
     allowNonZero: true,
@@ -53,7 +63,7 @@ try {
     timeoutMs: 120_000,
   })
   assert.equal(directInstall.status, 0)
-  const cachedJar = path.join(context.cacheDir, "j4a.jar")
+  const cachedJar = path.join(context.cacheDir, "runtimes", context.manifest.runtime.version, "j4a.jar")
   assert.equal(sha256(await readFile(cachedJar)), context.jarSha256)
   assert.equal(context.directRequests, 1)
 
@@ -71,7 +81,7 @@ try {
   })
   assert.equal(javaVersion.status, 0)
   assert.equal(javaVersion.stderr, "")
-  assert.equal(javaVersion.stdout.trim(), context.manifest.version)
+  assert.equal(javaVersion.stdout.trim(), context.manifest.runtime.version)
 
   const cacheReuse = await runBounded(context.installedCommand, ["install"], {
     cwd: context.consumerDir,
@@ -110,7 +120,7 @@ try {
   assert.match(mcp.stderr, /j4a: runtime ready at .*j4a\.jar/)
   assert.doesNotMatch(mcp.stderr, /MCP runtime installation failed|download failed|MCP server I\/O failure/)
   assert.equal(mcp.initialize?.result?.serverInfo?.name, "j4a")
-  assert.equal(mcp.initialize?.result?.serverInfo?.version, context.manifest.version)
+  assert.equal(mcp.initialize?.result?.serverInfo?.version, context.manifest.runtime.version)
   assert.equal(mcp.shutdown?.result, null)
   await access(cachedJar)
   assert.equal(sha256(await readFile(cachedJar)), context.jarSha256)
@@ -134,6 +144,7 @@ try {
     packagedCompatibilityGuidance: "PASS",
     mcpStartup: "PASS",
     cacheReuse: "PASS",
+    skillsOnly: "PASS",
     directRequests: context.directRequests,
     redirectRequests: context.redirectRequests,
     assetRequests: context.assetRequests,
