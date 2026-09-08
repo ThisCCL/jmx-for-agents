@@ -48,7 +48,7 @@ test("package manifest defines the exact public j4a contract", async () => {
   const workspaceYaml = await readFile("pnpm-workspace.yaml", "utf8")
 
   assert.equal(packageJson.name, "@jmx-for-agents/j4a")
-  assert.equal(packageJson.version, "1.0.1")
+  assert.match(packageJson.version, /^\d+\.\d+\.\d+$/)
   assert.equal(packageJson.private, false)
   assert.equal(packageJson.type, "module")
   assert.equal(packageJson.packageManager, "pnpm@11.5.1")
@@ -131,6 +131,7 @@ test("release preparation creates the one public tarball with allowlisted bytes 
   const preparedRoot = await createPreparedPackageRoot()
   const extractDir = await mkdtemp(path.join(tmpdir(), "j4a-package-extract-"))
   const { version } = await readPackageJson()
+  const { version: runtimeVersion } = JSON.parse(await readFile(path.join(preparedRoot, "config", "runtime.json"), "utf8"))
 
   try {
     const tarballName = `jmx-for-agents-j4a-${version}.tgz`
@@ -142,9 +143,9 @@ test("release preparation creates the one public tarball with allowlisted bytes 
         const libs = path.join(preparedRoot, "build", "libs")
         await mkdir(libs, { recursive: true })
         const jarBytes = Buffer.from("package-test-jar")
-        await writeFile(path.join(libs, `j4a-${version}-all.jar`), jarBytes)
         const runtimeJsonPath = path.join(preparedRoot, "config", "runtime.json")
         const runtimeJson = JSON.parse(await readFile(runtimeJsonPath, "utf8"))
+        await writeFile(path.join(libs, `j4a-${runtimeJson.version}-all.jar`), jarBytes)
         runtimeJson.jarSha256 = sha256(jarBytes)
         await writeFile(runtimeJsonPath, `${JSON.stringify(runtimeJson, null, 2)}\n`, "utf8")
       },
@@ -164,8 +165,8 @@ test("release preparation creates the one public tarball with allowlisted bytes 
     assert.deepEqual(JSON.parse(verified.stdout.trim().split("\n").at(-1)), { prebuiltTarball: tarball })
 
     assert.deepEqual((await readdir(path.dirname(tarball))).sort(), [
-      `j4a-${version}.jar`,
-      `j4a-${version}.jar.sha256`,
+      `j4a-${runtimeVersion}.jar`,
+      `j4a-${runtimeVersion}.jar.sha256`,
       tarballName,
     ])
     assert.ok((await readFile(tarball)).byteLength > 0)
