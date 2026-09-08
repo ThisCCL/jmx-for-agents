@@ -5,7 +5,7 @@ Use `apply` for adds, moves, deletes, related property changes, or any write req
 ## Procedure
 
 1. Inspect the live schema. Provide one patch source: `patchYaml` for generated work or `patchFile` for retained YAML.
-2. Collect current refs/property addresses with `read`; before every add, discover the exact component through `categories` and paged `components`.
+2. Collect current refs/property addresses with `read`; before every add, discover the exact addable component through `categories` and paged `components`. Do not synthesize an add identity from a TestElement class or a root node.
 3. Put related cards in one ordered `changes` list. Copy component ids, property arrays, types, and structured values from current results.
 4. Give every add/move one placement selector: `position`, `before`, or `after`.
 5. Dry-run the identical patch when required by the main skill, then choose exactly one destination intent using [write modes](write-modes.md).

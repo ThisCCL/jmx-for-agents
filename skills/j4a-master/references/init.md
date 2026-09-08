@@ -1,6 +1,6 @@
 # `init` MCP tool
 
-Use `init` when no valid base JMX exists. It creates the minimal Test Plan and Thread Group root for later J4A operations.
+Use `init` when no valid base JMX exists. It creates the minimal Test Plan and Thread Group root for later J4A operations. Root Test Plan creation belongs to `init`; it is not an `apply` add component.
 
 1. Inspect the live schema and choose an `out` path using the `init` row in [write modes](write-modes.md). On `OUTPUT_FILE_EXISTS`, choose exactly one returned recovery.
 2. Supply names only when required, then call `init` under the resolved JMeter home.

@@ -10,6 +10,8 @@ Ordinary details are the authoring surface. For opaque properties they point to 
 
 `runtime_metadata_status` describes metadata-source availability, not GUI completeness. `value_shape` is representation metadata, not the patch `type`; copy a `value_template` only for the exact component/property that emitted it.
 
+For a finite scalar choice, `value_options` contains exact selected-runtime pairs of native `value` and explanatory `label`. Match the requested meaning to a label and submit only its paired value at the reported scalar type. Do not convert the label into a patch value or infer integer meanings from list position. Absence of `value_options` makes no completeness claim; if the requested meaning cannot be established from current runtime output, stop and report that boundary instead of guessing.
+
 Category pages contain complete exact-FQCN entries under both count and UTF-8 byte budgets. Reuse only a cursor from the same runtime/category/projection/limit/max-bytes request. Cursor v3 is rejected, so restart from the first page. When a row returns `componentToken`, call components with that token as its sole selector (plus the same explicit JMeter home, if used) to recover exact untruncated ordinary detail. Tamper or binding failure also restarts category paging.
 
 `component` is the selected-runtime public identity. For generic TestBeans this is the exact class, such as `org.apache.jmeter.config.CSVDataSet`, not `org.apache.jmeter.testbeans.gui.TestBeanGUI`.
