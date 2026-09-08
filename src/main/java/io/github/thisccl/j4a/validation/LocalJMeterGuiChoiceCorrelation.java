@@ -36,6 +36,7 @@ final class LocalJMeterGuiChoiceCorrelation {
                     LocalJMeterGuiSemanticTraversal.inspect(probeGui, version).choices(), expected);
             if (matches.size() != 1) return java.util.Optional.empty();
             LocalJMeterGuiSemanticTraversal.ChoiceCandidate choice = matches.get(0);
+            int initialSelectedIndex = choice.selectedIndex();
             ArrayList<Map<String, ScalarSample>> snapshots = new ArrayList<Map<String, ScalarSample>>();
             ArrayList<TestElement> variants = new ArrayList<TestElement>();
             for (int index = 0; index < choice.size(); index++) {
@@ -76,8 +77,8 @@ final class LocalJMeterGuiChoiceCorrelation {
                                 guiClassName, version, expected, property, variants, budget)) {
                     continue;
                 }
-                Object defaultValue = choice.selectedIndex() >= 0 && choice.selectedIndex() < snapshots.size()
-                        ? snapshots.get(choice.selectedIndex()).get(property).value : null;
+                Object defaultValue = initialSelectedIndex >= 0 && initialSelectedIndex < snapshots.size()
+                        ? snapshots.get(initialSelectedIndex).get(property).value : null;
                 candidates.add(new LocalJMeterGuiSemanticMetadata.ScalarDescriptor(
                         property, type, defaultValue, options));
             }

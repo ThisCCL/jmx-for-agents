@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.swing.JComboBox;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -25,6 +26,25 @@ import io.github.thisccl.j4a.path.PropertyPathSegment;
 import org.junit.jupiter.api.Test;
 
 class LocalJMeterGuiSemanticCorrelationFailureTest {
+    @Test
+    void finiteChoiceDefaultRemainsTheInitialSelectionAfterAllValuesAreProbed() {
+        LocalJMeterGuiSemanticMetadata.Observation observation = observe(InitialChoiceGui.class);
+
+        assertThat(observation.scalarDescriptors())
+                .filteredOn(descriptor -> "fixture.mode".equals(descriptor.property()))
+                .singleElement()
+                .satisfies(descriptor -> {
+                    assertThat(descriptor.defaultValue()).isEqualTo(10);
+                    assertThat(descriptor.valueOptions())
+                            .extracting(
+                                    LocalJMeterGuiSemanticMetadata.ValueOption::value,
+                                    LocalJMeterGuiSemanticMetadata.ValueOption::label)
+                            .containsExactly(
+                                    org.assertj.core.groups.Tuple.tuple(10, "first"),
+                                    org.assertj.core.groups.Tuple.tuple(20, "second"));
+                });
+    }
+
     @Test
     void independentlyCorrelatesMultipleTableModelsWithDifferentCustomRowClasses() {
         LocalJMeterGuiSemanticMetadata.Observation observation = observe(IndependentTablesGui.class);
@@ -294,6 +314,45 @@ class LocalJMeterGuiSemanticCorrelationFailureTest {
         @Override
         public void modifyTestElement(TestElement element) {
             FixtureGui.attach(element, "fixture.rows", panel);
+        }
+    }
+
+    public static final class InitialChoiceGui extends AbstractConfigGui {
+        private final JComboBox<String> mode =
+                new JComboBox<String>(new String[] {"first", "second"});
+
+        public InitialChoiceGui() {
+            add(mode);
+        }
+
+        @Override
+        public String getLabelResource() {
+            return "initial-choice";
+        }
+
+        @Override
+        public TestElement createTestElement() {
+            ConfigTestElement element = new ConfigTestElement();
+            modifyTestElement(element);
+            return element;
+        }
+
+        @Override
+        public void clearGui() {
+            super.clearGui();
+            mode.setSelectedIndex(0);
+        }
+
+        @Override
+        public void configure(TestElement element) {
+            super.configure(element);
+            mode.setSelectedIndex(element.getPropertyAsInt("fixture.mode") == 20 ? 1 : 0);
+        }
+
+        @Override
+        public void modifyTestElement(TestElement element) {
+            configureTestElement(element);
+            element.setProperty("fixture.mode", mode.getSelectedIndex() == 0 ? 10 : 20);
         }
     }
 }
