@@ -2,9 +2,10 @@ package io.github.thisccl.j4a.components;
 
 import io.github.thisccl.j4a.path.PropertyAddressDocument;
 import io.github.thisccl.j4a.path.PropertyPath;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public final class ComponentCatalog {
     private ComponentCatalog() {
@@ -108,6 +109,7 @@ public final class ComponentCatalog {
         private final String rowType;
         private final List<String> rowProperties;
         private final Object valueTemplate;
+        private final List<ValueOption> valueOptions;
 
         public ComponentProperty(
                 PropertyPath property,
@@ -125,6 +127,28 @@ public final class ComponentCatalog {
                 String rowType,
                 List<String> rowProperties,
                 Object valueTemplate) {
+            this(property, type, key, writable, reason, ownership, representationSource,
+                    value, defaultValue, valueShape, requiredPropertyClass, requiredValueClass,
+                    rowType, rowProperties, valueTemplate, Collections.<ValueOption>emptyList());
+        }
+
+        public ComponentProperty(
+                PropertyPath property,
+                String type,
+                boolean key,
+                boolean writable,
+                String reason,
+                String ownership,
+                String representationSource,
+                Object value,
+                Object defaultValue,
+                String valueShape,
+                String requiredPropertyClass,
+                String requiredValueClass,
+                String rowType,
+                List<String> rowProperties,
+                Object valueTemplate,
+                List<ValueOption> valueOptions) {
             this.property = property;
             this.type = type;
             this.key = key;
@@ -140,6 +164,7 @@ public final class ComponentCatalog {
             this.rowType = rowType;
             this.rowProperties = Collections.unmodifiableList(new ArrayList<>(rowProperties));
             this.valueTemplate = valueTemplate;
+            this.valueOptions = Collections.unmodifiableList(new ArrayList<ValueOption>(valueOptions));
         }
 
         public List<Object> address() {
@@ -205,5 +230,29 @@ public final class ComponentCatalog {
         public Object valueTemplate() {
             return valueTemplate;
         }
+
+        public List<ValueOption> valueOptions() {
+            return valueOptions;
+        }
+
+        public ComponentProperty withValueOptions(List<ValueOption> options) {
+            return new ComponentProperty(
+                    property, type, key, writable, reason, ownership, representationSource,
+                    value, defaultValue, valueShape, requiredPropertyClass, requiredValueClass,
+                    rowType, rowProperties, valueTemplate, options);
+        }
+    }
+
+    public static final class ValueOption {
+        private final Object value;
+        private final String label;
+
+        public ValueOption(Object value, String label) {
+            this.value = value;
+            this.label = Objects.requireNonNull(label, "label");
+        }
+
+        public Object value() { return value; }
+        public String label() { return label; }
     }
 }

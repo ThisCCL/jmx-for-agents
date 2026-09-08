@@ -319,7 +319,7 @@ final class SyntheticPluginSourceTemplates {
                 + "  public org.apache.jmeter.testelement.TestElement createTestElement() {\n"
                 + "    " + className + " element = new " + className + "();\n"
                 + "    modifyTestElement(element);\n"
-                + "    element.setProperty(\"qa.clear.gui.state\", cleared ? \"cleared\" : \"stale\");\n"
+                + "    if (!cleared) element.setProperty(\"qa.constructor.only\", \"stale\");\n"
                 + "    return element;\n"
                 + "  }\n"
                 + "  public void modifyTestElement(org.apache.jmeter.testelement.TestElement element) {\n"

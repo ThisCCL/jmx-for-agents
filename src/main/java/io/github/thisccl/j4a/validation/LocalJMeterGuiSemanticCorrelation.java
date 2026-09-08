@@ -17,7 +17,14 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.DoubleProperty;
+import org.apache.jmeter.testelement.property.FloatProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 
 final class LocalJMeterGuiSemanticCorrelation {
     private static final AtomicLong NEXT_SENTINEL = new AtomicLong();
@@ -27,7 +34,12 @@ final class LocalJMeterGuiSemanticCorrelation {
 
     static LocalJMeterGuiSemanticMetadata.Observation observe(
             String guiClassName, String version, RuntimeContext runtimeContext) {
+        long started = System.nanoTime();
         LocalJMeterGuiSemanticTraversal.TraversalResult initial;
+        List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> lifecycleScalars =
+                new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>();
+        List<LocalJMeterGuiSemanticMetadata.Failure> lifecycleFailures =
+                new ArrayList<LocalJMeterGuiSemanticMetadata.Failure>();
         JMeterGUIComponent gui;
         try {
             gui = create(guiClassName);
@@ -42,28 +54,137 @@ final class LocalJMeterGuiSemanticCorrelation {
                     new LocalJMeterGuiSemanticMetadata.Stats(0, 0, 0, 0, 0, 0L));
         }
         try {
+            TestElement constructorState = gui.createTestElement();
             gui.clearGui();
+            TestElement clearedState = gui.createTestElement();
+            lifecycleScalars.addAll(constructorOnlyScalars(
+                    constructorState, clearedState, lifecycleFailures));
             initial = LocalJMeterGuiSemanticTraversal.inspect(gui, version);
         } finally {
             release(gui);
         }
         List<LocalJMeterGuiSemanticMetadata.Failure> failures =
                 new ArrayList<LocalJMeterGuiSemanticMetadata.Failure>(initial.observation().failures());
+        failures.addAll(lifecycleFailures);
         List<LocalJMeterGuiSemanticMetadata.StructuredRowConsumer> consumers =
                 new ArrayList<LocalJMeterGuiSemanticMetadata.StructuredRowConsumer>();
         for (LocalJMeterGuiSemanticTraversal.TableCandidate candidate : initial.tables()) {
             LocalJMeterGuiSemanticInstrumentation.differentialProbeStarted();
             correlate(guiClassName, version, runtimeContext, candidate, failures).ifPresent(consumers::add);
         }
-        if (initial.observation().scalarDescriptors().size() + consumers.size()
+        List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> choiceScalars =
+                new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>();
+        LocalJMeterGuiChoiceCorrelation.ProbeBudget choiceBudget =
+                new LocalJMeterGuiChoiceCorrelation.ProbeBudget(
+                        LocalJMeterGuiSemanticMetadata.Budget.CORE_5_6_3, started);
+        for (LocalJMeterGuiSemanticTraversal.ChoiceCandidate candidate : initial.choices()) {
+            LocalJMeterGuiSemanticInstrumentation.differentialProbeStarted();
+            LocalJMeterGuiChoiceCorrelation.correlate(
+                    guiClassName, version, candidate, choiceBudget).ifPresent(choiceScalars::add);
+            if (choiceBudget.exhausted()) break;
+        }
+        LocalJMeterGuiSemanticMetadata.Failure choiceFailure = choiceBudget.failure();
+        if (choiceFailure != null) {
+            failures.add(choiceFailure);
+        }
+        List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> scalars = mergeScalars(
+                initial.observation().scalarDescriptors(), lifecycleScalars);
+        scalars = mergeScalars(scalars, uniqueProperties(choiceScalars));
+        if (scalars.size() + consumers.size()
                 > LocalJMeterGuiSemanticMetadata.Budget.CORE_5_6_3.maxOutputRows) {
             failures.add(new LocalJMeterGuiSemanticMetadata.Failure(
                     LocalJMeterGuiSemanticMetadata.FailureReason.OUTPUT_BUDGET,
-                    String.valueOf(consumers.size())));
+                    String.valueOf(scalars.size() + consumers.size())));
+            int scalarLimit = Math.min(
+                    scalars.size(), LocalJMeterGuiSemanticMetadata.Budget.CORE_5_6_3.maxOutputRows);
+            scalars = new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>(
+                    scalars.subList(0, scalarLimit));
             consumers.clear();
         }
         return new LocalJMeterGuiSemanticMetadata.Observation(
-                initial.observation().scalarDescriptors(), consumers, failures, initial.observation().stats());
+                scalars, consumers, failures, initial.observation().stats());
+    }
+
+    private static List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> constructorOnlyScalars(
+            TestElement constructorState,
+            TestElement clearedState,
+            List<LocalJMeterGuiSemanticMetadata.Failure> failures) {
+        ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> descriptors =
+                new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>();
+        PropertyIterator properties = constructorState.propertyIterator();
+        int count = 0;
+        while (properties.hasNext()) {
+            if (count++ >= LocalJMeterGuiSemanticMetadata.Budget.CORE_5_6_3.maxOutputRows) {
+                failures.add(new LocalJMeterGuiSemanticMetadata.Failure(
+                        LocalJMeterGuiSemanticMetadata.FailureReason.OUTPUT_BUDGET,
+                        String.valueOf(count)));
+                break;
+            }
+            JMeterProperty property = properties.next();
+            if (clearedState.getPropertyOrNull(property.getName()) != null) continue;
+            String type = scalarType(property);
+            if (type != null) {
+                descriptors.add(new LocalJMeterGuiSemanticMetadata.ScalarDescriptor(
+                        property.getName(), type, scalarValue(property)));
+            }
+        }
+        return descriptors;
+    }
+
+    private static List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> mergeScalars(
+            List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> primary,
+            List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> supplemental) {
+        LinkedHashMap<String, LocalJMeterGuiSemanticMetadata.ScalarDescriptor> merged =
+                new LinkedHashMap<String, LocalJMeterGuiSemanticMetadata.ScalarDescriptor>();
+        for (LocalJMeterGuiSemanticMetadata.ScalarDescriptor descriptor : primary) {
+            merged.put(descriptor.property(), descriptor);
+        }
+        for (LocalJMeterGuiSemanticMetadata.ScalarDescriptor descriptor : supplemental) {
+            LocalJMeterGuiSemanticMetadata.ScalarDescriptor existing = merged.get(descriptor.property());
+            if (existing == null) {
+                merged.put(descriptor.property(), descriptor);
+            } else if (existing.type().equals(descriptor.type())
+                    && existing.valueOptions().isEmpty() && !descriptor.valueOptions().isEmpty()) {
+                merged.put(descriptor.property(), new LocalJMeterGuiSemanticMetadata.ScalarDescriptor(
+                        existing.property(), existing.type(), existing.defaultValue(), descriptor.valueOptions()));
+            }
+        }
+        return new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>(merged.values());
+    }
+
+    private static List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> uniqueProperties(
+            List<LocalJMeterGuiSemanticMetadata.ScalarDescriptor> descriptors) {
+        LinkedHashMap<String, LocalJMeterGuiSemanticMetadata.ScalarDescriptor> unique =
+                new LinkedHashMap<String, LocalJMeterGuiSemanticMetadata.ScalarDescriptor>();
+        LinkedHashSet<String> ambiguous = new LinkedHashSet<String>();
+        for (LocalJMeterGuiSemanticMetadata.ScalarDescriptor descriptor : descriptors) {
+            if (ambiguous.contains(descriptor.property())) continue;
+            if (unique.put(descriptor.property(), descriptor) != null) {
+                unique.remove(descriptor.property());
+                ambiguous.add(descriptor.property());
+            }
+        }
+        return new ArrayList<LocalJMeterGuiSemanticMetadata.ScalarDescriptor>(unique.values());
+    }
+
+    private static String scalarType(JMeterProperty property) {
+        if (property instanceof StringProperty) return "string";
+        if (property instanceof BooleanProperty) return "boolean";
+        if (property instanceof IntegerProperty) return "int";
+        if (property instanceof LongProperty) return "long";
+        if (property instanceof FloatProperty) return "float";
+        if (property instanceof DoubleProperty) return "double";
+        return null;
+    }
+
+    private static Object scalarValue(JMeterProperty property) {
+        if (property instanceof StringProperty) return property.getStringValue();
+        if (property instanceof BooleanProperty) return Boolean.valueOf(property.getBooleanValue());
+        if (property instanceof IntegerProperty) return Integer.valueOf(property.getIntValue());
+        if (property instanceof LongProperty) return Long.valueOf(property.getLongValue());
+        if (property instanceof FloatProperty) return Float.valueOf(property.getFloatValue());
+        if (property instanceof DoubleProperty) return Double.valueOf(property.getDoubleValue());
+        throw new IllegalArgumentException("property is not a supported scalar");
     }
 
     private static java.util.Optional<LocalJMeterGuiSemanticMetadata.StructuredRowConsumer> correlate(

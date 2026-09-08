@@ -28,7 +28,8 @@ class LocalJMeterWorkerSemanticPerformanceTest {
                 + "\twarm_write_evidence_nanos\tcold_observations\twarm_observations"
                 + "\twarm_write_observations\tcold_gui_constructions\twarm_gui_constructions"
                 + "\twarm_write_gui_constructions\tcold_differential_probes\twarm_differential_probes"
-                + "\twarm_write_differential_probes\tdescriptor_candidates\ttable_candidates\tcache_size\tstatus");
+                + "\twarm_write_differential_probes\tdescriptor_candidates\ttable_candidates"
+                + "\tchoice_candidates\tcache_size\tstatus");
         int observed = 0;
         for (ComponentCatalog.ComponentDefinition definition : definitions) {
             LocalJMeterMenuRegistry.Entry entry = registry.resolve(definition.component()).orElse(null);
@@ -78,6 +79,7 @@ class LocalJMeterWorkerSemanticPerformanceTest {
                     + delta(afterWarm.differentialProbes(), afterCold.differentialProbes()) + "\t"
                     + delta(afterWrite.differentialProbes(), afterWriteWarmup.differentialProbes()) + "\t"
                     + stats.descriptorCandidates() + "\t" + stats.tableCandidates() + "\t"
+                    + stats.choiceCandidates() + "\t"
                     + LocalJMeterWorkerComponents.semanticCacheSize() + "\t" + status);
             assertThat(afterWarm.observationAttempts()).isEqualTo(afterCold.observationAttempts());
             assertThat(afterWarm.guiConstructions()).isEqualTo(afterCold.guiConstructions());

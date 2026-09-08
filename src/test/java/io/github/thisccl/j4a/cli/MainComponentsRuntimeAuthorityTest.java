@@ -19,6 +19,31 @@ import org.yaml.snakeyaml.Yaml;
 
 class MainComponentsRuntimeAuthorityTest {
     @Test
+    void finiteScalarOptionsRemainTypedAndMatchAcrossAuthoringAndDiagnostics() {
+        List<ComponentCatalog.ValueOption> options = Arrays.asList(
+                new ComponentCatalog.ValueOption(Integer.valueOf(0), "By count"),
+                new ComponentCatalog.ValueOption(Integer.valueOf(1), "By ratio"));
+        ComponentCatalog.ComponentProperty property = new ComponentCatalog.ComponentProperty(
+                propertyPath("Example.style"), "int", false, true, null, "user", "runtime",
+                null, Integer.valueOf(0), null, "org.example.IntegerProperty", "java.lang.Integer",
+                null, Collections.<String>emptyList(), null, options);
+        ComponentCatalog.ComponentDefinition definition = definition(
+                "controller", "Controllers", "org.example.ControllerGui", "Example Controller",
+                Collections.singletonList(property), "menu_controllers", "GUI_COMPONENT");
+
+        Map<String, Object> ordinary = mapping(new Yaml().load(
+                new ComponentCatalogRenderer().renderRuntimeComponent(definition)));
+        Map<String, Object> diagnostics = mapping(new Yaml().load(
+                new ComponentCatalogRenderer().renderRuntimeComponent(definition, true)));
+
+        Object ordinaryOptions = mapping(list(ordinary.get("properties")).get(0)).get("value_options");
+        Object diagnosticOptions = mapping(list(diagnostics.get("properties")).get(0)).get("value_options");
+        assertThat(ordinaryOptions).isEqualTo(Arrays.asList(
+                option(Integer.valueOf(0), "By count"), option(Integer.valueOf(1), "By ratio")));
+        assertThat(diagnosticOptions).isEqualTo(ordinaryOptions);
+    }
+
+    @Test
     void diagnosticDetailProjectionRetainsEveryCapabilityFieldAndNonWritableProperty() {
         Map<String, Object> template = new LinkedHashMap<String, Object>();
         template.put("presence", "present");
@@ -145,6 +170,13 @@ class MainComponentsRuntimeAuthorityTest {
 
     private static PropertyPath propertyPath(String name) {
         return new PropertyPath(Collections.singletonList(PropertyPathSegment.property(name)));
+    }
+
+    private static Map<String, Object> option(Object value, String label) {
+        Map<String, Object> option = new LinkedHashMap<String, Object>();
+        option.put("value", value);
+        option.put("label", label);
+        return option;
     }
 
     @Test

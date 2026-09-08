@@ -92,6 +92,7 @@ public final class ComponentCatalogRenderer {
         putIfPresent(output, "row_type", property.rowType());
         if (!property.rowProperties().isEmpty()) output.put("row_properties", property.rowProperties());
         if (property.valueTemplate() != null) output.put("value_template", property.valueTemplate());
+        if (!property.valueOptions().isEmpty()) output.put("value_options", valueOptions(property));
         return output;
     }
 
@@ -109,7 +110,19 @@ public final class ComponentCatalogRenderer {
         putIfPresent(output, "row_type", property.rowType());
         if (!property.rowProperties().isEmpty()) output.put("row_properties", property.rowProperties());
         if (property.valueTemplate() != null) output.put("value_template", property.valueTemplate());
+        if (!property.valueOptions().isEmpty()) output.put("value_options", valueOptions(property));
         return output;
+    }
+
+    private static List<Map<String, Object>> valueOptions(ComponentProperty property) {
+        List<Map<String, Object>> options = new ArrayList<Map<String, Object>>();
+        for (ComponentCatalog.ValueOption option : property.valueOptions()) {
+            Map<String, Object> row = new LinkedHashMap<String, Object>();
+            row.put("value", option.value());
+            row.put("label", option.label());
+            options.add(row);
+        }
+        return options;
     }
 
     private static List<Map<String, Object>> runtimeCategorySummaries(

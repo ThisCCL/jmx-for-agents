@@ -1,9 +1,12 @@
 package io.github.thisccl.j4a.validation;
 
 import io.github.thisccl.j4a.jmx.property.RuntimeStructuredRowEvidence;
+import io.github.thisccl.j4a.jmx.property.GraphType;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 final class LocalJMeterGuiSemanticMetadata {
@@ -30,6 +33,9 @@ final class LocalJMeterGuiSemanticMetadata {
         FIELD_BUDGET,
         DESCRIPTOR_BUDGET,
         TABLE_CANDIDATE_BUDGET,
+        CHOICE_CANDIDATE_BUDGET,
+        CHOICE_VALUE_BUDGET,
+        CHOICE_PROBE_BUDGET,
         OUTPUT_BUDGET,
         ELAPSED_TIME_BUDGET,
         TABLE_MODEL_SHAPE,
@@ -68,11 +74,18 @@ final class LocalJMeterGuiSemanticMetadata {
         private final String property;
         private final String type;
         private final Object defaultValue;
+        private final List<ValueOption> valueOptions;
 
         ScalarDescriptor(String property, String type, Object defaultValue) {
+            this(property, type, defaultValue, Collections.<ValueOption>emptyList());
+        }
+
+        ScalarDescriptor(
+                String property, String type, Object defaultValue, List<ValueOption> valueOptions) {
             this.property = Objects.requireNonNull(property, "property");
             this.type = Objects.requireNonNull(type, "type");
             this.defaultValue = immutableScalar(defaultValue);
+            this.valueOptions = Collections.unmodifiableList(new ArrayList<ValueOption>(valueOptions));
         }
 
         String property() {
@@ -87,13 +100,22 @@ final class LocalJMeterGuiSemanticMetadata {
             return defaultValue;
         }
 
-        private static Object immutableScalar(Object value) {
-            if (value == null || value instanceof String || value instanceof Number
-                    || value instanceof Boolean || value instanceof Character || value instanceof Enum) {
-                return value;
-            }
-            return String.valueOf(value);
+        List<ValueOption> valueOptions() {
+            return valueOptions;
         }
+    }
+
+    static final class ValueOption {
+        private final Object value;
+        private final String label;
+
+        ValueOption(Object value, String label) {
+            this.value = immutableScalar(value);
+            this.label = Objects.requireNonNull(label, "label");
+        }
+
+        Object value() { return value; }
+        String label() { return label; }
     }
 
     static final class StructuredRowConsumer {
@@ -134,15 +156,23 @@ final class LocalJMeterGuiSemanticMetadata {
         private final int maximumDepth;
         private final int descriptorCandidates;
         private final int tableCandidates;
+        private final int choiceCandidates;
         private final long elapsedNanos;
 
         Stats(int visitedObjects, int reflectedFields, int maximumDepth, int descriptorCandidates,
                 int tableCandidates, long elapsedNanos) {
+            this(visitedObjects, reflectedFields, maximumDepth, descriptorCandidates,
+                    tableCandidates, 0, elapsedNanos);
+        }
+
+        Stats(int visitedObjects, int reflectedFields, int maximumDepth, int descriptorCandidates,
+                int tableCandidates, int choiceCandidates, long elapsedNanos) {
             this.visitedObjects = visitedObjects;
             this.reflectedFields = reflectedFields;
             this.maximumDepth = maximumDepth;
             this.descriptorCandidates = descriptorCandidates;
             this.tableCandidates = tableCandidates;
+            this.choiceCandidates = choiceCandidates;
             this.elapsedNanos = elapsedNanos;
         }
 
@@ -151,6 +181,7 @@ final class LocalJMeterGuiSemanticMetadata {
         int maximumDepth() { return maximumDepth; }
         int descriptorCandidates() { return descriptorCandidates; }
         int tableCandidates() { return tableCandidates; }
+        int choiceCandidates() { return choiceCandidates; }
         long elapsedNanos() { return elapsedNanos; }
     }
 
@@ -176,6 +207,13 @@ final class LocalJMeterGuiSemanticMetadata {
         }
 
         List<ScalarDescriptor> scalarDescriptors() { return scalarDescriptors; }
+        Map<String, GraphType> scalarGraphTypes() {
+            LinkedHashMap<String, GraphType> types = new LinkedHashMap<String, GraphType>();
+            for (ScalarDescriptor descriptor : scalarDescriptors) {
+                types.put(descriptor.property(), GraphType.fromWireName(descriptor.type()));
+            }
+            return Collections.unmodifiableMap(types);
+        }
         List<StructuredRowConsumer> structuredRowConsumers() { return structuredRowConsumers; }
         List<Failure> failures() { return failures; }
         Stats stats() { return stats; }
@@ -194,28 +232,59 @@ final class LocalJMeterGuiSemanticMetadata {
     static final class Budget {
         /*
          * The 83-component JMeter 5.6.3 characterization maxima were depth 7,
-         * 214 objects, 188 fields, 25 descriptors, 6 tables, and 25 output rows.
+         * 265 objects, 188 fields, 25 descriptors, 6 tables, 11 finite choices,
+         * and 25 output rows.
          * Fixed limits retain at least 2x headroom and bound malformed plugin graphs.
          */
-        static final Budget CORE_5_6_3 = new Budget(16, 1024, 1024, 128, 32, 128, 2_000_000_000L);
+        static final Budget CORE_5_6_3 = new Budget(
+                16, 1024, 1024, 128, 32, 32, 128, 512, 128, 2_000_000_000L);
 
         final int maxDepth;
         final int maxObjects;
         final int maxFields;
         final int maxDescriptors;
         final int maxTableCandidates;
+        final int maxChoiceCandidates;
+        final int maxChoiceValues;
+        final int maxChoiceProbes;
         final int maxOutputRows;
         final long maxElapsedNanos;
 
         Budget(int maxDepth, int maxObjects, int maxFields, int maxDescriptors,
                 int maxTableCandidates, int maxOutputRows, long maxElapsedNanos) {
+            this(maxDepth, maxObjects, maxFields, maxDescriptors,
+                    maxTableCandidates, maxTableCandidates, maxOutputRows, 512,
+                    maxOutputRows, maxElapsedNanos);
+        }
+
+        Budget(int maxDepth, int maxObjects, int maxFields, int maxDescriptors,
+                int maxTableCandidates, int maxChoiceCandidates, int maxChoiceValues,
+                int maxOutputRows, long maxElapsedNanos) {
+            this(maxDepth, maxObjects, maxFields, maxDescriptors, maxTableCandidates,
+                    maxChoiceCandidates, maxChoiceValues, 512, maxOutputRows, maxElapsedNanos);
+        }
+
+        Budget(int maxDepth, int maxObjects, int maxFields, int maxDescriptors,
+                int maxTableCandidates, int maxChoiceCandidates, int maxChoiceValues,
+                int maxChoiceProbes, int maxOutputRows, long maxElapsedNanos) {
             this.maxDepth = maxDepth;
             this.maxObjects = maxObjects;
             this.maxFields = maxFields;
             this.maxDescriptors = maxDescriptors;
             this.maxTableCandidates = maxTableCandidates;
+            this.maxChoiceCandidates = maxChoiceCandidates;
+            this.maxChoiceValues = maxChoiceValues;
+            this.maxChoiceProbes = maxChoiceProbes;
             this.maxOutputRows = maxOutputRows;
             this.maxElapsedNanos = maxElapsedNanos;
         }
+    }
+
+    private static Object immutableScalar(Object value) {
+        if (value == null || value instanceof String || value instanceof Number
+                || value instanceof Boolean || value instanceof Character || value instanceof Enum) {
+            return value;
+        }
+        return String.valueOf(value);
     }
 }
