@@ -1,7 +1,7 @@
 export const releaseConfig = {
-  runtimeVersion: "1.0.1",
-  releaseTag: "v1.0.1",
+  runtimeVersion: "1.0.2",
+  releaseTag: "runtime-v1.0.2",
   launcherProtocol: 1,
-  jarUrl: "https://github.com/ThisCCL/jmx-for-agents/releases/download/v1.0.1/j4a-1.0.1.jar",
-  jarSha256: "d83b6fb2c71b70ea380955d3fca5827b59205c9f8d4299af8756113b1e489f8d",
+  jarUrl: "https://github.com/ThisCCL/jmx-for-agents/releases/download/runtime-v1.0.2/j4a-1.0.2.jar",
+  jarSha256: "a41536daae07943d715f9846b38e1d8c6900655b46d99153bdf19a0921926438",
 }
