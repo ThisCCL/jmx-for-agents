@@ -183,7 +183,8 @@ final class LocalComponentProperties {
             return new MetadataProjection(new ArrayList<>(refinements.values()), runtimeMetadataStatus);
         }
 
-        GraphSnapshot snapshot = new DefaultJMeterPropertyGraph().inspect(defaults, runtimeContext);
+        GraphSnapshot snapshot = new DefaultJMeterPropertyGraph().inspect(
+                defaults, runtimeContext, guiSemanticMetadata.scalarGraphTypes());
         Map<PropertyPath, ComponentCatalog.ComponentProperty> projected = new LinkedHashMap<>();
         Map<String, LocalJMeterGuiSemanticMetadata.StructuredRowConsumer> consumers =
                 structuredConsumers(guiSemanticMetadata);
@@ -210,13 +211,26 @@ final class LocalComponentProperties {
             Map<PropertyPath, ComponentCatalog.ComponentProperty> properties) {
         for (LocalJMeterGuiSemanticMetadata.ScalarDescriptor descriptor : descriptors) {
             PropertyPath path = propertyPath(descriptor.property());
-            if (!properties.containsKey(path)) {
+            List<ComponentCatalog.ValueOption> valueOptions = valueOptions(descriptor);
+            ComponentCatalog.ComponentProperty existing = properties.get(path);
+            if (existing == null) {
                 properties.put(path, new ComponentCatalog.ComponentProperty(
                         path, descriptor.type(), false, true, null, "user",
                         "gui_semantic_descriptor", null, descriptor.defaultValue(), null,
-                        null, null, null, Collections.<String>emptyList(), null));
+                        null, null, null, Collections.<String>emptyList(), null, valueOptions));
+            } else if (existing.type().equals(descriptor.type()) && !valueOptions.isEmpty()) {
+                properties.put(path, existing.withValueOptions(valueOptions));
             }
         }
+    }
+
+    private static List<ComponentCatalog.ValueOption> valueOptions(
+            LocalJMeterGuiSemanticMetadata.ScalarDescriptor descriptor) {
+        ArrayList<ComponentCatalog.ValueOption> options = new ArrayList<ComponentCatalog.ValueOption>();
+        for (LocalJMeterGuiSemanticMetadata.ValueOption option : descriptor.valueOptions()) {
+            options.add(new ComponentCatalog.ValueOption(option.value(), option.label()));
+        }
+        return options;
     }
 
     private static ComponentCatalog.ComponentProperty graphProperty(
@@ -258,7 +272,9 @@ final class LocalComponentProperties {
                 semantic ? semanticConsumer.exactRowClass() : rows.isPresent() ? rows.get().rowType() : null,
                 semantic ? semanticConsumer.rowProperties()
                         : rows.isPresent() ? rows.get().fields() : Collections.<String>emptyList(),
-                null);
+                null,
+                refinement == null || !type.equals(refinement.type())
+                        ? Collections.<ComponentCatalog.ValueOption>emptyList() : refinement.valueOptions());
     }
 
     private static Map<String, LocalJMeterGuiSemanticMetadata.StructuredRowConsumer> structuredConsumers(

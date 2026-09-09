@@ -4,6 +4,7 @@ public enum RepresentationSource {
     RUNTIME("runtime"),
     JMETER_SCHEMA("jmeter_schema"),
     TEST_BEAN("test_bean"),
+    GUI_SEMANTIC_DESCRIPTOR("gui_semantic_descriptor"),
     OPAQUE_FALLBACK("opaque_fallback");
 
     private final String wireName;

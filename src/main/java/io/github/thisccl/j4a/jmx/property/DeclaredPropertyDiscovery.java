@@ -5,6 +5,7 @@ import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -33,10 +34,31 @@ final class DeclaredPropertyDiscovery {
     }
 
     static List<Declaration> declarations(TestElement element) {
+        return declarations(element, Collections.<String, GraphType>emptyMap());
+    }
+
+    static List<Declaration> declarations(
+            TestElement element, Map<String, GraphType> semanticScalars) {
         List<Declaration> declarations = new ArrayList<Declaration>();
         addSchemaDeclarations(element, declarations);
         addBeanInfoDeclarations(element, declarations);
+        addSemanticScalarDeclarations(semanticScalars, declarations);
         return Collections.unmodifiableList(declarations);
+    }
+
+    private static void addSemanticScalarDeclarations(
+            Map<String, GraphType> semanticScalars, List<Declaration> declarations) {
+        if (semanticScalars == null) {
+            return;
+        }
+        for (Map.Entry<String, GraphType> scalar : semanticScalars.entrySet()) {
+            String name = scalar.getKey();
+            Shape shape = scalarShape(scalar.getValue());
+            if (name != null && !name.isEmpty() && shape != null) {
+                declarations.add(new Declaration(
+                        name, shape, RepresentationSource.GUI_SEMANTIC_DESCRIPTOR));
+            }
+        }
     }
 
     private static void addSchemaDeclarations(
@@ -144,6 +166,26 @@ final class DeclaredPropertyDiscovery {
 
     private static Shape shape(GraphType type, Class<?> propertyClass) {
         return new Shape(type, propertyClass.getName(), null);
+    }
+
+    private static Shape scalarShape(GraphType type) {
+        if (type == null) return null;
+        switch (type) {
+            case STRING:
+                return shape(type, StringProperty.class);
+            case BOOLEAN:
+                return shape(type, BooleanProperty.class);
+            case INT:
+                return shape(type, IntegerProperty.class);
+            case LONG:
+                return shape(type, LongProperty.class);
+            case FLOAT:
+                return shape(type, FloatProperty.class);
+            case DOUBLE:
+                return shape(type, DoubleProperty.class);
+            default:
+                return null;
+        }
     }
 
     static final class Declaration {

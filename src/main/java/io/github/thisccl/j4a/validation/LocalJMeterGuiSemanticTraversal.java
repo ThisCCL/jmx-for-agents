@@ -2,6 +2,7 @@ package io.github.thisccl.j4a.validation;
 
 import static io.github.thisccl.j4a.validation.LocalJMeterGuiSemanticMetadata.FailureReason;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -17,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.LongSupplier;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import org.apache.jmeter.gui.Binding;
 import org.apache.jmeter.gui.BindingGroup;
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor;
@@ -104,10 +109,12 @@ final class LocalJMeterGuiSemanticTraversal {
         private final Set<String> conflictingDescriptors = new LinkedHashSet<>();
         private final List<LocalJMeterGuiSemanticMetadata.Failure> failures = new ArrayList<>();
         private final List<TableCandidate> tables = new ArrayList<TableCandidate>();
+        private final List<ChoiceCandidate> choices = new ArrayList<ChoiceCandidate>();
         private int fields;
         private int maximumDepth;
         private int descriptorCandidates;
         private int tableCandidates;
+        private int choiceCandidates;
         private boolean stopped;
         private Class<?> selectedRootType;
 
@@ -138,6 +145,15 @@ final class LocalJMeterGuiSemanticTraversal {
                 visited.add(value);
                 if (value instanceof PropertyDescriptor) {
                     descriptor((PropertyDescriptor<?, ?>) value);
+                    continue;
+                }
+                if (value instanceof JComboBox) {
+                    choiceCandidates++;
+                    if (choiceCandidates > budget.maxChoiceCandidates) {
+                        stop(FailureReason.CHOICE_CANDIDATE_BUDGET, String.valueOf(choiceCandidates));
+                    } else {
+                        choice((JComboBox<?>) value);
+                    }
                     continue;
                 }
                 if (isTableModel(value)) {
@@ -281,6 +297,38 @@ final class LocalJMeterGuiSemanticTraversal {
             }
         }
 
+        private void choice(JComboBox<?> choice) {
+            if (choice.isEditable() || choice.getItemCount() < 2) return;
+            if (choice.getItemCount() > budget.maxChoiceValues) {
+                fail(FailureReason.CHOICE_VALUE_BUDGET, String.valueOf(choice.getItemCount()));
+                return;
+            }
+            ArrayList<String> labels = new ArrayList<String>();
+            LinkedHashSet<String> uniqueLabels = new LinkedHashSet<String>();
+            for (int index = 0; index < choice.getItemCount(); index++) {
+                Object item = choice.getItemAt(index);
+                if (item == null) return;
+                String label = renderedLabel(choice, item, index);
+                if (label == null) return;
+                if (label.trim().isEmpty() || !uniqueLabels.add(label)) return;
+                labels.add(label);
+            }
+            choices.add(new ChoiceCandidate(choice, labels, choice.getSelectedIndex()));
+        }
+
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        private static String renderedLabel(JComboBox<?> choice, Object item, int index) {
+            try {
+                ListCellRenderer renderer = choice.getRenderer();
+                if (renderer == null) return null;
+                Component rendered = renderer.getListCellRendererComponent(
+                        new JList<Object>(), item, index, false, false);
+                return rendered instanceof JLabel ? ((JLabel) rendered).getText() : null;
+            } catch (RuntimeException | LinkageError exception) {
+                return null;
+            }
+        }
+
         private boolean elapsedExceeded() {
             long elapsed = nanoTime.getAsLong() - started;
             if (elapsed > budget.maxElapsedNanos) {
@@ -309,8 +357,9 @@ final class LocalJMeterGuiSemanticTraversal {
                             new ArrayList<>(descriptors.values()), failures,
                             new LocalJMeterGuiSemanticMetadata.Stats(
                                     visited.size(), fields, maximumDepth, descriptorCandidates, tableCandidates,
+                                    choiceCandidates,
                                     Math.max(0L, nanoTime.getAsLong() - started))),
-                    tables);
+                    tables, choices);
         }
 
         private boolean traversable(Class<?> type) {
@@ -348,11 +397,15 @@ final class LocalJMeterGuiSemanticTraversal {
     static final class TraversalResult {
         private final LocalJMeterGuiSemanticMetadata.Observation observation;
         private final List<TableCandidate> tables;
+        private final List<ChoiceCandidate> choices;
 
         private TraversalResult(
-                LocalJMeterGuiSemanticMetadata.Observation observation, List<TableCandidate> tables) {
+                LocalJMeterGuiSemanticMetadata.Observation observation,
+                List<TableCandidate> tables,
+                List<ChoiceCandidate> choices) {
             this.observation = observation;
             this.tables = Collections.unmodifiableList(new ArrayList<TableCandidate>(tables));
+            this.choices = Collections.unmodifiableList(new ArrayList<ChoiceCandidate>(choices));
         }
 
         LocalJMeterGuiSemanticMetadata.Observation observation() {
@@ -361,6 +414,10 @@ final class LocalJMeterGuiSemanticTraversal {
 
         List<TableCandidate> tables() {
             return tables;
+        }
+
+        List<ChoiceCandidate> choices() {
+            return choices;
         }
     }
 
@@ -390,6 +447,30 @@ final class LocalJMeterGuiSemanticTraversal {
             return objectClass == other.objectClass
                     && columnTypes.equals(other.columnTypes)
                     && setterNames.equals(other.setterNames);
+        }
+    }
+
+    static final class ChoiceCandidate {
+        private final JComboBox<?> choice;
+        private final List<String> labels;
+        private final int selectedIndex;
+
+        private ChoiceCandidate(JComboBox<?> choice, List<String> labels, int selectedIndex) {
+            this.choice = choice;
+            this.labels = Collections.unmodifiableList(new ArrayList<String>(labels));
+            this.selectedIndex = selectedIndex;
+        }
+
+        int size() { return labels.size(); }
+        String label(int index) { return labels.get(index); }
+        int selectedIndex() { return selectedIndex; }
+
+        void select(int index) {
+            choice.setSelectedIndex(index);
+        }
+
+        boolean sameSignature(ChoiceCandidate other) {
+            return labels.equals(other.labels);
         }
     }
 }

@@ -24,11 +24,19 @@ final class PropertyGraphDiscovery {
     private static final String CODEC_REASON = "Property write codec is not implemented";
 
     GraphSnapshot inspect(TestElement testElement, RuntimeContext runtimeContext) {
+        return inspect(testElement, runtimeContext, Collections.<String, GraphType>emptyMap());
+    }
+
+    GraphSnapshot inspect(
+            TestElement testElement,
+            RuntimeContext runtimeContext,
+            Map<String, GraphType> semanticScalars) {
         Objects.requireNonNull(testElement, "test element is required");
         Objects.requireNonNull(runtimeContext, "runtime context is required");
+        Objects.requireNonNull(semanticScalars, "semantic scalars are required");
         Traversal traversal = new Traversal();
         discoverElement(testElement, Collections.<PropertyPathSegment>emptyList(),
-                traversal, runtimeContext);
+                traversal, runtimeContext, semanticScalars);
         List<GraphNode> nodes = new ArrayList<GraphNode>(traversal.candidates.size());
         for (Candidate candidate : traversal.candidates.values()) {
             nodes.add(candidate.toNode());
@@ -40,7 +48,8 @@ final class PropertyGraphDiscovery {
             TestElement element,
             List<PropertyPathSegment> prefix,
             Traversal traversal,
-            RuntimeContext runtimeContext) {
+            RuntimeContext runtimeContext,
+            Map<String, GraphType> semanticScalars) {
         if (traversal.elementStack.put(element, Boolean.TRUE) != null) {
             return;
         }
@@ -57,7 +66,7 @@ final class PropertyGraphDiscovery {
                 nested.add(new NestedProperty(path, property));
             }
             for (DeclaredPropertyDiscovery.Declaration declaration
-                    : DeclaredPropertyDiscovery.declarations(element)) {
+                    : DeclaredPropertyDiscovery.declarations(element, semanticScalars)) {
                 PropertyPath path = path(prefix, declaration.name());
                 Candidate candidate = traversal.candidates.get(path);
                 if (candidate != null) {
@@ -85,7 +94,8 @@ final class PropertyGraphDiscovery {
             RuntimeContext runtimeContext) {
         Object value = property.getObjectValue();
         if (property instanceof TestElementProperty && value instanceof TestElement) {
-            discoverElement((TestElement) value, path.segments(), traversal, runtimeContext);
+            discoverElement((TestElement) value, path.segments(), traversal, runtimeContext,
+                    Collections.<String, GraphType>emptyMap());
             return;
         }
         if (property instanceof MapProperty) {

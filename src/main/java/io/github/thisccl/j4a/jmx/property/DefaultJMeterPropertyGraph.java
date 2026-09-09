@@ -30,6 +30,13 @@ public final class DefaultJMeterPropertyGraph {
         return discovery.inspect(testElement, runtimeContext);
     }
 
+    public GraphSnapshot inspect(
+            TestElement testElement,
+            RuntimeContext runtimeContext,
+            Map<String, GraphType> semanticScalars) {
+        return discovery.inspect(testElement, runtimeContext, semanticScalars);
+    }
+
     public MutationReceipt apply(
             TestElement testElement, GraphSnapshot snapshot, List<PropertyWrite> writes) {
         TestElement target = Objects.requireNonNull(testElement, "test element is required");

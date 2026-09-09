@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define bounded JMeter 5.6.3 runtime evidence for persisted GUI-bound properties and structured table consumer types that are otherwise unobservable when a newly materialized component is empty.
+Define bounded JMeter 5.6.3 runtime evidence for persisted GUI-bound scalars, finite choice semantics, and structured table consumer types that are otherwise unobservable when a newly materialized component is empty.
 
 ## Requirements
 
@@ -23,8 +23,8 @@ The system SHALL query GUI semantic metadata only inside the isolated worker tha
 - **WHEN** GUI semantic metadata is queried
 - **THEN** no JMeter desktop application or top-level GUI window SHALL be started or displayed
 
-### Requirement: GUI-bound scalar descriptors supplement empty-state metadata
-Successfully observed GUI property descriptors SHALL be eligible runtime evidence for persisted scalar property names, types, and defaults when the exact newly materialized element omits those properties because their controls are empty. Descriptor evidence SHALL supplement rather than replace present-property, schema, BeanInfo, or existing XML evidence and SHALL NOT imply complete enumeration of every GUI field.
+### Requirement: GUI-bound scalar evidence supplements empty-state metadata
+Successfully observed GUI property descriptors and scalar properties present only across a proven GUI materialization lifecycle SHALL be eligible runtime evidence for persisted scalar property names, types, and defaults when the exact cleared element omits those properties. GUI scalar evidence SHALL supplement rather than replace present-property, schema, BeanInfo, or existing XML evidence and SHALL NOT imply complete enumeration of every GUI field. Component details and add mutation SHALL consume the same materialization lifecycle and semantic evidence before either surface describes the scalar as writable.
 
 #### Scenario: Empty HTTP defaults expose Domain and Port
 - **WHEN** JMeter 5.6.3 materializes HTTP Request Defaults with empty Domain and Port controls
@@ -34,6 +34,30 @@ Successfully observed GUI property descriptors SHALL be eligible runtime evidenc
 #### Scenario: Existing value remains authoritative
 - **WHEN** an exact loaded target already contains a persisted property also found through a GUI descriptor
 - **THEN** the target's concrete persisted property shape and value SHALL remain authoritative
+
+#### Scenario: Clear-sensitive scalar remains copyable into add
+- **WHEN** exact-runtime component details observe a persisted scalar before GUI clearing but the cleared add candidate omits its raw property
+- **THEN** ordinary details SHALL expose the scalar only through the shared runtime evidence graph
+- **AND** copying its address, type, and value into an add overlay SHALL survive SaveService reload
+- **AND** no component or property identity table SHALL authorize the write
+
+### Requirement: Finite choices are correlated by runtime round-trip evidence
+For a non-editable finite GUI choice, the system SHALL publish a scalar value domain only when exact-runtime intervention produces distinct copyable typed persisted values and isolating each candidate property in an otherwise default TestElement makes a fresh GUI select the corresponding original option. The immutable result SHALL pair each native scalar `value` with its runtime-provided `label`. Ambiguous controls, duplicate or opaque labels, non-bijective or non-finite values, failed round trips, and over-budget candidates SHALL be omitted without a component, property, or enum lookup table.
+
+#### Scenario: Integer selector exposes its runtime meaning
+- **WHEN** a two-option GUI control writes distinct integer selector values and only that scalar restores both choices on reconfiguration
+- **THEN** component details SHALL publish two ordered `value_options` records containing native integer `value` and runtime-localized `label`
+- **AND** the labels SHALL NOT be accepted as replacement values for the integer property
+
+#### Scenario: Mode change also changes dependent scalars
+- **WHEN** changing one finite choice causes multiple persisted scalar values to differ
+- **THEN** each scalar candidate SHALL be isolated and round-tripped through a fresh exact-runtime GUI
+- **AND** only the uniquely choice-determining property MAY receive `value_options`
+
+#### Scenario: Choice mapping is ambiguous
+- **WHEN** no single scalar restores every original option or more than one scalar independently does so
+- **THEN** the system SHALL omit the value domain
+- **AND** it SHALL NOT infer semantics from GUI field order, component identity, property name, or remembered JMeter constants
 
 ### Requirement: Table consumers are correlated to JMX properties by differential evidence
 For an empty structured property whose exact consumer row type is not otherwise observable, the system SHALL accept GUI table-consumer evidence only after an isolated probe produces a uniquely attributable change in the outer component's materialized JMeter property graph. The probe SHALL use a worker-generated typed sentinel and SHALL fail closed when the consumer, property path, concrete row class, or reconstruction relationship is ambiguous.
@@ -54,7 +78,7 @@ For an empty structured property whose exact consumer row type is not otherwise 
 - **AND** it SHALL NOT authorize a structured write
 
 ### Requirement: Semantic observation is bounded and outside normal hot paths
-GUI semantic observation SHALL be lazy, single-flight per worker and component identity, bounded by explicit traversal, candidate, result, and elapsed-time budgets, and cached only as an immutable completed result for the worker lifetime. Ordinary component lists, repeated component details, reads, and writes SHALL NOT repeat a successful or failed observation in that worker. A budget breach SHALL fail the metadata source softly and SHALL NOT evict a healthy worker or mutate a user JMX file. Retry SHALL require worker eviction, crash, or replacement rather than elapsed time.
+GUI semantic observation SHALL be lazy, single-flight per worker and component identity, bounded by explicit traversal, table-candidate, choice-candidate, choice-value, result, and elapsed-time budgets, and cached only as an immutable completed result for the worker lifetime. Ordinary component lists, repeated component details, reads, and writes SHALL NOT repeat a successful or failed observation in that worker. A budget breach SHALL fail the metadata source softly and SHALL NOT evict a healthy worker or mutate a user JMX file. Retry SHALL require worker eviction, crash, or replacement rather than elapsed time.
 
 #### Scenario: Repeated details reuse one observation
 - **WHEN** callers repeatedly request details for the same component in one worker lifetime

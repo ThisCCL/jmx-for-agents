@@ -64,37 +64,9 @@ final class LocalComponentDiscovery {
     private static MaterializedDefaults materializeDefaults(
             LocalJMeterMenuRegistry.Entry entry,
             io.github.thisccl.j4a.jmx.property.RuntimeContext runtimeContext) throws Exception {
-        Class<?> fallback = entry.fallbackTestElementClass();
-        if (fallback != null) {
-            java.lang.reflect.Constructor<?> constructor = fallback.getDeclaredConstructor();
-            if (java.lang.reflect.Modifier.isPublic(constructor.getModifiers())
-                    && java.lang.reflect.Modifier.isPublic(fallback.getModifiers())) {
-                return new MaterializedDefaults(
-                        (org.apache.jmeter.testelement.TestElement) constructor.newInstance(),
-                        LocalJMeterGuiSemanticMetadata.Observation.provenEmpty());
-            }
-            return MaterializedDefaults.empty();
-        }
-        if (entry.kind() != LocalJMeterMenuRegistry.RegistrationKind.GUI_COMPONENT) {
-            return MaterializedDefaults.empty();
-        }
-        Class<?> menuClass = Class.forName(entry.menuClassName(), true,
-                LocalJMeterValidationWorker.class.getClassLoader());
-        org.apache.jmeter.gui.JMeterGUIComponent gui =
-                (org.apache.jmeter.gui.JMeterGUIComponent) menuClass.getDeclaredConstructor().newInstance();
-        LocalJMeterGuiSemanticInstrumentation.guiConstructed();
-        try {
-            org.apache.jmeter.testelement.TestElement defaults = gui.createTestElement();
-            defaults.setProperty(org.apache.jmeter.testelement.TestElement.GUI_CLASS, entry.menuClassName());
-            LocalJMeterGuiSemanticMetadata.Observation semantic = semanticMetadata(
-                    entry, runtimeContext);
-            return new MaterializedDefaults(defaults, semantic);
-        } finally {
-            if (gui instanceof org.apache.jmeter.testbeans.gui.TestBeanGUI) {
-                org.apache.jmeter.util.JMeterUtils.removeLocaleChangeListener(
-                        (org.apache.jmeter.testbeans.gui.TestBeanGUI) gui);
-            }
-        }
+        org.apache.jmeter.testelement.TestElement defaults =
+                LocalJMeterElementMaterializer.create(entry);
+        return new MaterializedDefaults(defaults, semanticMetadata(entry, runtimeContext));
     }
 
     static LocalJMeterGuiSemanticMetadata.Observation semanticMetadata(
@@ -118,9 +90,5 @@ final class LocalComponentDiscovery {
             this.guiSemanticMetadata = guiSemanticMetadata;
         }
 
-        private static MaterializedDefaults empty() {
-            return new MaterializedDefaults(
-                    null, LocalJMeterGuiSemanticMetadata.Observation.provenEmpty());
-        }
     }
 }

@@ -22,6 +22,8 @@ import io.github.thisccl.j4a.jmx.property.RuntimeStructuredRowEvidence;
 import io.github.thisccl.j4a.locator.LocatorNode;
 import io.github.thisccl.j4a.path.PropertyPath;
 import io.github.thisccl.j4a.path.PropertyAddress;
+import io.github.thisccl.j4a.path.PropertyPathErrorCode;
+import io.github.thisccl.j4a.path.PropertyPathResolutionException;
 import io.github.thisccl.j4a.reference.ResolvedNodeHandle;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -338,7 +340,7 @@ final class LocalMutationProgram {
             throw new JMeterAddDisabledException(add.component());
         }
         TestElement element = LocalJMeterElementMaterializer.create(entry);
-        MutationReceipt receipt = applyProperties(element, add.properties());
+        MutationReceipt receipt = applyProperties(element, add.properties(), entry);
         requirePlacement(add.component(), parent, element);
 
         HashTree newSubtree = parentChildrenTree.add(element);
@@ -355,8 +357,18 @@ final class LocalMutationProgram {
     private MutationReceipt applyProperties(
             TestElement element,
             List<ApplyPatch.PropertyChange> properties,
-            LocalJMeterGuiSemanticMetadata.Observation semanticMetadata) {
+            LocalJMeterMenuRegistry.Entry semanticEntry) {
         GraphSnapshot snapshot = propertyGraph.inspect(element, runtimeContext);
+        LocalJMeterGuiSemanticMetadata.Observation semanticMetadata = null;
+        if (requiresSemanticScalars(snapshot, properties)) {
+            semanticMetadata = semanticEntry == null
+                    ? semanticMetadata(element)
+                    : LocalComponentDiscovery.semanticMetadata(semanticEntry, runtimeContext);
+            if (semanticMetadata != null) {
+                snapshot = propertyGraph.inspect(
+                        element, runtimeContext, semanticMetadata.scalarGraphTypes());
+            }
+        }
         List<PropertyWrite> writes = new ArrayList<PropertyWrite>(properties.size());
         for (ApplyPatch.PropertyChange property : properties) {
             GraphNode node = snapshot.resolve(property.property());
@@ -364,6 +376,29 @@ final class LocalMutationProgram {
             writes.add(decodePropertyWrite(element, node, path, property, semanticMetadata));
         }
         return propertyGraph.apply(element, snapshot, writes);
+    }
+
+    private static boolean requiresSemanticScalars(
+            GraphSnapshot snapshot, List<ApplyPatch.PropertyChange> properties) {
+        for (ApplyPatch.PropertyChange property : properties) {
+            try {
+                snapshot.resolve(property.property());
+            } catch (PropertyPathResolutionException exception) {
+                if (exception.errorCode() == PropertyPathErrorCode.MISSING_PROPERTY) {
+                    return true;
+                }
+                throw exception;
+            }
+        }
+        return false;
+    }
+
+    private LocalJMeterGuiSemanticMetadata.Observation semanticMetadata(TestElement element) {
+        String guiClass = element.getPropertyAsString(TestElement.GUI_CLASS);
+        String resolvedGuiClass = org.apache.jmeter.save.SaveService.aliasToClass(guiClass);
+        LocalJMeterMenuRegistry.Entry entry = LocalJMeterMenuRegistry.current()
+                .resolve(resolvedGuiClass == null ? guiClass : resolvedGuiClass).orElse(null);
+        return entry == null ? null : LocalComponentDiscovery.semanticMetadata(entry, runtimeContext);
     }
 
     private MutationReceipt applyAppend(
@@ -497,14 +532,10 @@ final class LocalMutationProgram {
         }
         LocalJMeterGuiSemanticMetadata.Observation metadata = suppliedMetadata;
         if (metadata == null) {
-            String guiClass = element.getPropertyAsString(TestElement.GUI_CLASS);
-            String resolvedGuiClass = org.apache.jmeter.save.SaveService.aliasToClass(guiClass);
-            LocalJMeterMenuRegistry.Entry entry = LocalJMeterMenuRegistry.current()
-                    .resolve(resolvedGuiClass == null ? guiClass : resolvedGuiClass).orElse(null);
-            if (entry == null) {
+            metadata = semanticMetadata(element);
+            if (metadata == null) {
                 return Optional.empty();
             }
-            metadata = LocalComponentDiscovery.semanticMetadata(entry, runtimeContext);
         }
         String property = path.segments().get(0).name();
         return LocalStructuredRowEvidenceResolver.resolve(property, metadata);

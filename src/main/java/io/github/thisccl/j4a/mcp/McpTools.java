@@ -78,7 +78,7 @@ final class McpTools {
                     property("kind", "string", "Input-only compatibility alias for component; canonical output still uses component."),
                     property("componentToken", "string", "Opaque signed recovery token from a COMPONENT_DETAIL_TOO_LARGE category entry. Exclusive with every component paging or diagnostics selector."),
                     McpToolArgumentValidator.trueMarkerSchema(property("details", "boolean",
-                            "Use true with component or kind for one compact authoring detail, or with category for a bounded authoring-detail page.")),
+                            "Use true with component or kind for one compact authoring detail, or with category for a bounded authoring-detail page. Runtime-proven finite scalars include typed value_options.")),
                     McpToolArgumentValidator.trueMarkerSchema(property("diagnostics", "boolean",
                             "Use true with component or kind for the full capability projection. runtime_metadata_status reports metadata-source availability, not GUI completeness.")),
                     integerProperty("limit", "Maximum category detail entries per page; defaults to 20 and cannot exceed 50.", 1, 50, 20),

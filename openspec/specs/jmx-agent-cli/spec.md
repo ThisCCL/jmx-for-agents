@@ -779,11 +779,16 @@ Packaged CLI commands SHALL remain one-shot invocations that do not require an M
 - **THEN** its isolated local worker SHALL be terminated before the CLI exits
 
 ### Requirement: Structured property metadata describes serialization capability
-Component property details SHALL report runtime-observed property address, concrete JMeter value shape, scalar, generic recursive, universal `rows`, or opaque protocol `type`, writable state, and representation source. Records SHALL NOT classify component legality, addability, or GUI-openability. A `rows` schema SHALL be emitted only from exact-target runtime evidence. Named family-specific collection types SHALL NOT be emitted. An opaque or non-writable value SHALL describe the precise serialization or safety boundary and MUST NOT use `unsupported` as a caller-submittable patch type.
+Component property details SHALL report runtime-observed property address, concrete JMeter value shape, scalar, generic recursive, universal `rows`, or opaque protocol `type`, writable state, and representation source. A runtime-proven finite scalar domain SHALL be optional `value_options` records containing native typed `value` and runtime `label`; absence SHALL make no claim that the GUI has no finite semantics. Records SHALL NOT classify component legality, addability, or GUI-openability. A `rows` schema SHALL be emitted only from exact-target runtime evidence. Named family-specific collection types SHALL NOT be emitted. An opaque or non-writable value SHALL describe the precise serialization or safety boundary and MUST NOT use `unsupported` as a caller-submittable patch type.
 
 #### Scenario: Writable values expose protocol types
 - **WHEN** runtime property discovery observes a scalar, collection, map, nested TestElement, runtime-proven row collection, or opaque value
 - **THEN** details SHALL emit the matching reusable representation and `writable: true`
+
+#### Scenario: Runtime-proven finite scalar exposes native choices
+- **WHEN** exact-runtime GUI intervention and isolated reconfiguration prove a finite scalar value-to-label mapping
+- **THEN** ordinary and diagnostic details SHALL emit the same ordered `value_options`
+- **AND** each option SHALL preserve the property's native scalar type without treating its label as a patch value
 
 #### Scenario: Opaque details expose an acquisition contract
 - **WHEN** a persisted value can be replaced only as a bound opaque value
@@ -919,7 +924,7 @@ The system SHALL run local JMeter loading, validation, menu discovery, materiali
 - **AND** owned candidate and validation files SHALL be removed
 
 ### Requirement: Apply add overlays every graph-representable property
-Apply add SHALL materialize the runtime component before any property validation, observe the candidate's complete property graph and runtime-proven structured rows, and overlay submitted property representations before SaveService verification. Catalog descriptors, component/property registrations, and the absence of a structured row projection MUST NOT independently authorize or reject an add property.
+Apply add SHALL materialize the runtime component before any property validation, observe the candidate's complete property graph plus cached exact-runtime semantic scalar and structured-row evidence, and overlay submitted property representations before SaveService verification. Catalog descriptors, component/property registrations, and the absence of a structured row projection MUST NOT independently authorize or reject an add property.
 
 #### Scenario: HTTP sampler is added with runtime rows
 - **WHEN** one add operation creates an HTTP sampler and supplies its emitted `type: rows` Arguments value

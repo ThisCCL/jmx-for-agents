@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.LongSupplier;
+import javax.swing.JComboBox;
 import org.apache.jmeter.gui.Binding;
 import org.apache.jmeter.gui.BindingGroup;
 import org.apache.jmeter.testelement.TestElement;
@@ -21,9 +22,40 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.control.gui.ThroughputControllerGui;
 import org.junit.jupiter.api.Test;
 
 class LocalJMeterGuiSemanticTraversalTest {
+    @Test
+    void correlatesFiniteChoiceToItsOnlyRoundTrippingScalar() {
+        ThroughputControllerGui gui = new ThroughputControllerGui();
+        gui.clearGui();
+        LocalJMeterGuiSemanticTraversal.TraversalResult traversal =
+                LocalJMeterGuiSemanticTraversal.inspect(gui, "5.6.3");
+
+        assertThat(traversal.choices()).hasSize(1);
+        LocalJMeterGuiSemanticTraversal.ChoiceCandidate choice = traversal.choices().get(0);
+        assertThat(choice.size()).isEqualTo(2);
+
+        LocalJMeterGuiSemanticMetadata.Observation observation =
+                LocalJMeterGuiSemanticCorrelation.observe(
+                        ThroughputControllerGui.class.getName(),
+                        "5.6.3", LocalPropertyGraphRuntimeContext.inProcess());
+        assertThat(observation.scalarDescriptors())
+                .as(observation.scalarDescriptors().stream()
+                        .map(descriptor -> descriptor.property() + ":" + descriptor.valueOptions().size())
+                        .collect(java.util.stream.Collectors.toList()).toString())
+                .filteredOn(descriptor -> "ThroughputController.style".equals(descriptor.property()))
+                .singleElement()
+                .satisfies(descriptor -> assertThat(descriptor.valueOptions())
+                        .extracting(
+                                LocalJMeterGuiSemanticMetadata.ValueOption::value,
+                                LocalJMeterGuiSemanticMetadata.ValueOption::label)
+                        .containsExactly(
+                                org.assertj.core.groups.Tuple.tuple(0, choice.label(0)),
+                                org.assertj.core.groups.Tuple.tuple(1, choice.label(1))));
+    }
+
     @Test
     void correlatesHttpArgumentConsumerToItsOuterProperty() {
         LocalJMeterGuiSemanticMetadata.Observation observation =
@@ -204,6 +236,20 @@ class LocalJMeterGuiSemanticTraversalTest {
         assertBudgetFailure(new TableRoot(tableModel()),
                 new BudgetValues(16, 100, 100, 100, 0, 100, Long.MAX_VALUE),
                 LocalJMeterGuiSemanticMetadata.FailureReason.TABLE_CANDIDATE_BUDGET);
+        assertFailure(observe(new ChoiceRoot(), new LocalJMeterGuiSemanticMetadata.Budget(
+                        16, 100, 100, 100, 100, 0, 100, 100, Long.MAX_VALUE)),
+                LocalJMeterGuiSemanticMetadata.FailureReason.CHOICE_CANDIDATE_BUDGET);
+        assertFailure(observe(new ChoiceRoot(), new LocalJMeterGuiSemanticMetadata.Budget(
+                        16, 100, 100, 100, 100, 100, 1, 100, Long.MAX_VALUE)),
+                LocalJMeterGuiSemanticMetadata.FailureReason.CHOICE_VALUE_BUDGET);
+        LocalJMeterGuiChoiceCorrelation.ProbeBudget choiceProbeBudget =
+                new LocalJMeterGuiChoiceCorrelation.ProbeBudget(
+                        new LocalJMeterGuiSemanticMetadata.Budget(
+                                16, 100, 100, 100, 100, 100, 100, 0, 100, Long.MAX_VALUE),
+                        System.nanoTime());
+        assertThat(choiceProbeBudget.consume()).isFalse();
+        assertThat(choiceProbeBudget.failure().reason())
+                .isEqualTo(LocalJMeterGuiSemanticMetadata.FailureReason.CHOICE_PROBE_BUDGET);
         assertBudgetFailure(new NestedRoot(group("qa.output")),
                 new BudgetValues(16, 100, 100, 100, 100, 0, Long.MAX_VALUE),
                 LocalJMeterGuiSemanticMetadata.FailureReason.OUTPUT_BUDGET);
@@ -311,6 +357,10 @@ class LocalJMeterGuiSemanticTraversalTest {
         private TableRoot(ObjectTableModel tableModel) {
             this.tableModel = tableModel;
         }
+    }
+
+    private static final class ChoiceRoot {
+        private final JComboBox<String> choice = new JComboBox<String>(new String[] {"one", "two"});
     }
 
     private static final class DescriptorBinding implements Binding {
