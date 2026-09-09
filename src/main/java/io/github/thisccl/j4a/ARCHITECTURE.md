@@ -1,5 +1,6 @@
+---
+---
 # Architecture
-Scope: src/main/java/io/github/thisccl/j4a/**
 
 ## Local JMeter runtime authority
 

@@ -1,5 +1,6 @@
+---
+---
 # Constraints
-Scope: current directory
 
 - **Canonical per-home runtime isolation**: MCP runtime reuse must be keyed by a validated real JMeter-home path, serialize operations within one home, and keep different homes in isolated worker JVMs. Violation: JMeter static state or plugin classes can cross runtime boundaries, or equivalent homes can create duplicate workers.
 - **No implicit replay after fatal runtime failure**: A crash, timeout, protocol failure, or failed initialization must fail the in-flight call and evict that runtime generation; only a later independent call may rebuild it. Violation: a mutating MCP request can execute more than once without caller authorization.
