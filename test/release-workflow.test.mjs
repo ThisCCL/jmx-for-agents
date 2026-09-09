@@ -124,6 +124,17 @@ test("wrapper and runtime workflows have disjoint publication authority", async 
   assert.doesNotMatch(runtime, /npm publish|npm view|NPM_BOOTSTRAP|environment:\s*npm-release/)
 })
 
+test("runtime release uses the create response id without rediscovering the draft", async () => {
+  const { runtime } = await workflowSources()
+  const createStart = runtime.indexOf("      - name: Create or reuse the identity-matching draft runtime release")
+  const uploadStart = runtime.indexOf("      - name: Upload only missing canonical runtime assets")
+  assert.ok(createStart >= 0 && uploadStart > createStart, "runtime release create step is missing")
+
+  const createStep = runtime.slice(createStart, uploadStart)
+  assert.match(createStep, /RELEASE_ID="\$\(gh api --method POST [\s\S]*--jq '\.id'\)"/)
+  assert.doesNotMatch(createStep, /releases\?per_page|select-release|gh release create/)
+})
+
 test("release workflow validator rejects cross-publication and unsafe trigger changes", async () => {
   const { wrapper, runtime } = await workflowSources()
   const cases = [

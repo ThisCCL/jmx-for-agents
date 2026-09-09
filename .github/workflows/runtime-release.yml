@@ -156,10 +156,15 @@ jobs:
         run: |
           set -euo pipefail
           export "$(printf '%s%s' 'GH_' 'TOKEN')=$GH_AUTH"
-          gh release create "$RUNTIME_TAG" --draft --title "$RUNTIME_TAG" --notes ""
-          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq --slurp '.' > "$RUNNER_TEMP/releases.json"
-          node scripts/release-state-machine.mjs select-release "$RUNNER_TEMP/releases.json" "$RUNTIME_TAG" > "$RUNNER_TEMP/release.json"
-          RELEASE_ID="$(node -p "require('$RUNNER_TEMP/release.json').id")"
+          RELEASE_ID="$(gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
+            -f tag_name="$RUNTIME_TAG" \
+            -f target_commitish="$GITHUB_SHA" \
+            -f name="$RUNTIME_TAG" \
+            -f body="" \
+            -F draft=true \
+            -F prerelease=false \
+            --jq '.id')"
+          test -n "$RELEASE_ID"
           echo "RELEASE_ID=$RELEASE_ID" >> "$GITHUB_ENV"
       - name: Upload only missing canonical runtime assets
         env:
