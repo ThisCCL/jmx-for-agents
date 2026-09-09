@@ -28,13 +28,13 @@ npx -y @jmx-for-agents/j4a install --with-skills
 npx -y @jmx-for-agents/j4a runtime-info --json
 ```
 
-通过其他网络下载其中 `jarUrl` 指向的文件，按 `jarSha256` 校验 SHA-256，再保存到 `jarPath`。当前运行时版本为 `1.0.1`，默认路径如下：
+通过其他网络下载其中 `jarUrl` 指向的文件，按 `jarSha256` 校验 SHA-256，再保存到 `jarPath`。当前运行时版本为 `1.0.3`，默认路径如下：
 
-- Windows：`%LOCALAPPDATA%\j4a\runtimes\1.0.1\j4a.jar`
-- macOS：`~/Library/Application Support/j4a/runtimes/1.0.1/j4a.jar`
-- Linux：`~/.local/share/j4a/runtimes/1.0.1/j4a.jar`
+- Windows：`%LOCALAPPDATA%\j4a\runtimes\1.0.3\j4a.jar`
+- macOS：`~/Library/Application Support/j4a/runtimes/1.0.3/j4a.jar`
+- Linux：`~/.local/share/j4a/runtimes/1.0.3/j4a.jar`
 
-如果设置了 `J4A_CACHE_DIR`，请改用 `<J4A_CACHE_DIR>/runtimes/1.0.1/j4a.jar`。然后执行 `npx -y @jmx-for-agents/j4a install`；只有摘要匹配时文件才会被接受，并且不会重复下载。
+如果设置了 `J4A_CACHE_DIR`，请改用 `<J4A_CACHE_DIR>/runtimes/1.0.3/j4a.jar`。然后执行 `npx -y @jmx-for-agents/j4a install`；只有摘要匹配时文件才会被接受，并且不会重复下载。
 
 如果只需安装项目内的工作流，不下载或检查 Java 运行时文件：
 
