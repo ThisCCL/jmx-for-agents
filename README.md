@@ -28,13 +28,13 @@ If GitHub Releases cannot be reached, inspect the exact runtime artifact first:
 npx -y @jmx-for-agents/j4a runtime-info --json
 ```
 
-Download the reported `jarUrl` by another route, verify its SHA-256 against `jarSha256`, and save it as the reported `jarPath`. For the current runtime (`1.0.1`), the default paths are:
+Download the reported `jarUrl` by another route, verify its SHA-256 against `jarSha256`, and save it as the reported `jarPath`. For the current runtime (`1.0.3`), the default paths are:
 
-- Windows: `%LOCALAPPDATA%\j4a\runtimes\1.0.1\j4a.jar`
-- macOS: `~/Library/Application Support/j4a/runtimes/1.0.1/j4a.jar`
-- Linux: `~/.local/share/j4a/runtimes/1.0.1/j4a.jar`
+- Windows: `%LOCALAPPDATA%\j4a\runtimes\1.0.3\j4a.jar`
+- macOS: `~/Library/Application Support/j4a/runtimes/1.0.3/j4a.jar`
+- Linux: `~/.local/share/j4a/runtimes/1.0.3/j4a.jar`
 
-If `J4A_CACHE_DIR` is set, use `<J4A_CACHE_DIR>/runtimes/1.0.1/j4a.jar` instead. Then run `npx -y @jmx-for-agents/j4a install`; it accepts the file only when the digest matches and does not download it again.
+If `J4A_CACHE_DIR` is set, use `<J4A_CACHE_DIR>/runtimes/1.0.3/j4a.jar` instead. Then run `npx -y @jmx-for-agents/j4a install`; it accepts the file only when the digest matches and does not download it again.
 
 To install just the packaged workflow without downloading or checking Java runtime files:
 

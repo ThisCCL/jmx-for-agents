@@ -1,6 +1,7 @@
 package io.github.thisccl.j4a.validation;
 
 import io.github.thisccl.j4a.jmx.JmxTestPlan;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +62,12 @@ final class SessionCandidateIdentityProof {
         if (actual == null || !claim.expectedClass.equals(actual.element().getClass().getName())) {
             throw failure(claim.label + " is missing or changed class after SaveService reload");
         }
-        if (!Arrays.equals(ownPersistedState(expected.element()), ownPersistedState(actual.element()))) {
+        byte[] expectedState = ownPersistedState(expected.element());
+        byte[] actualState = ownPersistedState(actual.element());
+        if (!Arrays.equals(expectedState, actualState)
+                && !Arrays.equals(
+                        normalizedOwnPersistedState(expectedState),
+                        normalizedOwnPersistedState(actualState))) {
             throw failure(claim.label + " changed its own persisted state after SaveService reload");
         }
     }
@@ -70,6 +76,14 @@ final class SessionCandidateIdentityProof {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         SaveService.saveElement(element, output);
         return output.toByteArray();
+    }
+
+    private static byte[] normalizedOwnPersistedState(byte[] persistedState) throws IOException {
+        Object normalized = SaveService.loadElement(new ByteArrayInputStream(persistedState));
+        if (!(normalized instanceof TestElement)) {
+            throw new IOException("SaveService did not reload a TestElement");
+        }
+        return ownPersistedState((TestElement) normalized);
     }
 
     private static List<TopologyNode> topology(HashTree tree) {

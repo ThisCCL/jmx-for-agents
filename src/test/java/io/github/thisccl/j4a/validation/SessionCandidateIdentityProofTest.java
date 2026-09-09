@@ -1,19 +1,23 @@
 package io.github.thisccl.j4a.validation;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.github.thisccl.j4a.apply.MutationOutcome;
 import io.github.thisccl.j4a.jmx.JmxTestPlan;
 import io.github.thisccl.j4a.reference.BoundReferences;
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.collections.HashTree;
@@ -44,6 +48,35 @@ class SessionCandidateIdentityProofTest {
         JmxTestPlan reloaded = roundTrip(fixture.plan, "happy-candidate.jmx");
 
         assertThatCode(() -> SessionCandidateIdentityProof.requireProven(fixture.plan, reloaded, proposal))
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void acceptsCreatedAliasWhenSaveServiceOnlyNormalizesOwnPropertyOrder() throws Exception {
+        TestPlan root = new TestPlan("root");
+        root.setProperty(TestElement.TEST_CLASS, TestPlan.class.getName());
+        root.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui");
+        SaveServicePropertyOrderController created = new SaveServicePropertyOrderController();
+        created.setName("created");
+        created.setProperty(TestElement.TEST_CLASS, SaveServicePropertyOrderController.class.getName());
+        created.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
+        created.removeProperty(SaveServicePropertyOrderController.CONSTRUCTOR_PROPERTY);
+        created.setProperty("qa.user.property", "user-value");
+        created.setProperty(SaveServicePropertyOrderController.CONSTRUCTOR_PROPERTY, "constructor-value");
+        ListedHashTree tree = new ListedHashTree();
+        tree.add(root).add(created);
+        JmxTestPlan expected = new JmxTestPlan(tree);
+        SessionPlanIndex.LocatedElement located = SessionPlanIndex.create(expected).find(created);
+        PreparedReferenceState proposal = PreparedReferenceState.tracking(
+                Collections.<PreparedReferenceState.TrackedReference>emptyList(),
+                Collections.<String>emptyList(),
+                Collections.singletonList(PreparedReferenceState.CreatedAlias.of(
+                        "created", located.locator(), created.getClass().getName(), ExactNodeHandle.of(created))));
+        JmxTestPlan reloaded = roundTrip(expected, "property-order-candidate.jmx");
+        TestElement actual = reloaded.depthFirstTestElements().get(1);
+
+        assertThat(persistedBytes(created)).isNotEqualTo(persistedBytes(actual));
+        assertThatCode(() -> SessionCandidateIdentityProof.requireProven(expected, reloaded, proposal))
                 .doesNotThrowAnyException();
     }
 
@@ -156,6 +189,12 @@ class SessionCandidateIdentityProofTest {
         Path candidate = tempDir.resolve(name);
         LocalJMeterWorkerJmx.save(plan, candidate);
         return LocalJMeterWorkerJmx.load(candidate, JMETER_HOME);
+    }
+
+    private static byte[] persistedBytes(TestElement element) throws Exception {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        SaveService.saveElement(element, output);
+        return output.toByteArray();
     }
 
     private static JmxTestPlan fixturePlan(String leftName, String rightName, String untrackedName) {
